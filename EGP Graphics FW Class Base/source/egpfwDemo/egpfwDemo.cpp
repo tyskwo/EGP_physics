@@ -94,6 +94,10 @@ enum VAOIndex
 	axesVAO, 
 
 	sphere8x6VAO, sphere32x24VAO, cubeVAO, cubeWireVAO, cubeIndexedVAO, cubeWireIndexedVAO,
+    
+    quadVAO,
+    
+    octahedronVAO,
 
 //-----------------------------
 	vaoCount
@@ -103,21 +107,27 @@ enum VBOIndex
 	axesVBO, 
 
 	sphere8x6VBO, sphere32x24VBO, cubeVBO, cubeWireVBO, cubeIndexedVBO, cubeWireIndexedVBO,
-
+    
+    quadVBO,
+    
+    octahedronVBO,
+    
 //-----------------------------
 	vboCount
 };
 enum IBOIndex
 {
 	cubeIndexedIBO, cubeWireIndexedIBO,
+    
+    octahedronIBO,
 
 //-----------------------------
 	iboCount
 };
 
-egpVertexArrayObjectDescriptor vao[vaoCount] = { 0 };
+egpVertexArrayObjectDescriptor  vao[vaoCount] = { 0 };
 egpVertexBufferObjectDescriptor vbo[vboCount] = { 0 };
-egpIndexBufferObjectDescriptor ibo[iboCount] = { 0 };
+egpIndexBufferObjectDescriptor  ibo[iboCount] = { 0 };
 
 
 
@@ -274,6 +284,23 @@ void setupGeometry()
 		egpCreateAttributeDescriptor(ATTRIB_COLOR, ATTRIB_VEC3, egpGetAxesColors()),
 	};
 	vao[axesVAO] = egpCreateVAOInterleaved(PRIM_LINES, axesAttribs, 2, egpGetAxesVertexCount(), (vbo + axesVBO), 0);
+    
+    
+    
+    
+    
+    
+    
+    // CUSTOM GEOMETRY
+    
+    // octahedron
+    egpAttributeDescriptor octAttribs[] = {
+        egpCreateAttributeDescriptor(ATTRIB_POSITION, ATTRIB_VEC3, egpfwGetOctahedronUniquePositions()),
+        egpCreateAttributeDescriptor(ATTRIB_COLOR, ATTRIB_VEC3, egpfwGetOctahedronUniqueColors())
+    };
+    
+    vao[octahedronVAO] = egpCreateVAOInterleavedIndexed(PRIM_TRIANGLES, octAttribs, 2, egpfwGetOctahedronUniqueVertexCount(), vbo+octahedronVBO,
+                                                        INDEX_UINT, egpfwGetOctahedronIndexCount(), egpfwGetOctahedronIndeces(), ibo+octahedronIBO);
 }
 
 void deleteGeometry()
@@ -480,6 +507,7 @@ void renderGameState()
 			drawToBackBuffer(viewport_nb, viewport_nb, viewport_tw, viewport_th);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
 			// uncomment to draw everything as wireframe
 		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -496,7 +524,8 @@ void renderGameState()
 		//	egpActivateVAO(vao + cubeWireVAO);
 		//	egpActivateVAO(vao + cubeIndexedVAO);
 		//	egpActivateVAO(vao + cubeWireIndexedVAO);
-		//	egpDrawActiveVAO();
+        	egpActivateVAO(vao + octahedronVAO);
+			egpDrawActiveVAO();
 		}
 	}
 
@@ -504,7 +533,7 @@ void renderGameState()
 	// ****
 	// TEST YOUR SHAPES
 	{
-		egpfwDrawColoredTriangleImmediate(viewProjMat.m, 0);
+    //	egpfwDrawColoredTriangleImmediate(viewProjMat.m, 0);
 	//	egpfwDrawColoredUnitQuadImmediate(viewProjMat.m, 0);
 	//	egpfwDrawTexturedUnitQuadImmediate(viewProjMat.m, 0);
 	}

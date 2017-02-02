@@ -96,13 +96,22 @@ void egpfwDrawTexturedUnitQuadImmediate(const float *mvp, const int mvpLoc)
 // raw quad data
 // data should be arranged as TRIANGLE STRIP: use at most 4 vertices!
 #define quadNumVertices 4
-const float fwUnitQuadPositions[quadNumVertices * 3] = {
-	-1.0f, //...
+const float fwUnitQuadPositions[quadNumVertices * 3] =
+{
+	-1.0f,  1.0f,  0.0f,
+    -1.0f, -1.0f,  0.0f,
+     1.0f,  1.0f,  0.0f,
+     1.0f, -1.0f,  0.0f
 };
-const float fwUnitQuadColors[quadNumVertices * 3] = {
-	0.0f, //...
+const float fwUnitQuadColors[quadNumVertices * 3] =
+{
+    0.0f,  1.0f,  0.5f,
+    0.0f,  0.0f,  0.5f,
+    1.0f,  1.0f,  0.5f,
+    1.0f,  0.0f,  0.5f
 };
-const float fwUnitQuadTexcoords[quadNumVertices * 2] = {
+const float fwUnitQuadTexcoords[quadNumVertices * 2] =
+{
 	0.0f, //...
 };
 
@@ -136,3 +145,51 @@ unsigned int egpfwGetUnitQuadVertexCount()
 
 
 //-----------------------------------------------------------------------------
+
+// octahedron
+
+#define octahedronUniqueNumVertices 6
+#define octahedronIndices 24
+const float octahedronUniquePositions[octahedronUniqueNumVertices * 3] =
+{
+     1.0f,  0.0f,  0.0f,
+     0.0f,  0.0f, -1.0f,
+    -1.0f,  0.0f,  0.0f,
+     0.0f,  0.0f,  1.0f,
+     0.0f,  1.0f,  0.0f,
+     0.0f, -1.0f,  0.0f
+};
+const float octahedronUniqueColors[octahedronUniqueNumVertices * 3] =
+{
+    1.0f,  0.5f,  0.5f,
+    0.5f,  0.5f,  0.0f,
+    0.0f,  0.5f,  0.5f,
+    0.5f,  0.5f,  1.0f,
+    0.5f,  1.0f,  0.5f,
+    0.5f,  0.0f,  0.5f
+};
+const unsigned int octahedronIndexOrder[octahedronIndices] =
+{
+    0,1,4, // northern hemisphere
+    1,2,4,
+    2,3,4,
+    3,0,4,
+    
+    0,3,5, // southern hemisphere
+    3,2,5,
+    2,1,5,
+    1,0,5
+};
+
+
+
+const float        *egpfwGetOctahedronUniquePositions() { return octahedronUniquePositions; }
+const float        *egpfwGetOctahedronUniqueColors()    { return octahedronUniqueColors;    }
+const unsigned int *egpfwGetOctahedronIndeces()         { return octahedronIndexOrder;      }
+
+unsigned int egpfwGetOctahedronUniqueVertexCount() { return octahedronUniqueNumVertices; }
+unsigned int egpfwGetOctahedronIndexCount()        { return octahedronIndices;           }
+
+
+//-----------------------------------------------------------------------------
+

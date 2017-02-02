@@ -48,7 +48,19 @@ extern "C"
 
 
 //-----------------------------------------------------------------------------
-
+    
+    
+    // get data for quad that can be colored or textured
+    // data should be arranged as TRIANGLE STRIP
+    // positions and colors have 3 elements each, texture coordinates have 2
+    const float        *egpfwGetOctahedronUniquePositions();
+    const float        *egpfwGetOctahedronUniqueColors();
+    const unsigned int *egpfwGetOctahedronIndeces();
+          unsigned int egpfwGetOctahedronUniqueVertexCount();
+          unsigned int egpfwGetOctahedronIndexCount();
+    
+    
+    //-----------------------------------------------------------------------------
 
 #ifdef __cplusplus
 }
