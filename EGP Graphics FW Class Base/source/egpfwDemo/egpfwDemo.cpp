@@ -41,6 +41,9 @@
 #include "egpfw/egpfw.h"
 
 
+#include "gphysics/egpfwMover.h"
+
+
 //-----------------------------------------------------------------------------
 // globals
 
@@ -61,8 +64,8 @@ float win_aspect;
 float fovy = 1.0f, znear = 0.5f, zfar = 50.0f;
 float maxClipDist = 0.0f, minClipDist = 0.0f;
 
-									// update flag: play speed as a percentage
-unsigned int playing = 1;
+// update flag: play speed as a percentage
+unsigned int playing = 0;
 unsigned int playrate = 100;
 
 
@@ -123,6 +126,40 @@ egpIndexBufferObjectDescriptor ibo[iboCount] = { 0 };
 
 //-----------------------------------------------------------------------------
 // our game objects
+
+
+// gravity constant: ACCELERATION due to gravity
+const cbmath::vec3 gravityAccel(0.0f, -9.81f, 0.0f);
+
+// movables
+const unsigned int numMovers = 2;
+egpfwMover mover[numMovers];
+
+
+// quickly reset physics
+void resetPhysics()
+{
+	mover[0] = { cbmath::m4Identity, cbmath::vec3(-5.0f, 0.0f, 0.0f), cbmath::vec3(4.0f, 3.0f, 0.0f), gravityAccel };
+	mover[1] = { cbmath::m4Identity, cbmath::vec3(0.0f, 0.0f, 0.0f), cbmath::vec3(0.0f, 5.0f, 0.0f), gravityAccel };
+}
+
+// update physics only
+void updatePhysics(float dt)
+{
+	// basic physics update: 
+	//	-> integrate
+	//	-> update anything that has to do with graphics
+	unsigned int i;
+	egpfwMover *m;
+	for (i = 0, m = mover; i < numMovers; ++i, ++m)
+	{
+		// physics
+		updateMoverFirstOrder(m, dt);
+
+		// graphics
+		updateMoverGraphics(m);
+	}
+}
 
 
 
@@ -373,6 +410,10 @@ int initGame()
 	setupGeometry();
 
 
+	// physics
+	resetPhysics();
+
+
 	// other
 	egpSetActiveMouse(mouse);
 	egpSetActiveKeyboard(keybd);
@@ -404,6 +445,9 @@ void displayControls()
 	printf("\n ~` = display controls");
 	printf("\n o = toggle slow-mo playback for all");
 	printf("\n p = toggle play/pause for all");
+
+	printf("\n y = reset physics");
+
 	printf("\n-------------------------------------------------------");
 }
 
@@ -423,6 +467,11 @@ void handleInputState()
 	// pause/play
 	if (egpKeyboardIsKeyPressed(keybd, 'p'))
 		playing = 1 - playing;
+
+
+	// reset physics
+	if (egpKeyboardIsKeyPressed(keybd, 'y'))
+		resetPhysics();
 
 
 	// finish by updating input state
@@ -451,7 +500,7 @@ void updateGameState(float dt)
 
 	// ****update objects here
 	{
-
+		updatePhysics(dt);
 	}
 }
 
@@ -504,9 +553,19 @@ void renderGameState()
 	// ****
 	// TEST YOUR SHAPES
 	{
-		egpfwDrawColoredTriangleImmediate(viewProjMat.m, 0);
+	//	egpfwDrawColoredTriangleImmediate(viewProjMat.m, 0);
 	//	egpfwDrawColoredUnitQuadImmediate(viewProjMat.m, 0);
 	//	egpfwDrawTexturedUnitQuadImmediate(viewProjMat.m, 0);
+
+
+		cbmath::mat4 mvp;
+
+		// draw each physics object in immediate mode
+		mvp = viewProjMat * mover[0].modelMatrix;
+		egpDrawWireCubeImmediate(mvp.m, 0, 0, 1.0f, 0.5f, 0.0f);
+
+		mvp = viewProjMat * mover[1].modelMatrix;
+		egpDrawWireCubeImmediate(mvp.m, 0, 0, 0.0f, 1.0f, 0.5f);
 	}
 
 

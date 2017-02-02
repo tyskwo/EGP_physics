@@ -325,6 +325,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\egpfwDemo\egpfwDemo.h" />
+    <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwMover.h" />
     <ClInclude Include="egpfwDemoFreeglut\resource.h" />
   </ItemGroup>
   <ItemGroup>
