@@ -31,6 +31,9 @@
     <Filter Include="Source Files\egpfwDemo">
       <UniqueIdentifier>{7dec6d87-16bc-4d69-80ec-968456751b2f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\egpfwDemo\gphysics">
+      <UniqueIdentifier>{56fe9b4f-8bcd-4062-9747-6372f8ae6c43}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\resource\glsl\410\fs\drawColor_fs410.glsl">
@@ -78,6 +81,9 @@
     </ClInclude>
     <ClInclude Include="egpfwDemoFreeglut\resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwMover.h">
+      <Filter>Source Files\egpfwDemo\gphysics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
