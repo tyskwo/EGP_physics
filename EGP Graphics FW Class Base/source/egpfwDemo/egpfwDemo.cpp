@@ -149,8 +149,21 @@ egpfwMover mover[numMovers];
 // quickly reset physics
 void resetPhysics()
 {
-	mover[0] = { cbmath::m4Identity, cbmath::vec3(-5.0f, 0.0f, 0.0f), cbmath::vec3(4.0f, 3.0f, 0.0f), gravityAccel };
-	mover[1] = { cbmath::m4Identity, cbmath::vec3(0.0f, 0.0f, 0.0f), cbmath::vec3(0.0f, 5.0f, 0.0f), gravityAccel };
+    mover[0] =
+    {
+        /* matrix */             cbmath::m4Identity,
+        /* position, velocity */ cbmath::vec3(-3.0f, 5.0f, 0.0f), cbmath::vec3(0.0f, 3.0f, 0.0f)//,
+        ///* fixed accel. */       gravityAccel
+    };
+	mover[1] =
+    {
+        /* matrix */             cbmath::m4Identity,
+        /* position, velocity */ cbmath::vec3(3.0f, 5.0f, 0.0f), cbmath::vec3(0.0f, 3.0f, 0.0f)//,
+        ///* fixed accel. */       gravityAccel
+    };
+    
+    setMass(mover + 0, 0.001f); //feather
+    setMass(mover + 1, 5.0f);   //bowling ball
 }
 
 // update physics only
@@ -164,7 +177,9 @@ void updatePhysics(float dt)
 	for (i = 0, m = mover; i < numMovers; ++i, ++m)
 	{
 		// physics
-		updateMoverFirstOrder(m, dt);
+        addForce(m, gravityAccel / m->mass);
+		updateMoverDisplacement(m, dt);
+
 
 		// graphics
 		updateMoverGraphics(m);
@@ -330,14 +345,14 @@ void setupGeometry()
     
     // CUSTOM GEOMETRY
     
-    // octahedron
+    /*// octahedron
     egpAttributeDescriptor octAttribs[] = {
         egpCreateAttributeDescriptor(ATTRIB_POSITION, ATTRIB_VEC3, egpfwGetOctahedronUniquePositions()),
         egpCreateAttributeDescriptor(ATTRIB_COLOR, ATTRIB_VEC3, egpfwGetOctahedronUniqueColors())
     };
     
     vao[octahedronVAO] = egpCreateVAOInterleavedIndexed(PRIM_TRIANGLES, octAttribs, 2, egpfwGetOctahedronUniqueVertexCount(), vbo+octahedronVBO,
-                                                        INDEX_UINT, egpfwGetOctahedronIndexCount(), egpfwGetOctahedronIndeces(), ibo+octahedronIBO);
+                                                        INDEX_UINT, egpfwGetOctahedronIndexCount(), egpfwGetOctahedronIndeces(), ibo+octahedronIBO);*/
 }
 
 void deleteGeometry()
@@ -573,8 +588,8 @@ void renderGameState()
 		//	egpActivateVAO(vao + cubeWireVAO);
 		//	egpActivateVAO(vao + cubeIndexedVAO);
 		//	egpActivateVAO(vao + cubeWireIndexedVAO);
-        	egpActivateVAO(vao + octahedronVAO);
-			egpDrawActiveVAO();
+        //  egpActivateVAO(vao + octahedronVAO);
+        //  egpDrawActiveVAO();
 		}
 	}
 
