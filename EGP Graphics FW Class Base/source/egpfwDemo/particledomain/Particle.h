@@ -10,9 +10,48 @@
 //  and/or communicate a copy of this project to a plagiarism-checking service,
 //  which may retain a copy of the project on its database.
 
+
+
 #ifndef Particle_h
 #define Particle_h
 
+
+
 #include <stdio.h>
+
+
+
+class Particle
+{
+    
+    
+private:
+    
+    // reference to the mover struct of this particle for physics simulation
+    Mover *mover;
+    
+    // how long this particle lives for
+    float lifespan;
+    
+    // how long this particle has been alive
+    float currentLife;
+    
+    // whether or not this particle is dead
+    bool  isActive;
+    
+    
+    
+public:
+    
+    Particle();
+    
+    inline Mover* getMover() { return mover; }
+    
+    void update(const float dt);
+    
+    void render();
+};
+
+
 
 #endif /* Particle_h */
