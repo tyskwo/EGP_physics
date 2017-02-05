@@ -26,6 +26,20 @@
 
 class ParticleSystem
 {
+public:
+	// struct to hold emission data
+	struct Emitter
+	{
+		// how does this system emit its particles?
+		enum Mode { Burst, Continuous };
+		Mode m_mode;
+
+		// how many particles this system emits each emit() call
+		int m_numberToEmit;
+
+		// the direction to emit from
+		cbmath::vec3 m_emitDirection;
+	};
     
 private:
     
@@ -38,23 +52,9 @@ private:
     // the mover this particle system uses
     Mover *m_mover;
     
-    // struct to hold emission data
-    struct Emitter
-    {
-        // how does this system emit its particles?
-        enum Mode { Burst, Continuous };
-        Mode m_mode;
-        
-        // how many particles this system emits each emit() call
-        int m_numberToEmit;
-        
-        // the direction to emit from
-        cbmath::vec3 m_emitDirection;
-    };
     Emitter m_emitter;
     
-    
-    
+ 
 public:
     
     ParticleSystem();
@@ -63,7 +63,7 @@ public:
                    cbmath::vec3  position       = cbmath::vec3(0.0f,0.0f,0.0f),
                    cbmath::vec3  emitDirection  = cbmath::vec3(0.0f,1.0f,0.0f),
                    int           numberToEmit   = 100);
-    
+
     inline Particle               getModelParticle() { return m_modelParticle; }
     inline std::vector<Particle*> getParticles()     { return m_particles;     }
     

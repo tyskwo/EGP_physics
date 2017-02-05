@@ -37,9 +37,15 @@
 
 #include "egpfw/egpfw.h"
 
-
+#ifdef _WIN32
 #include "gphysics/Mover.h"
-
+#include "particledomain\ParticleSystem.h"
+#include "particledomain\Particle.h"
+#else
+#include "Mover.h"
+#include "ParticleSystem.h"
+#include "Particle.h"
+#endif
 
 //-----------------------------------------------------------------------------
 // globals
@@ -141,11 +147,17 @@ const cbmath::vec3 gravityAccel(0.0f, -9.81f, 0.0f);
 // movables
 const unsigned int numMovers = 2;
 Mover mover[numMovers];
+ParticleSystem *particleSystem;
+Particle *modelParticle;
 
 
 // quickly reset physics
 void resetPhysics()
 {
+	modelParticle = new Particle(cbmath::v3zero, cbmath::v3y, 1.0f, 1.0f);
+	particleSystem = new ParticleSystem(modelParticle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3zero, cbmath::v3y + cbmath::v3x, 5);
+	//egp_particleSystem = new ParticleSystem()
+
     mover[0] =
     {
         /* matrix */             cbmath::m4Identity,
