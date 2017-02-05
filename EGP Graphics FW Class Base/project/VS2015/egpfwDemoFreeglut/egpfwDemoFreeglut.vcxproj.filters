@@ -91,13 +91,13 @@
     <ClInclude Include="egpfwDemoFreeglut\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.h">
+      <Filter>Source Files\egpfwDemo\particleDomain</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwMover.h">
       <Filter>Source Files\egpfwDemo\gphysics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\Particle.h">
-      <Filter>Source Files\egpfwDemo\particleDomain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.h">
       <Filter>Source Files\egpfwDemo\particleDomain</Filter>
     </ClInclude>
   </ItemGroup>

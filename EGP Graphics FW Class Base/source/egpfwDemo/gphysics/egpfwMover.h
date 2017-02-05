@@ -7,6 +7,7 @@
 
 
 #include "cbmath/cbtkMatrix.h"
+#include <math.h>
 
 
 struct egpfwMover
