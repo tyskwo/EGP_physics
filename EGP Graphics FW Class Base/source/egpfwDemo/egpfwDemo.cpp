@@ -4,11 +4,8 @@
 ////	By Dan Buckstein
 ////	January 2017
 ////
-////	****Modified by: ______________________________________________________
-////	^^^^
-////	NOTE: 4 asterisks anywhere means something you will have to either 
-////		modify or complete to get it working! Good practice for starters: 
-////		write your name beside "modified by" above!
+////	This file was modified by David Hartman, Ty Wood with permission from author.
+////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -1,6 +1,6 @@
-// Mover structure for integration
-// By D. Buckstein
-// Modified by: 
+//  Mover structure for integration
+//  By D. Buckstein
+//	This file was modified by David Hartman, Ty Wood with permission from author.
 
 #ifndef __EGPFW_MOVER_H
 #define __EGPFW_MOVER_H
