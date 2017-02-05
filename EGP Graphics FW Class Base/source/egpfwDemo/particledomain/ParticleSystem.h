@@ -36,7 +36,7 @@ private:
     std::vector<Particle*> m_particles;
     
     // the mover this particle system uses
-    egpfwMover *m_mover;
+    Mover *m_mover;
     
     // struct to hold emission data
     struct Emitter

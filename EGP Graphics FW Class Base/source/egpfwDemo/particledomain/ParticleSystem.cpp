@@ -46,7 +46,7 @@ void ParticleSystem::emit()
 {
     for(int i = 0; i < m_emitter.m_numberToEmit; i++)
     {
-        m_particles.push_back(new Particle());
+        m_particles.push_back(new Particle(m_mover->position, m_emitter.m_emitDirection, 2.0f, 5.0f));
     }
 }
 

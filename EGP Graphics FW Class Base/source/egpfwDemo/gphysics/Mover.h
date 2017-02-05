@@ -2,15 +2,22 @@
 //  By D. Buckstein
 //	This file was modified by Wednesday-David Hartman, Ty Wood with permission from author.
 
+
+
 #ifndef __MOVER_H
 #define __MOVER_H
 
 
-#include "cbmath/cbtkMatrix.h"
+
 #include <math.h>
+
+#include "cbmath/cbtkMatrix.h"
+
+
 
 struct Mover
 {
+    
 public:
 	// graphics: leave it at the start of the structure for consistency
 	cbmath::mat4 modelMatrix;
@@ -25,10 +32,13 @@ public:
     // mass
     float mass, massInverse, damping;
 
+    
+    
 private:
 	void updateVelocity(const float dt);
 	void updateAcceleration();
 	
+    
 
 public:
 	void setMass(float mass);

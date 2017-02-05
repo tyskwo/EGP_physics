@@ -40,7 +40,7 @@ Particle::Particle(cbmath::vec3 position, cbmath::vec3 velocity = cbmath::vec3(0
 
 void Particle::update(const float dt)
 {
-    updateMoverDisplacement(this->m_mover, dt);
+    this->m_mover->updateMoverDisplacement(dt);
 }
 
 
