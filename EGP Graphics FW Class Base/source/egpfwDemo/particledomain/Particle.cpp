@@ -15,7 +15,12 @@
 #include "Particle.h"
 
 #include <stdlib.h> 
-#include "egpfw\egpfw\utils\egpfwPrimitiveDataUtils.h"
+
+#ifdef _WIN32
+    #include "egpfw\egpfw\utils\egpfwPrimitiveDataUtils.h"
+#else
+    #include "../../../include/egpfw/egpfw/utils/egpfwPrimitiveDataUtils.h"
+#endif
 
 
 Particle::Particle() {}
