@@ -14,6 +14,8 @@
 
 #include "ParticleSystem.h"
 
+#include <stdlib.h>
+
 
 ParticleSystem::ParticleSystem() {}
 
