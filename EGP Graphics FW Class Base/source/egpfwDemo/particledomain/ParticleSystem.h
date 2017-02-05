@@ -27,27 +27,41 @@
 class ParticleSystem
 {
     
-    
 private:
     
     // the particle this system will be emitting
-    Particle modelParticle;
+    Particle m_modelParticle;
     
     // the list of particles this system is responsible for
-    std::vector<Particle> particles;
+    std::vector<Particle*> m_particles;
     
     // the mover this particle system uses
-    egpfwMover *mover;
+    egpfwMover *m_mover;
+    
+    // struct to hold emission data
+    struct Emitter
+    {
+        // how does this system emit its particles?
+        enum Mode { Burst, Continuous };
+        Mode m_mode;
+        
+        // how many particles this system emits each emit() call
+        int m_numberToEmit;
+        
+        // the direction to emit from
+        cbmath::vec3 m_emitDirection;
+    };
+    Emitter m_emitter;
     
     
     
 public:
     
     ParticleSystem();
-    ParticleSystem(cbmath::vec3 position, 
+    ParticleSystem(Particle modelParticle, Emitter::Mode mode, cbmath::vec3 position, cbmath::vec3 emitDirection, int numberToEmit);
     
-    inline Particle              getModelParticle() { return modelParticle; }
-    inline std::vector<Particle> getParticles()     { return particles;     }
+    inline Particle               getModelParticle() { return m_modelParticle; }
+    inline std::vector<Particle*> getParticles()     { return m_particles;     }
     
     void update(const float dt);
     
