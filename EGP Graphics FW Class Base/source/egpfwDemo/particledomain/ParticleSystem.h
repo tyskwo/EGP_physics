@@ -10,9 +10,53 @@
 //  and/or communicate a copy of this project to a plagiarism-checking service,
 //  which may retain a copy of the project on its database.
 
+
+
 #ifndef ParticleSystem_h
 #define ParticleSystem_h
 
+
+
 #include <stdio.h>
+#include <vector>
+
+#include "Particle.h"
+
+
+
+class ParticleSystem
+{
+    
+    
+private:
+    
+    // the particle this system will be emitting
+    Particle modelParticle;
+    
+    // the list of particles this system is responsible for
+    std::vector<Particle> particles;
+    
+    // the mover this particle system uses
+    egpfwMover *mover;
+    
+    
+    
+public:
+    
+    ParticleSystem();
+    ParticleSystem(cbmath::vec3 position, 
+    
+    inline Particle              getModelParticle() { return modelParticle; }
+    inline std::vector<Particle> getParticles()     { return particles;     }
+    
+    void update(const float dt);
+    
+    void emit();
+    
+    void render();
+    
+};
+
+
 
 #endif /* ParticleSystem_h */

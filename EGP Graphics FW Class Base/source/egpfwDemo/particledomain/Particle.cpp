@@ -10,4 +10,42 @@
 //  and/or communicate a copy of this project to a plagiarism-checking service,
 //  which may retain a copy of the project on its database.
 
-#include "Particle.hpp"
+
+
+#include "Particle.h"
+
+
+
+Particle::Particle() {}
+
+
+
+Particle::Particle(cbmath::vec3 position, cbmath::vec3 velocity = cbmath::vec3(0.0f,0.0f,0.0f), float mass = 1.0f, float lifespan = 1.0f)
+{
+    // set the physics values
+    mover->position = position;
+    mover->velocity = velocity;
+    mover->mass     = mass;
+    
+    // set the lifespan values
+    this->lifespan = lifespan;
+    this->currentLife = 0.0f;
+    
+    // this particle is now alive
+    this->isActive = true;
+}
+
+
+
+
+void Particle::update(const float dt)
+{
+    updateMoverDisplacement(this->mover, dt);
+}
+
+
+
+void Particle::render()
+{
+    
+}

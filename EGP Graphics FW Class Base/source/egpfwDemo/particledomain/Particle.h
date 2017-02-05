@@ -19,6 +19,8 @@
 
 #include <stdio.h>
 
+#include "egpfwMover.h"
+
 
 
 class Particle
@@ -28,7 +30,7 @@ class Particle
 private:
     
     // reference to the mover struct of this particle for physics simulation
-    Mover *mover;
+    egpfwMover *mover;
     
     // how long this particle lives for
     float lifespan;
@@ -44,8 +46,9 @@ private:
 public:
     
     Particle();
+    Particle(cbmath::vec3 position, cbmath::vec3 velocity, float mass, float lifespan);
     
-    inline Mover* getMover() { return mover; }
+    inline egpfwMover* getMover() { return mover; }
     
     void update(const float dt);
     
