@@ -38,7 +38,7 @@
 #include "egpfw/egpfw.h"
 
 
-#include "gphysics/egpfwMover.h"
+#include "gphysics/Mover.h"
 
 
 //-----------------------------------------------------------------------------
@@ -140,7 +140,7 @@ const cbmath::vec3 gravityAccel(0.0f, -9.81f, 0.0f);
 
 // movables
 const unsigned int numMovers = 2;
-egpfwMover mover[numMovers];
+Mover mover[numMovers];
 
 
 // quickly reset physics
@@ -159,12 +159,10 @@ void resetPhysics()
         /* fixed accel. */       gravityAccel
     };
     
-	mover->acceleration = -cbmath::v3y;
-	(mover + 1)->acceleration = -cbmath::v3y;
-    setMass(mover + 0, 1.0f); //feather
-    setMass(mover + 1, 5.0f); //bowling ball
-	setDamping(mover + 0, 0.99f);
-	setDamping(mover + 1, 0.99f);
+    (mover+0)->setMass(1.0f); //feather
+    (mover+1)->setMass(5.0f); //bowling ball
+	(mover+0)->setDamping(0.99f);
+	(mover+1)->setDamping(0.99f);
 }
 
 // update physics only
@@ -174,15 +172,15 @@ void updatePhysics(float dt)
 	//	-> integrate
 	//	-> update anything that has to do with graphics
 	unsigned int i;
-	egpfwMover *m;
+	Mover *m;
 	for (i = 0, m = mover; i < numMovers; ++i, ++m)
 	{
 		// physics
-		updateMoverDisplacement(m, dt);
+		m->updateMoverDisplacement(dt);
 
 
 		// graphics
-		updateMoverGraphics(m);
+		m->updateMoverGraphics();
 	}
 }
 
