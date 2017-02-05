@@ -153,7 +153,7 @@ Particle *modelParticle;
 void initParticleSystem()
 {
 	modelParticle = new Particle(cbmath::v3zero, cbmath::v3y, 1.0f, 1.0f);
-	particleSystem = new ParticleSystem(modelParticle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3zero, cbmath::v3y, 500);
+	particleSystem = new ParticleSystem(modelParticle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 25);
 }
 
 // quickly reset physics

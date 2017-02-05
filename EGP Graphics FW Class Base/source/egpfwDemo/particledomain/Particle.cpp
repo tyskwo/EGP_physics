@@ -30,7 +30,7 @@ Particle::Particle(cbmath::vec3 position, cbmath::vec3 velocity, float mass, flo
     m_mover->position = position;
 	m_mover->velocity = velocity;
 	m_mover->setMass(mass);
-	m_mover->setDamping(0.99f);
+	m_mover->setDamping(0.5f);
     
     // set the lifespan values
     this->m_lifespan = lifespan;
@@ -62,6 +62,10 @@ void Particle::render(cbmath::mat4 viewProjMatrix)
     if(m_isActive)
     {
 		this->m_mover->updateMoverGraphics();
-		egpDrawWireCubeImmediate((viewProjMatrix * this->m_mover->modelMatrix).m, 0, 0, static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX);
+		
+		egpDrawSphere8x6Immediate((viewProjMatrix * this->m_mover->modelMatrix).m, 0, 1.0f, 0.0f, 0.0f);
+
+		// random colors
+		//egpDrawWireCubeImmediate((viewProjMatrix * this->m_mover->modelMatrix).m, 0, 0, static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX);
     }
 }

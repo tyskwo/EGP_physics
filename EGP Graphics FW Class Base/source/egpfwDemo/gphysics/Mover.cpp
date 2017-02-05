@@ -52,6 +52,12 @@ void Mover::updateVelocity(const float dt)
 	// v = v0 + a*dt
 	velocity += acceleration * dt;
 
+	if (position.y < 0.0f)
+	{
+		position.y = 0.0f;
+		velocity.y = -velocity.y;
+	}
+
 	velocity *= powf(damping, dt);
 }
 
