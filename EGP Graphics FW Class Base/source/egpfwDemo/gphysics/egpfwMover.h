@@ -7,6 +7,7 @@
 
 
 #include "cbmath/cbtkMatrix.h"
+#include <math.h>
 
 
 struct egpfwMover
@@ -26,7 +27,7 @@ struct egpfwMover
     cbmath::vec3 acceleration;
     
     // mass
-    float mass, massInverse;
+    float mass, massInverse, damping;
 };
 
 
@@ -35,8 +36,13 @@ struct egpfwMover
 
 void setMass(egpfwMover *mover, float mass)
 {
-    if(mass > 0.0f) mover->massInverse = 1 / (mover->mass = mass);
-    else            mover->mass = mover->massInverse = 0.0f;
+    if(mass > 0.0f) mover->massInverse = 1.0f / (mover->mass = mass);
+    else            mover->massInverse = mover->mass = 0.0f;
+}
+
+void setDamping(egpfwMover *mover, float damping)
+{
+	mover->damping = damping;
 }
 
 
@@ -58,6 +64,8 @@ void updateVelocity(egpfwMover *mover, const float dt)
 {
     // v = v0 + a*dt
     mover->velocity += mover->acceleration * dt;
+
+	mover->velocity *= powf(mover->damping, dt);
 }
 
 
@@ -75,7 +83,7 @@ void updateAcceleration(egpfwMover *mover)
 void updateMoverDisplacement(egpfwMover *mover, const float dt)
 {
     //x = x0 + v * dt + 0.5 * a * dt^2
-    mover->position += mover->velocity * dt + 0.5 * mover->acceleration * dt * dt;
+    mover->position += mover->velocity * dt + 0.5 * mover->acceleration * (dt * dt);
     
     updateVelocity(mover, dt);
     updateAcceleration(mover);

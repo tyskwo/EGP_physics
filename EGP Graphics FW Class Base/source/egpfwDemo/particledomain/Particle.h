@@ -19,9 +19,8 @@
 
 #include <stdio.h>
 
-#include "egpfwMover.h"
-
-
+#include "cbmath\cbtkMatrix.h"
+#include "..\gphysics\egpfwMover.h"
 
 class Particle
 {
@@ -30,16 +29,16 @@ class Particle
 private:
     
     // reference to the mover struct of this particle for physics simulation
-    egpfwMover *mover;
+    egpfwMover *m_mover;
     
     // how long this particle lives for
-    float lifespan;
+    float m_lifespan;
     
     // how long this particle has been alive
-    float currentLife;
+    float m_currentLife;
     
     // whether or not this particle is dead
-    bool  isActive;
+    bool  m_isActive;
     
     
     
@@ -48,7 +47,7 @@ public:
     Particle();
     Particle(cbmath::vec3 position, cbmath::vec3 velocity, float mass, float lifespan);
     
-    inline egpfwMover* getMover() { return mover; }
+    inline egpfwMover* getMover() { return m_mover; }
     
     void update(const float dt);
     

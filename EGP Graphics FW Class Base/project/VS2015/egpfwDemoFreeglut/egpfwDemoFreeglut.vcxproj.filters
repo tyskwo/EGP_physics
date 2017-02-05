@@ -34,6 +34,9 @@
     <Filter Include="Source Files\egpfwDemo\gphysics">
       <UniqueIdentifier>{56fe9b4f-8bcd-4062-9747-6372f8ae6c43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\egpfwDemo\particleDomain">
+      <UniqueIdentifier>{92fa5fb5-73f1-4edb-baad-d60a9af7651b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\resource\glsl\410\fs\drawColor_fs410.glsl">
@@ -74,6 +77,12 @@
     <ClCompile Include="egpfwDemoFreeglut\egpDemoFreeglutMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\egpfwDemo\particledomain\Particle.cpp">
+      <Filter>Source Files\egpfwDemo\particleDomain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.cpp">
+      <Filter>Source Files\egpfwDemo\particleDomain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\egpfwDemo\egpfwDemo.h">
@@ -82,8 +91,14 @@
     <ClInclude Include="egpfwDemoFreeglut\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.h">
+      <Filter>Source Files\egpfwDemo\particleDomain</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwMover.h">
       <Filter>Source Files\egpfwDemo\gphysics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\Particle.h">
+      <Filter>Source Files\egpfwDemo\particleDomain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
