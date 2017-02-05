@@ -55,7 +55,7 @@ void Mover::updateVelocity(const float dt)
 void Mover::updateAcceleration()
 {
 	// a = F/m = F * im
-	acceleration = (force + accelerationFixed) * massInverse;
+	acceleration = (force * massInverse) + (accelerationFixed * mass);
 
 	force.set();
 }

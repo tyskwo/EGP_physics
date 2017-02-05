@@ -149,17 +149,17 @@ void resetPhysics()
     mover[0] =
     {
         /* matrix */             cbmath::m4Identity,
-        /* position, velocity */ cbmath::vec3(-3.0f, 5.0f, 0.0f), cbmath::vec3(0.0f, 2.0f, 0.0f),
+        /* position, velocity */ cbmath::vec3(0.0f, 5.0f, 0.0f), cbmath::vec3(0.0f, 0.0f, 0.0f),
         /* fixed accel. */       gravityAccel
     };
 	mover[1] =
     {
         /* matrix */             cbmath::m4Identity,
-        /* position, velocity */ cbmath::vec3(3.0f, 5.0f, 0.0f), cbmath::vec3(0.0f, 2.0f, 0.0f),
+        /* position, velocity */ cbmath::vec3(3.0f, 5.0f, 0.0f), cbmath::vec3(0.0f, 0.0f, 0.0f),
         /* fixed accel. */       gravityAccel
     };
     
-    (mover+0)->setMass(1.0f); //feather
+    (mover+0)->setMass(0.001f); //feather
     (mover+1)->setMass(5.0f); //bowling ball
 	(mover+0)->setDamping(0.99f);
 	(mover+1)->setDamping(0.99f);
