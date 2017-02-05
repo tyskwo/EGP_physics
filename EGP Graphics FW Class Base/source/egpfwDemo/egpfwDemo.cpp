@@ -152,18 +152,18 @@ void resetPhysics()
     mover[0] =
     {
         /* matrix */             cbmath::m4Identity,
-        /* position, velocity */ cbmath::vec3(-3.0f, 5.0f, 0.0f), cbmath::vec3(0.0f, 3.0f, 0.0f)//,
-        ///* fixed accel. */       gravityAccel
+        /* position, velocity */ cbmath::vec3(-3.0f, 5.0f, 0.0f), cbmath::vec3(0.0f, 10.0f, 0.0f),
+        /* fixed accel. */       gravityAccel
     };
 	mover[1] =
     {
         /* matrix */             cbmath::m4Identity,
-        /* position, velocity */ cbmath::vec3(3.0f, 5.0f, 0.0f), cbmath::vec3(0.0f, 3.0f, 0.0f)//,
-        ///* fixed accel. */       gravityAccel
+        /* position, velocity */ cbmath::vec3(3.0f, 5.0f, 0.0f), cbmath::vec3(0.0f, 2.0f, 0.0f),
+        /* fixed accel. */       gravityAccel
     };
     
-    setMass(mover + 0, 0.001f); //feather
-    setMass(mover + 1, 5.0f);   //bowling ball
+    setMass(mover + 0, 1.0f); //feather
+    setMass(mover + 1, 5.0f); //bowling ball
 }
 
 // update physics only
@@ -177,7 +177,6 @@ void updatePhysics(float dt)
 	for (i = 0, m = mover; i < numMovers; ++i, ++m)
 	{
 		// physics
-        addForce(m, gravityAccel / m->mass);
 		updateMoverDisplacement(m, dt);
 
 

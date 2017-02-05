@@ -65,21 +65,11 @@ void updateVelocity(egpfwMover *mover, const float dt)
 void updateAcceleration(egpfwMover *mover)
 {
     // a = F/m = F * im
-    mover->acceleration = mover->force * mover->massInverse + mover->accelerationFixed;
+    mover->acceleration = (mover->force + mover->accelerationFixed) * mover->massInverse;
     
     mover->force.set();
 }
 
-
-
-void updateMoverFirstOrder(egpfwMover *mover, const float dt)
-{
-    // x = x0 + v * dt
-	mover->position += mover->velocity * dt;
-    
-    updateVelocity(mover, dt);
-    updateAcceleration(mover);
-}
 
 
 void updateMoverDisplacement(egpfwMover *mover, const float dt)
