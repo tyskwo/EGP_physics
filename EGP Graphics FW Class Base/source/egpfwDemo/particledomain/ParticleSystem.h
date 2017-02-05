@@ -58,7 +58,11 @@ private:
 public:
     
     ParticleSystem();
-    ParticleSystem(Particle modelParticle, Emitter::Mode mode, cbmath::vec3 position, cbmath::vec3 emitDirection, int numberToEmit);
+    ParticleSystem(Particle      modelParticle,
+                   Emitter::Mode mode           = Emitter::Mode::Burst,
+                   cbmath::vec3  position       = cbmath::vec3(0.0f,0.0f,0.0f),
+                   cbmath::vec3  emitDirection  = cbmath::vec3(0.0f,1.0f,0.0f),
+                   int           numberToEmit   = 100);
     
     inline Particle               getModelParticle() { return m_modelParticle; }
     inline std::vector<Particle*> getParticles()     { return m_particles;     }

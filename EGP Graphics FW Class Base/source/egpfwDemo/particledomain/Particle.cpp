@@ -20,7 +20,7 @@ Particle::Particle() {}
 
 
 
-Particle::Particle(cbmath::vec3 position, cbmath::vec3 velocity = cbmath::vec3(0.0f,0.0f,0.0f), float mass = 1.0f, float lifespan = 1.0f)
+Particle::Particle(cbmath::vec3 position, cbmath::vec3 velocity, float mass, float lifespan)
 {
     // set the physics values
     m_mover->position = position;

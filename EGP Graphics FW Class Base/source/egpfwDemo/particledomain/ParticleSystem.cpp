@@ -18,10 +18,10 @@
 ParticleSystem::ParticleSystem() {}
 
 ParticleSystem::ParticleSystem(Particle      modelParticle,
-                               Emitter::Mode mode           = Emitter::Mode::Burst,
-                               cbmath::vec3  position       = cbmath::vec3(0.0f,0.0f,0.0f),
-                               cbmath::vec3  emitDirection  = cbmath::vec3(0.0f,1.0f,0.0f),
-                               int           numberToEmit   = 100)
+                               Emitter::Mode mode,
+                               cbmath::vec3  position,
+                               cbmath::vec3  emitDirection,
+                               int           numberToEmit)
 {
     this->m_modelParticle           = modelParticle;
     this->m_emitter.m_mode          = mode;

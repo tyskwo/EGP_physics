@@ -51,7 +51,7 @@ private:
 public:
     
     Particle();
-    Particle(cbmath::vec3 position, cbmath::vec3 velocity, float mass, float lifespan);
+    Particle(cbmath::vec3 position, cbmath::vec3 velocity = cbmath::v3zero, float mass = 1.0f, float lifespan = 1.0f);
     
     inline Mover* getMover() { return m_mover;    }
     inline bool   isAlive()  { return m_isActive; }
