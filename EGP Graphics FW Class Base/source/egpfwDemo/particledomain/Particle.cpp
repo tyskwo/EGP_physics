@@ -14,6 +14,8 @@
 
 #include "Particle.h"
 
+#include <stdlib.h> 
+#include "egpfw\egpfw\utils\egpfwPrimitiveDataUtils.h"
 
 
 Particle::Particle() {}
@@ -22,10 +24,13 @@ Particle::Particle() {}
 
 Particle::Particle(cbmath::vec3 position, cbmath::vec3 velocity, float mass, float lifespan)
 {
+	m_mover = new Mover();
+
     // set the physics values
     m_mover->position = position;
 	m_mover->velocity = velocity;
-	m_mover->mass     = mass;
+	m_mover->setMass(mass);
+	m_mover->setDamping(0.99f);
     
     // set the lifespan values
     this->m_lifespan = lifespan;
@@ -52,10 +57,11 @@ void Particle::update(const float dt)
 
 
 
-void Particle::render()
+void Particle::render(cbmath::mat4 viewProjMatrix)
 {
     if(m_isActive)
     {
-        
+		this->m_mover->updateMoverGraphics();
+		egpDrawWireCubeImmediate((viewProjMatrix * this->m_mover->modelMatrix).m, 0, 0, static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX);
     }
 }

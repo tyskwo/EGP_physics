@@ -14,6 +14,17 @@
 
 #include "Mover.h"
 
+Mover::Mover()
+{
+	modelMatrix = cbmath::m4Identity;
+	accelerationFixed = cbmath::v3y * GRAVITATIONAL_CONSTANT;
+}
+
+Mover::~Mover()
+{
+}
+
+
 
 
 void Mover::setMass(float mass)
@@ -27,8 +38,6 @@ void Mover::setDamping(float damping)
 	this->damping = damping;
 }
 
-
-
 void Mover::addForce(const cbmath::vec3 force)
 {
 	this->force += force;
@@ -38,10 +47,6 @@ void Mover::addForce(const cbmath::vec3 force)
 
 
 // physics (integration) updates
-
-
-
-
 void Mover::updateVelocity(const float dt)
 {
 	// v = v0 + a*dt
@@ -49,7 +54,6 @@ void Mover::updateVelocity(const float dt)
 
 	velocity *= powf(damping, dt);
 }
-
 
 
 void Mover::updateAcceleration()
@@ -61,7 +65,6 @@ void Mover::updateAcceleration()
 }
 
 
-
 void Mover::updateMoverDisplacement(const float dt)
 {
 	//x = x0 + v * dt + 0.5 * a * dt^2
@@ -70,7 +73,6 @@ void Mover::updateMoverDisplacement(const float dt)
 	updateVelocity(dt);
 	updateAcceleration();
 }
-
 
 
 

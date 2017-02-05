@@ -17,12 +17,13 @@
 
 ParticleSystem::ParticleSystem() {}
 
-ParticleSystem::ParticleSystem(Particle      modelParticle,
+ParticleSystem::ParticleSystem(Particle*     modelParticle,
                                Emitter::Mode mode,
                                cbmath::vec3  position,
                                cbmath::vec3  emitDirection,
                                int           numberToEmit)
 {
+	m_mover = new Mover();
     this->m_modelParticle           = modelParticle;
     this->m_emitter.m_mode          = mode;
     this->m_emitter.m_emitDirection = emitDirection;
@@ -54,16 +55,16 @@ void ParticleSystem::emit()
 {
     for(int i = 0; i < m_emitter.m_numberToEmit; i++)
     {
-        m_particles.push_back(new Particle(m_mover->position, m_emitter.m_emitDirection, 2.0f, 5.0f));
+        m_particles.push_back(new Particle(m_mover->position, m_emitter.m_emitDirection + cbmath::v3x * (static_cast<float>(rand()) / RAND_MAX) + cbmath::v3y * (static_cast<float>(rand()) / RAND_MAX) + cbmath::v3z * (static_cast<float>(rand()) / RAND_MAX), 0.5f, 5.0f));
     }
 }
 
 
 
-void ParticleSystem::render()
+void ParticleSystem::render(cbmath::mat4 viewProjMatrix)
 {
     for(Particle *p : m_particles)
     {
-        p->render();
+        p->render(viewProjMatrix);
     }
 }

@@ -7,7 +7,7 @@
 #ifndef __MOVER_H
 #define __MOVER_H
 
-
+#define GRAVITATIONAL_CONSTANT -9.81f
 
 #include <math.h>
 
@@ -15,7 +15,7 @@
 
 
 
-struct Mover
+class Mover
 {
     
 public:
@@ -41,6 +41,9 @@ private:
     
 
 public:
+	Mover();
+	~Mover();
+
 	void setMass(float mass);
 	void setDamping(float damping);
 

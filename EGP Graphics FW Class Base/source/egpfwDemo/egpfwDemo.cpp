@@ -150,31 +150,25 @@ Mover mover[numMovers];
 ParticleSystem *particleSystem;
 Particle *modelParticle;
 
+void initParticleSystem()
+{
+	modelParticle = new Particle(cbmath::v3zero, cbmath::v3y, 1.0f, 1.0f);
+	particleSystem = new ParticleSystem(modelParticle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3zero, cbmath::v3y, 500);
+}
 
 // quickly reset physics
 void resetPhysics()
 {
-	modelParticle = new Particle(cbmath::v3zero, cbmath::v3y, 1.0f, 1.0f);
-	particleSystem = new ParticleSystem(modelParticle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3zero, cbmath::v3y + cbmath::v3x, 5);
+	particleSystem->emit();
 	//egp_particleSystem = new ParticleSystem()
-
-    mover[0] =
-    {
-        /* matrix */             cbmath::m4Identity,
-        /* position, velocity */ cbmath::vec3(0.0f, 5.0f, 0.0f), cbmath::vec3(0.0f, 0.0f, 0.0f),
-        /* fixed accel. */       gravityAccel
-    };
-	mover[1] =
-    {
-        /* matrix */             cbmath::m4Identity,
-        /* position, velocity */ cbmath::vec3(3.0f, 5.0f, 0.0f), cbmath::vec3(0.0f, 0.0f, 0.0f),
-        /* fixed accel. */       gravityAccel
-    };
     
-    (mover+0)->setMass(0.001f); //feather
-    (mover+1)->setMass(5.0f); //bowling ball
-	(mover+0)->setDamping(0.99f);
-	(mover+1)->setDamping(0.99f);
+	//mover = new Mover();
+	//(mover + 1) = new Mover();
+
+    //(mover+0)->setMass(0.001f); //feather
+    //(mover+1)->setMass(5.0f); //bowling ball
+	//(mover+0)->setDamping(0.99f);
+	//(mover+1)->setDamping(0.99f);
 }
 
 // update physics only
@@ -183,17 +177,23 @@ void updatePhysics(float dt)
 	// basic physics update: 
 	//	-> integrate
 	//	-> update anything that has to do with graphics
-	unsigned int i;
-	Mover *m;
-	for (i = 0, m = mover; i < numMovers; ++i, ++m)
-	{
-		// physics
-		m->updateMoverDisplacement(dt);
+	
+
+	//unsigned int i;
+	//Mover *m;
+	//for (i = 0, m = mover; i < numMovers; ++i, ++m)
+	//{
+	//	// physics
+	//	m->updateMoverDisplacement(dt);
 
 
-		// graphics
-		m->updateMoverGraphics();
-	}
+	//	// graphics
+	//	m->updateMoverGraphics();
+	//}
+
+
+	// particles
+	particleSystem->update(dt);
 }
 
 
@@ -463,6 +463,7 @@ int initGame()
 
 
 	// physics
+	initParticleSystem();
 	resetPhysics();
 
 
@@ -612,14 +613,17 @@ void renderGameState()
 	//	egpfwDrawTexturedUnitQuadImmediate(viewProjMat.m, 0);
 
 
-		cbmath::mat4 mvp;
+		particleSystem->render(viewProjMat);
+		//cbmath::mat4 mvp;
+
+
 
 		// draw each physics object in immediate mode
-		mvp = viewProjMat * mover[0].modelMatrix;
+		/*mvp = viewProjMat * mover[0].modelMatrix;
 		egpDrawWireCubeImmediate(mvp.m, 0, 0, 1.0f, 0.5f, 0.0f);
 
 		mvp = viewProjMat * mover[1].modelMatrix;
-		egpDrawWireCubeImmediate(mvp.m, 0, 0, 0.0f, 1.0f, 0.5f);
+		egpDrawWireCubeImmediate(mvp.m, 0, 0, 0.0f, 1.0f, 0.5f);*/
 	}
 
 

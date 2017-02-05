@@ -58,7 +58,7 @@ public:
     
     void update(const float dt);
     
-    void render();
+    void render(cbmath::mat4 viewProjMatrix);
 };
 
 

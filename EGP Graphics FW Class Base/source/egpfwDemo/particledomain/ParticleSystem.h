@@ -44,7 +44,7 @@ public:
 private:
     
     // the particle this system will be emitting
-    Particle m_modelParticle;
+    Particle *m_modelParticle;
     
     // the list of particles this system is responsible for
     std::vector<Particle*> m_particles;
@@ -58,20 +58,20 @@ private:
 public:
     
     ParticleSystem();
-    ParticleSystem(Particle      modelParticle,
+    ParticleSystem(Particle*     modelParticle,
                    Emitter::Mode mode           = Emitter::Mode::Burst,
                    cbmath::vec3  position       = cbmath::vec3(0.0f,0.0f,0.0f),
                    cbmath::vec3  emitDirection  = cbmath::vec3(0.0f,1.0f,0.0f),
                    int           numberToEmit   = 100);
 
-    inline Particle               getModelParticle() { return m_modelParticle; }
+    inline Particle*              getModelParticle() { return m_modelParticle; }
     inline std::vector<Particle*> getParticles()     { return m_particles;     }
     
     void update(const float dt);
     
     void emit();
     
-    void render();
+    void render(cbmath::mat4 viewProjMatrix);
     
 };
 
