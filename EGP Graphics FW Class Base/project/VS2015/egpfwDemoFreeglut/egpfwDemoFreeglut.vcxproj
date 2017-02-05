@@ -321,13 +321,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\egpfwDemo\egpfwDemo.cpp" />
+    <ClCompile Include="..\..\..\source\egpfwDemo\gphysics\Mover.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\particledomain\Particle.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.cpp" />
     <ClCompile Include="egpfwDemoFreeglut\egpDemoFreeglutMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\egpfwDemo\egpfwDemo.h" />
-    <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwMover.h" />
+    <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\Mover.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\Particle.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.h" />
     <ClInclude Include="egpfwDemoFreeglut\resource.h" />

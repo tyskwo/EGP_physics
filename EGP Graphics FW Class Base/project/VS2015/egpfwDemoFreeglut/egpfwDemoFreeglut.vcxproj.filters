@@ -83,6 +83,9 @@
     <ClCompile Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.cpp">
       <Filter>Source Files\egpfwDemo\particleDomain</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\egpfwDemo\gphysics\Mover.cpp">
+      <Filter>Source Files\egpfwDemo\gphysics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\egpfwDemo\egpfwDemo.h">
@@ -94,11 +97,11 @@
     <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.h">
       <Filter>Source Files\egpfwDemo\particleDomain</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwMover.h">
-      <Filter>Source Files\egpfwDemo\gphysics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\Particle.h">
       <Filter>Source Files\egpfwDemo\particleDomain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\Mover.h">
+      <Filter>Source Files\egpfwDemo\gphysics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

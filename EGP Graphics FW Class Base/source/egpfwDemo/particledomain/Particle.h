@@ -19,13 +19,12 @@
 
 #include <stdio.h>
 
-#include "Mover.h"
-
-/*
 #ifdef _WIN32
-#include "cbmath\cbtkMatrix.h"
-#include "..\gphysics\egpfwMover.h"
-#endif*/
+	#include "cbmath\cbtkMatrix.h"
+	#include "..\gphysics\Mover.h"
+#else
+	#include "Mover.h"
+#endif
 
 class Particle
 {
