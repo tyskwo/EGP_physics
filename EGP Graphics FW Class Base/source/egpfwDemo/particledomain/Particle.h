@@ -26,6 +26,8 @@
 	#include "Mover.h"
 #endif
 
+
+
 class Particle
 {
     
@@ -51,7 +53,8 @@ public:
     Particle();
     Particle(cbmath::vec3 position, cbmath::vec3 velocity, float mass, float lifespan);
     
-    inline Mover* getMover() { return m_mover; }
+    inline Mover* getMover() { return m_mover;    }
+    inline bool   isAlive()  { return m_isActive; }
     
     void update(const float dt);
     

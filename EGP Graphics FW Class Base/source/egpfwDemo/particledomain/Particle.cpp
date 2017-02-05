@@ -40,12 +40,22 @@ Particle::Particle(cbmath::vec3 position, cbmath::vec3 velocity = cbmath::vec3(0
 
 void Particle::update(const float dt)
 {
-    this->m_mover->updateMoverDisplacement(dt);
+    if(m_isActive)
+    {
+        this->m_mover->updateMoverDisplacement(dt);
+        
+        m_currentLife += dt;
+        
+        if(m_currentLife > m_lifespan) m_isActive = false;
+    }
 }
 
 
 
 void Particle::render()
 {
-    
+    if(m_isActive)
+    {
+        
+    }
 }

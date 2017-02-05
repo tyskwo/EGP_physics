@@ -34,9 +34,17 @@ ParticleSystem::ParticleSystem(Particle      modelParticle,
 
 void ParticleSystem::update(const float dt)
 {
-    for(Particle *p : m_particles)
+    for(int i = 0; i < m_particles.size(); i++)
     {
+        Particle *p = m_particles.at(i);
+        
         p->update(dt);
+        
+        if(!p->isAlive())
+        {
+            m_particles.erase(m_particles.begin() + i);
+            i--;
+        }
     }
 }
 
