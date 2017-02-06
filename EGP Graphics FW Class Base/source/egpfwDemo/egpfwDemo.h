@@ -4,16 +4,16 @@
 ////	By Dan Buckstein
 ////	January 2017
 ////
-////	****Modified by: ______________________________________________________
-////	^^^^
-////	NOTE: 4 asterisks anywhere means something you will have to either 
-////		modify or complete to get it working! Good practice for starters: 
-////		write your name beside "modified by" above!
+////	This file was modified by David Hartman, Ty Wood with permission from author.
+////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+
+
 #ifndef __EGPFW_DEMO_H
 #define __EGPFW_DEMO_H
+
 
 
 #ifdef __cplusplus
@@ -22,6 +22,7 @@ extern "C"
 #endif  // __cplusplus
 
 
+    
 	unsigned int windowWidth();
 	unsigned int windowHeight();
 	unsigned int windowPosX();
@@ -45,6 +46,7 @@ extern "C"
 	int idle();
 
 
+    
 #ifdef __cplusplus
 }
 #endif  // __cplusplus

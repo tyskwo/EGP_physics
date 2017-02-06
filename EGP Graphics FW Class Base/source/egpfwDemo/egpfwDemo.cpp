@@ -32,9 +32,9 @@
 
 // OpenGL
 #ifdef _WIN32
-#include "GL/glew.h"
+    #include "GL/glew.h"
 #else	// !_WIN32
-#include <OpenGL/gl3.h>
+    #include <OpenGL/gl3.h>
 #endif	// _WIN32
 
 // DevIL (images)
@@ -54,6 +54,9 @@
     #include "Mover.h"
     #include "ParticleSystem.h"
     #include "Particle.h"
+    #include "Shader.h"
+    #include "Model.h"
+    #include "Geometry.h"
 #endif
 
 
@@ -116,7 +119,6 @@ cbtk::cbmath::vec4 cameraPosWorld(0.0f, 0.0f, cameraDistance, 1.0f), deltaCamPos
 
 //-----------------------------------------------------------------------------
 // graphics-related data and handles
-// good practice: default values for everything
 
 
 // test vertex buffers for built-in primitive data
@@ -170,23 +172,6 @@ egpIndexBufferObjectDescriptor  ibo[iboCount] = { 0 };
 
 
 
-egpProgram shaderProgram;
-
-enum GLSLCommonUniformIndex
-{
-    unif_mvp,
-    
-    unif_lightPos,
-    unif_eyePos,
-    
-    unif_dm,
-    unif_sm,
-    
-    //-----------------------------
-    GLSLCommonUniformCount
-};
-int glslCommonUniforms[GLSLCommonUniformCount] = { -1 };
-
 
 
 
@@ -202,17 +187,19 @@ int glslCommonUniforms[GLSLCommonUniformCount] = { -1 };
 // movables
 ParticleSystem *particleSystem;
 Particle *modelParticle;
+Model *model;
+
 
 void initParticleSystem()
 {
-	modelParticle = new Particle(cbmath::v3zero, cbmath::v3y, 1.0f, 1.0f);
-	particleSystem = new ParticleSystem(modelParticle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 25);
+	modelParticle  = new Particle(cbmath::v3zero, cbmath::v3y, 1.0f, 1.0f);
+	particleSystem = new ParticleSystem(modelParticle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 500);
 }
 
 // quickly reset physics
 void resetPhysics()
 {
-	particleSystem->emit(&shaderProgram);
+	particleSystem->emit(model);
 }
 
 // update physics only
@@ -298,10 +285,7 @@ int initIL()
 
 
 // display OpenGL version
-void printGLVersion()
-{
-	printf("%s", glGetString(GL_VERSION));
-}
+void printGLVersion() { printf("%s", glGetString(GL_VERSION)); }
 
 
 
@@ -329,8 +313,8 @@ void setupGeometry()
 	//	so prepare those first
 	egpAttributeDescriptor attribs[] = {
 		egpCreateAttributeDescriptor(ATTRIB_POSITION, ATTRIB_VEC3, 0),
-		egpCreateAttributeDescriptor(ATTRIB_NORMAL, ATTRIB_VEC3, 0),
-		egpCreateAttributeDescriptor(ATTRIB_COLOR, ATTRIB_VEC3, 0),
+		egpCreateAttributeDescriptor(ATTRIB_NORMAL,   ATTRIB_VEC3, 0),
+		egpCreateAttributeDescriptor(ATTRIB_COLOR,    ATTRIB_VEC3, 0),
 		egpCreateAttributeDescriptor(ATTRIB_TEXCOORD, ATTRIB_VEC2, 0),
 	};
 
@@ -386,26 +370,23 @@ void setupGeometry()
     
     // CUSTOM GEOMETRY
     
-    /*// octahedron
+    // octahedron
     egpAttributeDescriptor octAttribs[] = {
-        egpCreateAttributeDescriptor(ATTRIB_POSITION, ATTRIB_VEC3, egpfwGetOctahedronUniquePositions()),
-        egpCreateAttributeDescriptor(ATTRIB_COLOR, ATTRIB_VEC3, egpfwGetOctahedronUniqueColors())
+        egpCreateAttributeDescriptor(ATTRIB_POSITION, ATTRIB_VEC3, Octahedron::getPositions()),
+        egpCreateAttributeDescriptor(ATTRIB_COLOR,    ATTRIB_VEC3, Octahedron::getColors())
     };
     
-    vao[octahedronVAO] = egpCreateVAOInterleavedIndexed(PRIM_TRIANGLES, octAttribs, 2, egpfwGetOctahedronUniqueVertexCount(), vbo+octahedronVBO,
-                                                        INDEX_UINT, egpfwGetOctahedronIndexCount(), egpfwGetOctahedronIndeces(), ibo+octahedronIBO);*/
+    vao[octahedronVAO] = egpCreateVAOInterleavedIndexed(PRIM_TRIANGLES, octAttribs, 2, Octahedron::getVertexCount(), vbo+octahedronVBO,
+                                                        INDEX_UINT, Octahedron::getIndexCount(), Octahedron::getIndeces(), ibo+octahedronIBO);
 }
 
 void deleteGeometry()
 {
 	// delete VAOs first (because referencing), then VBOs and IBOs
 	unsigned int i;
-	for (i = 0; i < vaoCount; ++i)
-		egpReleaseVAO(vao + i);
-	for (i = 0; i < vboCount; ++i)
-		egpReleaseVBO(vbo + i);
-	for (i = 0; i < iboCount; ++i)
-		egpReleaseIBO(ibo + i);
+	for (i = 0; i < vaoCount; ++i) egpReleaseVAO(vao + i);
+	for (i = 0; i < vboCount; ++i) egpReleaseVBO(vbo + i);
+	for (i = 0; i < iboCount; ++i) egpReleaseIBO(ibo + i);
 }
 
 
@@ -420,66 +401,19 @@ void deleteGeometry()
 // setup and delete shaders
 void setupShaders()
 {
-    // activate a VAO for validation
-    egpActivateVAO(vao + cubeWireVAO);
+    // activate a VAO for validation (automatically deactivated in shader constructor)
+    egpActivateVAO(vao);
     
+    Shader* shader = new Shader("../../../../../../../../resource/glsl/4x/vs/passColor_vs4x.glsl",
+                                "../../../../../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl");
     
-    egpFileInfo files[2];
-    egpShader shaders[2];
-    
-    // array of common uniform names
-    const char *commonUniformName[] =
-    {
-        (const char *)("mvp"),
-        (const char *)("lightPos"),
-        (const char *)("eyePos"),
-        (const char *)("tex_dm"),
-        (const char *)("tex_sm"),
-    };
-
-    // load files
-    files[0] = egpLoadFileContents("../../../../../../../../resource/glsl/4x/vs/passColor_vs4x.glsl");
-    files[1] = egpLoadFileContents("../../../../../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl");
-    
-    // create shaders
-    shaders[0] = egpCreateShaderFromSource(EGP_SHADER_VERTEX, files[0].contents);
-    shaders[1] = egpCreateShaderFromSource(EGP_SHADER_FRAGMENT, files[1].contents);
-    
-    // create, link and validate program
-    shaderProgram = egpCreateProgram();
-    egpAttachShaderToProgram(&shaderProgram, shaders + 0);
-    egpAttachShaderToProgram(&shaderProgram, shaders + 1);
-    egpLinkProgram(&shaderProgram);
-    egpValidateProgram(&shaderProgram);
-    
-    // release shaders and files
-    egpReleaseShader(shaders + 0);
-    egpReleaseShader(shaders + 1);
-    egpReleaseFileContents(files + 0);
-    egpReleaseFileContents(files + 1);
-    
-    
-    
-    
-    
-    
-    egpActivateProgram(&shaderProgram);
-
-    for (int u = 0; u < GLSLCommonUniformCount; ++u)
-        glslCommonUniforms[u] = egpGetUniformLocation(&shaderProgram, commonUniformName[u]);
-    
-    
-    
-    
-    
-    // disable all
-    egpActivateProgram(0);
-    egpActivateVAO(0);
+    model = new Model(shader, vao+octahedronVAO);
 }
 
 void deleteShaders()
 {
-    egpReleaseProgram(&shaderProgram);
+    delete model;
+    model = NULL;
 }
 
 
@@ -696,71 +630,23 @@ void updateGameState(float dt)
 // DRAWING AND UPDATING SHOULD BE SEPARATE (good practice)
 void renderGameState()
 {
-//-----------------------------------------------------------------------------
-	// ****DRAW ALL OBJECTS - ALGORITHM: 
-	//	- activate shader program if different from last object
-	//	- bind texture we want to apply (skybox)
-	//	- send appropriate uniforms if different from last time we used this program
-	//	- call appropriate draw function, based on whether we are indexed or not
+    drawToBackBuffer(viewport_nb, viewport_nb, viewport_tw, viewport_th);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 
-//-----------------------------------------------------------------------------
-
-	// first pass: scene
-	{
-		// ****
-		// TEST DRAW: demo shapes
-		{
-			// target back-buffer and clear
-			drawToBackBuffer(viewport_nb, viewport_nb, viewport_tw, viewport_th);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    particleSystem->render(viewProjMat);
 
 
-			// uncomment to draw everything as wireframe
-		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-			// draw 3D primitives with immediate mode (terrible)
-		//	egpDrawSphere8x6Immediate(viewProjMat.m, 0, 1.0f, 0.0f, 0.0f);
-		//	egpDrawSphere32x24Immediate(viewProjMat.m, 0, 0.0f, 1.0f, 0.0f);
-		//	egpDrawCubeImmediate(viewProjMat.m, 0, 1, 0.0f, 0.0f, 1.0f);
-		//	egpDrawWireCubeImmediate(viewProjMat.m, 0, 1, 1.0f, 0.5f, 0.0f);
+    // force draw in front of everything
+    glDisable(GL_DEPTH_TEST);
 
-			// draw 3D primitives with retained mode (VAOs, proper)
-            /*egpActivateProgram(&shaderProgram);
+    // center of world (this is useful to see where the origin is and how big one unit is)
+    egpfwDrawAxesImmediate(viewProjMat.m, 0);
 
-            egpActivateVAO(vao + sphere8x6VAO);
-		//	egpActivateVAO(vao + sphere32x24VAO);
-		//	egpActivateVAO(vao + cubeVAO);
-		//	egpActivateVAO(vao + cubeWireVAO);
-		//	egpActivateVAO(vao + cubeIndexedVAO);
-		//	egpActivateVAO(vao + cubeWireIndexedVAO);
-        //  egpActivateVAO(vao + octahedronVAO);
-            egpDrawActiveVAO();*/
-		}
-	}
-
-
-	// ****
-	// TEST YOUR SHAPES
-	{
-        particleSystem->render(viewProjMat, glslCommonUniforms[unif_mvp], vao+sphere32x24VAO);
-	}
-
-
-	// TEST DRAW: coordinate axes at center of spaces
-	//	and other line objects
-	{
-		// force draw in front of everything
-		glDisable(GL_DEPTH_TEST);
-
-		// center of world
-		// (this is useful to see where the origin is and how big one unit is)
-		egpfwDrawAxesImmediate(viewProjMat.m, 0);
-
-		// done
-		glEnable(GL_DEPTH_TEST);
-	}
+    // done
+    glEnable(GL_DEPTH_TEST);
 }
 
 
@@ -801,11 +687,7 @@ int idle()
 
 
 // window closed
-void onCloseWindow()
-{
-	// clean up
-	termGame();
-}
+void onCloseWindow() { termGame(); }
 
 
 

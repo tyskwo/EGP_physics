@@ -55,19 +55,19 @@ void ParticleSystem::update(const float dt)
 
 
 
-void ParticleSystem::emit(egpProgram* shader)
+void ParticleSystem::emit(Model* model)
 {
     for(int i = 0; i < m_emitter.m_numberToEmit; i++)
     {
         m_particles.push_back(new Particle(m_mover->position, m_emitter.m_emitDirection + cbmath::v3x * (static_cast<float>(rand()) / (RAND_MAX * 0.5f)) + cbmath::v3y * (static_cast<float>(rand()) / (RAND_MAX * 0.5f)) + cbmath::v3z * (static_cast<float>(rand()) / (RAND_MAX * 0.5f)), 0.5f, 5.0f));
         
-        m_particles.back()->SetShader(shader);
+        m_particles.back()->SetModel(model);
     }
 }
 
 
 
-void ParticleSystem::render(cbmath::mat4 viewProjMatrix, int mvpUniform, egpVertexArrayObjectDescriptor* vao)
+void ParticleSystem::render(cbmath::mat4 viewProjMatrix)
 {
-    for(Particle *p : m_particles) { p->render(viewProjMatrix, mvpUniform, vao); }
+    for(Particle *p : m_particles) { p->render(viewProjMatrix); }
 }

@@ -36,6 +36,9 @@
 		20A007D71E48EA7700B80C3C /* stone_dm.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007BD1E48EA7700B80C3C /* stone_dm.png */; };
 		20A007D81E48EA7700B80C3C /* stone_hm.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007BE1E48EA7700B80C3C /* stone_hm.png */; };
 		20A007D91E48EA7700B80C3C /* stone_nm.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007BF1E48EA7700B80C3C /* stone_nm.png */; };
+		20B7AD6E1E4904AB0020DA19 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20B7AD6C1E4904AB0020DA19 /* Shader.cpp */; };
+		20B7AD701E4908330020DA19 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20B7AD6F1E4908330020DA19 /* Model.cpp */; };
+		20B7AD731E490C9C0020DA19 /* Geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20B7AD711E490C9C0020DA19 /* Geometry.cpp */; };
 		BBF58EDD1E3D35B800AD1858 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF58EDC1E3D35B800AD1858 /* AppDelegate.m */; };
 		BBF58EE01E3D35B800AD1858 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF58EDF1E3D35B800AD1858 /* main.m */; };
 		BBF58EE21E3D35B800AD1858 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBF58EE11E3D35B800AD1858 /* Assets.xcassets */; };
@@ -92,6 +95,12 @@
 		20A007BD1E48EA7700B80C3C /* stone_dm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stone_dm.png; sourceTree = "<group>"; };
 		20A007BE1E48EA7700B80C3C /* stone_hm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stone_hm.png; sourceTree = "<group>"; };
 		20A007BF1E48EA7700B80C3C /* stone_nm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stone_nm.png; sourceTree = "<group>"; };
+		20B7AD6B1E4903030020DA19 /* Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Model.h; path = ../../../source/egpfwDemo/Model.h; sourceTree = "<group>"; };
+		20B7AD6C1E4904AB0020DA19 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Shader.cpp; path = ../../../source/egpfwDemo/Shader.cpp; sourceTree = "<group>"; };
+		20B7AD6D1E4904AB0020DA19 /* Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Shader.h; path = ../../../source/egpfwDemo/Shader.h; sourceTree = "<group>"; };
+		20B7AD6F1E4908330020DA19 /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Model.cpp; path = ../../../source/egpfwDemo/Model.cpp; sourceTree = "<group>"; };
+		20B7AD711E490C9C0020DA19 /* Geometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Geometry.cpp; path = ../../../source/egpfwDemo/Geometry.cpp; sourceTree = "<group>"; };
+		20B7AD721E490C9C0020DA19 /* Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Geometry.h; path = ../../../source/egpfwDemo/Geometry.h; sourceTree = "<group>"; };
 		BBF58ED81E3D35B800AD1858 /* egpfwDemoCocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = egpfwDemoCocoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF58EDB1E3D35B800AD1858 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BBF58EDC1E3D35B800AD1858 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -347,6 +356,12 @@
 				20BFF2DD1E44D19A0078886D /* gPhysics */,
 				BBF58EF51E3D53D100AD1858 /* egpfwDemo.h */,
 				BBF58EF41E3D53D100AD1858 /* egpfwDemo.cpp */,
+				20B7AD6D1E4904AB0020DA19 /* Shader.h */,
+				20B7AD6C1E4904AB0020DA19 /* Shader.cpp */,
+				20B7AD6B1E4903030020DA19 /* Model.h */,
+				20B7AD6F1E4908330020DA19 /* Model.cpp */,
+				20B7AD721E490C9C0020DA19 /* Geometry.h */,
+				20B7AD711E490C9C0020DA19 /* Geometry.cpp */,
 			);
 			name = egpfwDemo;
 			sourceTree = "<group>";
@@ -448,9 +463,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20B7AD701E4908330020DA19 /* Model.cpp in Sources */,
 				BBF58EE01E3D35B800AD1858 /* main.m in Sources */,
 				20256B391E478F7000B3DC6C /* Particle.cpp in Sources */,
+				20B7AD6E1E4904AB0020DA19 /* Shader.cpp in Sources */,
 				20256B3C1E478F8F00B3DC6C /* ParticleSystem.cpp in Sources */,
+				20B7AD731E490C9C0020DA19 /* Geometry.cpp in Sources */,
 				BBF58EDD1E3D35B800AD1858 /* AppDelegate.m in Sources */,
 				BBF58EF61E3D53D100AD1858 /* egpfwDemo.cpp in Sources */,
 				BBF58EFA1E3D60F900AD1858 /* egpfwGLView.m in Sources */,

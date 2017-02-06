@@ -62,17 +62,20 @@ void Particle::update(const float dt)
 
 
 
-void Particle::render(cbmath::mat4 viewProjMatrix, int mvpUniform, egpVertexArrayObjectDescriptor* vao)
+void Particle::render(cbmath::mat4 viewProjMatrix)
 {
     if(m_isActive)
     {
 		this->m_mover->updateMoverGraphics();
         
-        egpActivateProgram(m_shader);
         
-        egpSendUniformFloatMatrix(mvpUniform, UNIF_MAT4, 1, 0, (viewProjMatrix * this->m_mover->modelMatrix).m);
+        egpProgram temp = m_model->getShader()->getProgram();
+        egpActivateProgram(&temp);
         
-        egpActivateVAO(vao);
+        
+        egpSendUniformFloatMatrix(m_model->getShader()->getMVPUniform(), UNIF_MAT4, 1, 0, (viewProjMatrix * this->m_mover->modelMatrix).m);
+        
+        egpActivateVAO(m_model->getVAO());
         
         egpDrawActiveVAO();
 

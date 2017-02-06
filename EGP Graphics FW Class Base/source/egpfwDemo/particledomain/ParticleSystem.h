@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "Particle.h"
+#include "Model.h"
 
 
 
@@ -69,9 +70,9 @@ public:
     
     void update(const float dt);
     
-    void emit(egpProgram* shader);
+    void emit(Model* model);
     
-    void render(cbmath::mat4 viewProjMatrix, int mvpUniform, egpVertexArrayObjectDescriptor* vao);
+    void render(cbmath::mat4 viewProjMatrix);
     
 };
 

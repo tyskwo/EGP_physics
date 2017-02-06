@@ -27,6 +27,7 @@
 	#include "..\gphysics\Mover.h"
 #else
 	#include "Mover.h"
+    #include "Model.h"
 #endif
 
 
@@ -53,7 +54,7 @@ private:
     // whether or not this particle is dead
     bool  m_isActive;
     
-    egpProgram* m_shader;
+    Model* m_model;
     
     
     
@@ -67,9 +68,9 @@ public:
     
     void update(const float dt);
     
-    void render(cbmath::mat4 viewProjMatrix, int mvpUniform, egpVertexArrayObjectDescriptor* vao);
+    void render(cbmath::mat4 viewProjMatrix);
     
-    inline void SetShader(egpProgram* shader) { m_shader = shader; }
+    inline void SetModel(Model* model) { m_model = model; }
 };
 
 
