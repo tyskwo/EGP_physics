@@ -1,5 +1,5 @@
 // By Dan Buckstein
-// Modified by: _______________________________________________________________
+// Modified by: Ty Wood
 #include "egpfw/egpfw/egpfwShaderProgram.h"
 
 

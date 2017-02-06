@@ -344,14 +344,14 @@ void setupGeometry()
     
     // CUSTOM GEOMETRY
     
-    /*// octahedron
+    // octahedron
     egpAttributeDescriptor octAttribs[] = {
         egpCreateAttributeDescriptor(ATTRIB_POSITION, ATTRIB_VEC3, egpfwGetOctahedronUniquePositions()),
         egpCreateAttributeDescriptor(ATTRIB_COLOR, ATTRIB_VEC3, egpfwGetOctahedronUniqueColors())
     };
     
     vao[octahedronVAO] = egpCreateVAOInterleavedIndexed(PRIM_TRIANGLES, octAttribs, 2, egpfwGetOctahedronUniqueVertexCount(), vbo+octahedronVBO,
-                                                        INDEX_UINT, egpfwGetOctahedronIndexCount(), egpfwGetOctahedronIndeces(), ibo+octahedronIBO);*/
+                                                        INDEX_UINT, egpfwGetOctahedronIndexCount(), egpfwGetOctahedronIndeces(), ibo+octahedronIBO);
 }
 
 void deleteGeometry()
@@ -452,7 +452,7 @@ int initGame()
 
 
 	// physics
-	resetPhysics();
+    //resetPhysics();
 
 
 	// other
@@ -541,7 +541,7 @@ void updateGameState(float dt)
 
 	// ****update objects here
 	{
-		updatePhysics(dt);
+        //updatePhysics(dt);
 	}
 }
 
@@ -587,15 +587,15 @@ void renderGameState()
 		//	egpActivateVAO(vao + cubeWireVAO);
 		//	egpActivateVAO(vao + cubeIndexedVAO);
 		//	egpActivateVAO(vao + cubeWireIndexedVAO);
-        //  egpActivateVAO(vao + octahedronVAO);
-        //  egpDrawActiveVAO();
+            egpActivateVAO(vao + octahedronVAO);
+            egpDrawActiveVAO();
 		}
 	}
 
 
 	// ****
 	// TEST YOUR SHAPES
-	{
+	/*{
 	//	egpfwDrawColoredTriangleImmediate(viewProjMat.m, 0);
 	//	egpfwDrawColoredUnitQuadImmediate(viewProjMat.m, 0);
 	//	egpfwDrawTexturedUnitQuadImmediate(viewProjMat.m, 0);
@@ -609,7 +609,7 @@ void renderGameState()
 
 		mvp = viewProjMat * mover[1].modelMatrix;
 		egpDrawWireCubeImmediate(mvp.m, 0, 0, 0.0f, 1.0f, 0.5f);
-	}
+	}*/
 
 
 	// TEST DRAW: coordinate axes at center of spaces

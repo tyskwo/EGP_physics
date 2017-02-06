@@ -26,7 +26,7 @@
 
 static NSWindow *win_handle;
 static const unsigned char win_close = 27;  // escape key
-static int context_modernized = 1;
+static int context_modernized = 0;
 static int win_resizing = 0;
 
 static NSTrackingArea *trackingArea;
