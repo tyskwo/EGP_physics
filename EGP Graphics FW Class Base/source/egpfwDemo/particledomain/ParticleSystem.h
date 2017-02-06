@@ -69,9 +69,9 @@ public:
     
     void update(const float dt);
     
-    void emit();
+    void emit(egpProgram* shader);
     
-    void render(cbmath::mat4 viewProjMatrix);
+    void render(cbmath::mat4 viewProjMatrix, int mvpUniform, egpVertexArrayObjectDescriptor* vao);
     
 };
 

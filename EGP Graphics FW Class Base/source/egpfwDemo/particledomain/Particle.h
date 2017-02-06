@@ -19,6 +19,9 @@
 
 #include <stdio.h>
 
+#include "egpfw/egpfw.h"
+
+
 #ifdef _WIN32
 	#include "cbmath\cbtkMatrix.h"
 	#include "..\gphysics\Mover.h"
@@ -50,6 +53,8 @@ private:
     // whether or not this particle is dead
     bool  m_isActive;
     
+    egpProgram* m_shader;
+    
     
     
 public:
@@ -62,7 +67,9 @@ public:
     
     void update(const float dt);
     
-    void render(cbmath::mat4 viewProjMatrix);
+    void render(cbmath::mat4 viewProjMatrix, int mvpUniform, egpVertexArrayObjectDescriptor* vao);
+    
+    inline void SetShader(egpProgram* shader) { m_shader = shader; }
 };
 
 

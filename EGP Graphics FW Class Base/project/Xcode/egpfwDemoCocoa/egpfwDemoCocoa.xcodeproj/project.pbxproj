@@ -10,6 +10,32 @@
 		20256B391E478F7000B3DC6C /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20256B371E478F7000B3DC6C /* Particle.cpp */; };
 		20256B3C1E478F8F00B3DC6C /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20256B3A1E478F8F00B3DC6C /* ParticleSystem.cpp */; };
 		20256B3F1E47A08F00B3DC6C /* Mover.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20256B3D1E47A08F00B3DC6C /* Mover.cpp */; };
+		20A007C01E48EA7700B80C3C /* drawColor_fs4x.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20A0079B1E48EA7700B80C3C /* drawColor_fs4x.glsl */; };
+		20A007C11E48EA7700B80C3C /* drawTexture_fs4x.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20A0079C1E48EA7700B80C3C /* drawTexture_fs4x.glsl */; };
+		20A007C21E48EA7700B80C3C /* phong_fs4x.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20A0079D1E48EA7700B80C3C /* phong_fs4x.glsl */; };
+		20A007C31E48EA7700B80C3C /* passColor_vs4x.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20A0079F1E48EA7700B80C3C /* passColor_vs4x.glsl */; };
+		20A007C41E48EA7700B80C3C /* passTexcoord_passthruPosition_vs4x.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20A007A01E48EA7700B80C3C /* passTexcoord_passthruPosition_vs4x.glsl */; };
+		20A007C51E48EA7700B80C3C /* passTexcoord_vs4x.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20A007A11E48EA7700B80C3C /* passTexcoord_vs4x.glsl */; };
+		20A007C61E48EA7700B80C3C /* phong_vs4x.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20A007A21E48EA7700B80C3C /* phong_vs4x.glsl */; };
+		20A007C71E48EA7700B80C3C /* sphere32x24.obj in Resources */ = {isa = PBXBuildFile; fileRef = 20A007A41E48EA7700B80C3C /* sphere32x24.obj */; };
+		20A007C81E48EA7700B80C3C /* sphere8x6.obj in Resources */ = {isa = PBXBuildFile; fileRef = 20A007A51E48EA7700B80C3C /* sphere8x6.obj */; };
+		20A007C91E48EA7700B80C3C /* resources.txt in Resources */ = {isa = PBXBuildFile; fileRef = 20A007A61E48EA7700B80C3C /* resources.txt */; };
+		20A007CA1E48EA7700B80C3C /* bg_clouds.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007A91E48EA7700B80C3C /* bg_clouds.png */; };
+		20A007CB1E48EA7700B80C3C /* sky_clouds.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007AA1E48EA7700B80C3C /* sky_clouds.png */; };
+		20A007CC1E48EA7700B80C3C /* sky_water.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007AB1E48EA7700B80C3C /* sky_water.png */; };
+		20A007CD1E48EA7700B80C3C /* earth_cm_2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007AE1E48EA7700B80C3C /* earth_cm_2k.png */; };
+		20A007CE1E48EA7700B80C3C /* earth_dm_2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007AF1E48EA7700B80C3C /* earth_dm_2k.png */; };
+		20A007CF1E48EA7700B80C3C /* earth_hm_2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007B01E48EA7700B80C3C /* earth_hm_2k.png */; };
+		20A007D01E48EA7700B80C3C /* earth_lm_2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007B11E48EA7700B80C3C /* earth_lm_2k.png */; };
+		20A007D11E48EA7700B80C3C /* earth_nm_2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007B21E48EA7700B80C3C /* earth_nm_2k.png */; };
+		20A007D21E48EA7700B80C3C /* earth_sm_2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007B31E48EA7700B80C3C /* earth_sm_2k.png */; };
+		20A007D31E48EA7700B80C3C /* mars_dm_2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007B61E48EA7700B80C3C /* mars_dm_2k.png */; };
+		20A007D41E48EA7700B80C3C /* mars_nm_2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007B71E48EA7700B80C3C /* mars_nm_2k.png */; };
+		20A007D51E48EA7700B80C3C /* moon_dm_2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007BA1E48EA7700B80C3C /* moon_dm_2k.png */; };
+		20A007D61E48EA7700B80C3C /* moon_nm_2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007BB1E48EA7700B80C3C /* moon_nm_2k.png */; };
+		20A007D71E48EA7700B80C3C /* stone_dm.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007BD1E48EA7700B80C3C /* stone_dm.png */; };
+		20A007D81E48EA7700B80C3C /* stone_hm.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007BE1E48EA7700B80C3C /* stone_hm.png */; };
+		20A007D91E48EA7700B80C3C /* stone_nm.png in Resources */ = {isa = PBXBuildFile; fileRef = 20A007BF1E48EA7700B80C3C /* stone_nm.png */; };
 		BBF58EDD1E3D35B800AD1858 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF58EDC1E3D35B800AD1858 /* AppDelegate.m */; };
 		BBF58EE01E3D35B800AD1858 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF58EDF1E3D35B800AD1858 /* main.m */; };
 		BBF58EE21E3D35B800AD1858 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBF58EE11E3D35B800AD1858 /* Assets.xcassets */; };
@@ -40,6 +66,32 @@
 		20256B3B1E478F8F00B3DC6C /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleSystem.h; path = ../../../source/egpfwDemo/particledomain/ParticleSystem.h; sourceTree = "<group>"; };
 		20256B3D1E47A08F00B3DC6C /* Mover.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mover.cpp; path = ../../../source/egpfwDemo/gphysics/Mover.cpp; sourceTree = "<group>"; };
 		20256B3E1E47A08F00B3DC6C /* Mover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mover.h; path = ../../../source/egpfwDemo/gphysics/Mover.h; sourceTree = "<group>"; };
+		20A0079B1E48EA7700B80C3C /* drawColor_fs4x.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = drawColor_fs4x.glsl; sourceTree = "<group>"; };
+		20A0079C1E48EA7700B80C3C /* drawTexture_fs4x.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = drawTexture_fs4x.glsl; sourceTree = "<group>"; };
+		20A0079D1E48EA7700B80C3C /* phong_fs4x.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = phong_fs4x.glsl; sourceTree = "<group>"; };
+		20A0079F1E48EA7700B80C3C /* passColor_vs4x.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = passColor_vs4x.glsl; sourceTree = "<group>"; };
+		20A007A01E48EA7700B80C3C /* passTexcoord_passthruPosition_vs4x.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = passTexcoord_passthruPosition_vs4x.glsl; sourceTree = "<group>"; };
+		20A007A11E48EA7700B80C3C /* passTexcoord_vs4x.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = passTexcoord_vs4x.glsl; sourceTree = "<group>"; };
+		20A007A21E48EA7700B80C3C /* phong_vs4x.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = phong_vs4x.glsl; sourceTree = "<group>"; };
+		20A007A41E48EA7700B80C3C /* sphere32x24.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere32x24.obj; sourceTree = "<group>"; };
+		20A007A51E48EA7700B80C3C /* sphere8x6.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere8x6.obj; sourceTree = "<group>"; };
+		20A007A61E48EA7700B80C3C /* resources.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = resources.txt; sourceTree = "<group>"; };
+		20A007A91E48EA7700B80C3C /* bg_clouds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_clouds.png; sourceTree = "<group>"; };
+		20A007AA1E48EA7700B80C3C /* sky_clouds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sky_clouds.png; sourceTree = "<group>"; };
+		20A007AB1E48EA7700B80C3C /* sky_water.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sky_water.png; sourceTree = "<group>"; };
+		20A007AE1E48EA7700B80C3C /* earth_cm_2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = earth_cm_2k.png; sourceTree = "<group>"; };
+		20A007AF1E48EA7700B80C3C /* earth_dm_2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = earth_dm_2k.png; sourceTree = "<group>"; };
+		20A007B01E48EA7700B80C3C /* earth_hm_2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = earth_hm_2k.png; sourceTree = "<group>"; };
+		20A007B11E48EA7700B80C3C /* earth_lm_2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = earth_lm_2k.png; sourceTree = "<group>"; };
+		20A007B21E48EA7700B80C3C /* earth_nm_2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = earth_nm_2k.png; sourceTree = "<group>"; };
+		20A007B31E48EA7700B80C3C /* earth_sm_2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = earth_sm_2k.png; sourceTree = "<group>"; };
+		20A007B61E48EA7700B80C3C /* mars_dm_2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mars_dm_2k.png; sourceTree = "<group>"; };
+		20A007B71E48EA7700B80C3C /* mars_nm_2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mars_nm_2k.png; sourceTree = "<group>"; };
+		20A007BA1E48EA7700B80C3C /* moon_dm_2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = moon_dm_2k.png; sourceTree = "<group>"; };
+		20A007BB1E48EA7700B80C3C /* moon_nm_2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = moon_nm_2k.png; sourceTree = "<group>"; };
+		20A007BD1E48EA7700B80C3C /* stone_dm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stone_dm.png; sourceTree = "<group>"; };
+		20A007BE1E48EA7700B80C3C /* stone_hm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stone_hm.png; sourceTree = "<group>"; };
+		20A007BF1E48EA7700B80C3C /* stone_nm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stone_nm.png; sourceTree = "<group>"; };
 		BBF58ED81E3D35B800AD1858 /* egpfwDemoCocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = egpfwDemoCocoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF58EDB1E3D35B800AD1858 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BBF58EDC1E3D35B800AD1858 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -79,6 +131,152 @@
 				20256B3B1E478F8F00B3DC6C /* ParticleSystem.h */,
 			);
 			name = ParticleDomain;
+			sourceTree = "<group>";
+		};
+		20A007971E48EA7700B80C3C /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				20A007981E48EA7700B80C3C /* glsl */,
+				20A007A31E48EA7700B80C3C /* obj */,
+				20A007A61E48EA7700B80C3C /* resources.txt */,
+				20A007A71E48EA7700B80C3C /* tex */,
+			);
+			name = resource;
+			path = ../../../resource;
+			sourceTree = "<group>";
+		};
+		20A007981E48EA7700B80C3C /* glsl */ = {
+			isa = PBXGroup;
+			children = (
+				20A007991E48EA7700B80C3C /* 4x */,
+			);
+			path = glsl;
+			sourceTree = "<group>";
+		};
+		20A007991E48EA7700B80C3C /* 4x */ = {
+			isa = PBXGroup;
+			children = (
+				20A0079A1E48EA7700B80C3C /* fs */,
+				20A0079E1E48EA7700B80C3C /* vs */,
+			);
+			path = 4x;
+			sourceTree = "<group>";
+		};
+		20A0079A1E48EA7700B80C3C /* fs */ = {
+			isa = PBXGroup;
+			children = (
+				20A0079B1E48EA7700B80C3C /* drawColor_fs4x.glsl */,
+				20A0079C1E48EA7700B80C3C /* drawTexture_fs4x.glsl */,
+				20A0079D1E48EA7700B80C3C /* phong_fs4x.glsl */,
+			);
+			path = fs;
+			sourceTree = "<group>";
+		};
+		20A0079E1E48EA7700B80C3C /* vs */ = {
+			isa = PBXGroup;
+			children = (
+				20A0079F1E48EA7700B80C3C /* passColor_vs4x.glsl */,
+				20A007A01E48EA7700B80C3C /* passTexcoord_passthruPosition_vs4x.glsl */,
+				20A007A11E48EA7700B80C3C /* passTexcoord_vs4x.glsl */,
+				20A007A21E48EA7700B80C3C /* phong_vs4x.glsl */,
+			);
+			path = vs;
+			sourceTree = "<group>";
+		};
+		20A007A31E48EA7700B80C3C /* obj */ = {
+			isa = PBXGroup;
+			children = (
+				20A007A41E48EA7700B80C3C /* sphere32x24.obj */,
+				20A007A51E48EA7700B80C3C /* sphere8x6.obj */,
+			);
+			path = obj;
+			sourceTree = "<group>";
+		};
+		20A007A71E48EA7700B80C3C /* tex */ = {
+			isa = PBXGroup;
+			children = (
+				20A007A81E48EA7700B80C3C /* bg */,
+				20A007AC1E48EA7700B80C3C /* earth */,
+				20A007B41E48EA7700B80C3C /* mars */,
+				20A007B81E48EA7700B80C3C /* moon */,
+				20A007BC1E48EA7700B80C3C /* stone */,
+			);
+			path = tex;
+			sourceTree = "<group>";
+		};
+		20A007A81E48EA7700B80C3C /* bg */ = {
+			isa = PBXGroup;
+			children = (
+				20A007A91E48EA7700B80C3C /* bg_clouds.png */,
+				20A007AA1E48EA7700B80C3C /* sky_clouds.png */,
+				20A007AB1E48EA7700B80C3C /* sky_water.png */,
+			);
+			path = bg;
+			sourceTree = "<group>";
+		};
+		20A007AC1E48EA7700B80C3C /* earth */ = {
+			isa = PBXGroup;
+			children = (
+				20A007AD1E48EA7700B80C3C /* 2k */,
+			);
+			path = earth;
+			sourceTree = "<group>";
+		};
+		20A007AD1E48EA7700B80C3C /* 2k */ = {
+			isa = PBXGroup;
+			children = (
+				20A007AE1E48EA7700B80C3C /* earth_cm_2k.png */,
+				20A007AF1E48EA7700B80C3C /* earth_dm_2k.png */,
+				20A007B01E48EA7700B80C3C /* earth_hm_2k.png */,
+				20A007B11E48EA7700B80C3C /* earth_lm_2k.png */,
+				20A007B21E48EA7700B80C3C /* earth_nm_2k.png */,
+				20A007B31E48EA7700B80C3C /* earth_sm_2k.png */,
+			);
+			path = 2k;
+			sourceTree = "<group>";
+		};
+		20A007B41E48EA7700B80C3C /* mars */ = {
+			isa = PBXGroup;
+			children = (
+				20A007B51E48EA7700B80C3C /* 2k */,
+			);
+			path = mars;
+			sourceTree = "<group>";
+		};
+		20A007B51E48EA7700B80C3C /* 2k */ = {
+			isa = PBXGroup;
+			children = (
+				20A007B61E48EA7700B80C3C /* mars_dm_2k.png */,
+				20A007B71E48EA7700B80C3C /* mars_nm_2k.png */,
+			);
+			path = 2k;
+			sourceTree = "<group>";
+		};
+		20A007B81E48EA7700B80C3C /* moon */ = {
+			isa = PBXGroup;
+			children = (
+				20A007B91E48EA7700B80C3C /* 2k */,
+			);
+			path = moon;
+			sourceTree = "<group>";
+		};
+		20A007B91E48EA7700B80C3C /* 2k */ = {
+			isa = PBXGroup;
+			children = (
+				20A007BA1E48EA7700B80C3C /* moon_dm_2k.png */,
+				20A007BB1E48EA7700B80C3C /* moon_nm_2k.png */,
+			);
+			path = 2k;
+			sourceTree = "<group>";
+		};
+		20A007BC1E48EA7700B80C3C /* stone */ = {
+			isa = PBXGroup;
+			children = (
+				20A007BD1E48EA7700B80C3C /* stone_dm.png */,
+				20A007BE1E48EA7700B80C3C /* stone_hm.png */,
+				20A007BF1E48EA7700B80C3C /* stone_nm.png */,
+			);
+			path = stone;
 			sourceTree = "<group>";
 		};
 		20BFF2DD1E44D19A0078886D /* gPhysics */ = {
@@ -144,6 +342,7 @@
 		BBF58EF31E3D53C000AD1858 /* egpfwDemo */ = {
 			isa = PBXGroup;
 			children = (
+				20A007971E48EA7700B80C3C /* resource */,
 				20256B361E478F1200B3DC6C /* ParticleDomain */,
 				20BFF2DD1E44D19A0078886D /* gPhysics */,
 				BBF58EF51E3D53D100AD1858 /* egpfwDemo.h */,
@@ -211,8 +410,34 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20A007CE1E48EA7700B80C3C /* earth_dm_2k.png in Resources */,
+				20A007CA1E48EA7700B80C3C /* bg_clouds.png in Resources */,
+				20A007CD1E48EA7700B80C3C /* earth_cm_2k.png in Resources */,
+				20A007C11E48EA7700B80C3C /* drawTexture_fs4x.glsl in Resources */,
+				20A007C51E48EA7700B80C3C /* passTexcoord_vs4x.glsl in Resources */,
+				20A007C91E48EA7700B80C3C /* resources.txt in Resources */,
+				20A007CC1E48EA7700B80C3C /* sky_water.png in Resources */,
+				20A007C31E48EA7700B80C3C /* passColor_vs4x.glsl in Resources */,
+				20A007CF1E48EA7700B80C3C /* earth_hm_2k.png in Resources */,
+				20A007C21E48EA7700B80C3C /* phong_fs4x.glsl in Resources */,
+				20A007D01E48EA7700B80C3C /* earth_lm_2k.png in Resources */,
+				20A007D81E48EA7700B80C3C /* stone_hm.png in Resources */,
+				20A007C71E48EA7700B80C3C /* sphere32x24.obj in Resources */,
+				20A007CB1E48EA7700B80C3C /* sky_clouds.png in Resources */,
+				20A007D61E48EA7700B80C3C /* moon_nm_2k.png in Resources */,
+				20A007C81E48EA7700B80C3C /* sphere8x6.obj in Resources */,
+				20A007D41E48EA7700B80C3C /* mars_nm_2k.png in Resources */,
+				20A007C41E48EA7700B80C3C /* passTexcoord_passthruPosition_vs4x.glsl in Resources */,
+				20A007D91E48EA7700B80C3C /* stone_nm.png in Resources */,
+				20A007C01E48EA7700B80C3C /* drawColor_fs4x.glsl in Resources */,
+				20A007D71E48EA7700B80C3C /* stone_dm.png in Resources */,
+				20A007D31E48EA7700B80C3C /* mars_dm_2k.png in Resources */,
+				20A007D11E48EA7700B80C3C /* earth_nm_2k.png in Resources */,
+				20A007D21E48EA7700B80C3C /* earth_sm_2k.png in Resources */,
 				BBF58EE21E3D35B800AD1858 /* Assets.xcassets in Resources */,
 				BBF58EE51E3D35B800AD1858 /* MainMenu.xib in Resources */,
+				20A007D51E48EA7700B80C3C /* moon_dm_2k.png in Resources */,
+				20A007C61E48EA7700B80C3C /* phong_vs4x.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

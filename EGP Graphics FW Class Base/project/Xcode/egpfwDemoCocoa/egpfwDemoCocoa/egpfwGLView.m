@@ -26,7 +26,7 @@
 
 static NSWindow *win_handle;
 static const unsigned char win_close = 27;  // escape key
-static int context_modernized = 1;
+static int context_modernized = 0;
 static int win_resizing = 0;
 
 static NSTrackingArea *trackingArea;
@@ -205,7 +205,7 @@ static void winClosePressed()
         NSRect bounds = [self bounds];
         [[self openGLContext] makeCurrentContext];
         onPositionWindow((unsigned int)(bounds.origin.x), (unsigned int)(bounds.origin.y));
-        onResizeWindow((unsigned int)(bounds.size.width), (unsigned int)(bounds.size.height));
+        onResizeWindow((unsigned int)(bounds.size.width*2), (unsigned int)(bounds.size.height*2));
     }
 }
 

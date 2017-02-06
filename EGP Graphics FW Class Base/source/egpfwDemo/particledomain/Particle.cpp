@@ -62,13 +62,20 @@ void Particle::update(const float dt)
 
 
 
-void Particle::render(cbmath::mat4 viewProjMatrix)
+void Particle::render(cbmath::mat4 viewProjMatrix, int mvpUniform, egpVertexArrayObjectDescriptor* vao)
 {
     if(m_isActive)
     {
 		this->m_mover->updateMoverGraphics();
-		
-		egpDrawSphere8x6Immediate((viewProjMatrix * this->m_mover->modelMatrix).m, 0, 1.0f, 0.0f, 0.0f);
+        
+        egpActivateProgram(m_shader);
+        
+        egpSendUniformFloatMatrix(mvpUniform, UNIF_MAT4, 1, 0, (viewProjMatrix * this->m_mover->modelMatrix).m);
+        
+        egpActivateVAO(vao);
+        
+        egpDrawActiveVAO();
+
 
 		// random colors
 		//egpDrawWireCubeImmediate((viewProjMatrix * this->m_mover->modelMatrix).m, 0, 0, static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX);

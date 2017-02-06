@@ -9,6 +9,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+
+
+
+
+
+
+
+
+
 #include "egpfwDemo.h"
 
 //-----------------------------------------------------------------------------
@@ -38,14 +47,23 @@
 #include "egpfw/egpfw.h"
 
 #ifdef _WIN32
-#include "gphysics/Mover.h"
-#include "particledomain\ParticleSystem.h"
-#include "particledomain\Particle.h"
+    #include "gphysics/Mover.h"
+    #include "particledomain\ParticleSystem.h"
+    #include "particledomain\Particle.h"
 #else
-#include "Mover.h"
-#include "ParticleSystem.h"
-#include "Particle.h"
+    #include "Mover.h"
+    #include "ParticleSystem.h"
+    #include "Particle.h"
 #endif
+
+
+
+
+
+
+
+
+
 
 //-----------------------------------------------------------------------------
 // globals
@@ -86,6 +104,13 @@ cbtk::cbmath::mat4 viewMatrix, projectionMatrix, viewProjMat;
 float cameraElevation = 0.0f, cameraAzimuth = 0.0f;
 float cameraRotateSpeed = 0.1f, cameraMoveSpeed = 1.0f, cameraDistance = 8.0f;
 cbtk::cbmath::vec4 cameraPosWorld(0.0f, 0.0f, cameraDistance, 1.0f), deltaCamPos;
+
+
+
+
+
+
+
 
 
 
@@ -137,6 +162,39 @@ egpIndexBufferObjectDescriptor  ibo[iboCount] = { 0 };
 
 
 
+
+
+
+
+
+
+
+
+egpProgram shaderProgram;
+
+enum GLSLCommonUniformIndex
+{
+    unif_mvp,
+    
+    unif_lightPos,
+    unif_eyePos,
+    
+    unif_dm,
+    unif_sm,
+    
+    //-----------------------------
+    GLSLCommonUniformCount
+};
+int glslCommonUniforms[GLSLCommonUniformCount] = { -1 };
+
+
+
+
+
+
+
+
+
 //-----------------------------------------------------------------------------
 // our game objects
 
@@ -154,7 +212,7 @@ void initParticleSystem()
 // quickly reset physics
 void resetPhysics()
 {
-	particleSystem->emit();
+	particleSystem->emit(&shaderProgram);
 }
 
 // update physics only
@@ -170,29 +228,28 @@ void updatePhysics(float dt)
 
 
 
+
+
+
+
+
+
+
 //-----------------------------------------------------------------------------
 // game functions
 
+
+
+
+
 // access window info
-unsigned int windowWidth()
-{
-	return win_w;
-}
+unsigned int windowWidth()  { return win_w; }
+unsigned int windowHeight() { return win_h; }
+unsigned int windowPosX()   { return win_x; }
+unsigned int windowPosY()   { return win_y; }
 
-unsigned int windowHeight()
-{
-	return win_h;
-}
 
-unsigned int windowPosX()
-{
-	return win_x;
-}
 
-unsigned int windowPosY()
-{
-	return win_y;
-}
 
 
 // set initial GL states
@@ -245,6 +302,8 @@ void printGLVersion()
 {
 	printf("%s", glGetString(GL_VERSION));
 }
+
+
 
 
 
@@ -350,6 +409,88 @@ void deleteGeometry()
 }
 
 
+
+
+
+
+
+
+
+
+// setup and delete shaders
+void setupShaders()
+{
+    // activate a VAO for validation
+    egpActivateVAO(vao + cubeWireVAO);
+    
+    
+    egpFileInfo files[2];
+    egpShader shaders[2];
+    
+    // array of common uniform names
+    const char *commonUniformName[] =
+    {
+        (const char *)("mvp"),
+        (const char *)("lightPos"),
+        (const char *)("eyePos"),
+        (const char *)("tex_dm"),
+        (const char *)("tex_sm"),
+    };
+
+    // load files
+    files[0] = egpLoadFileContents("../../../../../../../../resource/glsl/4x/vs/passColor_vs4x.glsl");
+    files[1] = egpLoadFileContents("../../../../../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl");
+    
+    // create shaders
+    shaders[0] = egpCreateShaderFromSource(EGP_SHADER_VERTEX, files[0].contents);
+    shaders[1] = egpCreateShaderFromSource(EGP_SHADER_FRAGMENT, files[1].contents);
+    
+    // create, link and validate program
+    shaderProgram = egpCreateProgram();
+    egpAttachShaderToProgram(&shaderProgram, shaders + 0);
+    egpAttachShaderToProgram(&shaderProgram, shaders + 1);
+    egpLinkProgram(&shaderProgram);
+    egpValidateProgram(&shaderProgram);
+    
+    // release shaders and files
+    egpReleaseShader(shaders + 0);
+    egpReleaseShader(shaders + 1);
+    egpReleaseFileContents(files + 0);
+    egpReleaseFileContents(files + 1);
+    
+    
+    
+    
+    
+    
+    egpActivateProgram(&shaderProgram);
+
+    for (int u = 0; u < GLSLCommonUniformCount; ++u)
+        glslCommonUniforms[u] = egpGetUniformLocation(&shaderProgram, commonUniformName[u]);
+    
+    
+    
+    
+    
+    // disable all
+    egpActivateProgram(0);
+    egpActivateVAO(0);
+}
+
+void deleteShaders()
+{
+    egpReleaseProgram(&shaderProgram);
+}
+
+
+
+
+
+
+
+
+
+
 // restart all timers and time counters
 void resetTimers()
 {
@@ -377,6 +518,9 @@ void drawToBackBuffer(int x, int y, unsigned int w, unsigned int h)
 	// reset viewport with borders clipped
 	glViewport(x, y, w, h);
 }
+
+
+
 
 
 //-----------------------------------------------------------------------------
@@ -420,6 +564,9 @@ void updateCameraOrbit(float dt)
 }
 
 
+
+
+
 //-----------------------------------------------------------------------------
 
 // initialize game objects
@@ -433,6 +580,7 @@ int initGame()
 	// setup geometry
 	setupGeometry();
 
+    setupShaders();
 
 	// physics
 	initParticleSystem();
@@ -447,18 +595,22 @@ int initGame()
 	return 1;
 }
 
+
 // destroy game objects (mem)
 int termGame()
 {
 	// good practice to do this in reverse order of creation
 	//	in case something is referencing something else
 
-	// delete geometry
-	deleteGeometry();
+    deleteShaders();
+    deleteGeometry();
 
 	// done
 	return 1;
 }
+
+
+
 
 
 // output controls
@@ -475,6 +627,9 @@ void displayControls()
 
 	printf("\n-------------------------------------------------------");
 }
+
+
+
 
 
 // process input each frame
@@ -504,6 +659,10 @@ void handleInputState()
 	egpKeyboardUpdate(keybd);
 }
 
+
+
+
+
 // game update to perform each frame
 // update game state using the time since the last update (dt) in seconds
 void updateGameState(float dt)
@@ -528,6 +687,9 @@ void updateGameState(float dt)
 		updatePhysics(dt);
 	}
 }
+
+
+
 
 
 // draw frame
@@ -565,14 +727,16 @@ void renderGameState()
 		//	egpDrawWireCubeImmediate(viewProjMat.m, 0, 1, 1.0f, 0.5f, 0.0f);
 
 			// draw 3D primitives with retained mode (VAOs, proper)
-		//	egpActivateVAO(vao + sphere8x6VAO);
+            /*egpActivateProgram(&shaderProgram);
+
+            egpActivateVAO(vao + sphere8x6VAO);
 		//	egpActivateVAO(vao + sphere32x24VAO);
 		//	egpActivateVAO(vao + cubeVAO);
 		//	egpActivateVAO(vao + cubeWireVAO);
 		//	egpActivateVAO(vao + cubeIndexedVAO);
 		//	egpActivateVAO(vao + cubeWireIndexedVAO);
         //  egpActivateVAO(vao + octahedronVAO);
-        //  egpDrawActiveVAO();
+            egpDrawActiveVAO();*/
 		}
 	}
 
@@ -580,15 +744,7 @@ void renderGameState()
 	// ****
 	// TEST YOUR SHAPES
 	{
-	//	egpfwDrawColoredTriangleImmediate(viewProjMat.m, 0);
-	//	egpfwDrawColoredUnitQuadImmediate(viewProjMat.m, 0);
-	//	egpfwDrawTexturedUnitQuadImmediate(viewProjMat.m, 0);
-
-		// draw each physics object in immediate mode
-		
-		// viewProjMat * modelMat
-
-		particleSystem->render(viewProjMat);
+        particleSystem->render(viewProjMat, glslCommonUniforms[unif_mvp], vao+sphere32x24VAO);
 	}
 
 
@@ -606,6 +762,8 @@ void renderGameState()
 		glEnable(GL_DEPTH_TEST);
 	}
 }
+
+
 
 
 
@@ -638,12 +796,18 @@ int idle()
 	return ret;
 }
 
+
+
+
+
 // window closed
 void onCloseWindow()
 {
 	// clean up
 	termGame();
 }
+
+
 
 // window resized
 void onResizeWindow(int w, int h)
@@ -671,6 +835,8 @@ void onResizeWindow(int w, int h)
 		minClipDist = (float)((unsigned int)(sqrtf(zfar*zfar / 3.0f)));
 	}
 }
+
+
 
 // window moved
 void onPositionWindow(int x, int y)
