@@ -26,11 +26,13 @@ ParticleSystem::ParticleSystem(Particle*     modelParticle,
                                int           numberToEmit)
 {
 	m_mover = new Mover();
+    this->m_mover->position         = position;
+
     this->m_modelParticle           = modelParticle;
+    
     this->m_emitter.m_mode          = mode;
     this->m_emitter.m_emitDirection = emitDirection;
     this->m_emitter.m_numberToEmit  = numberToEmit;
-    this->m_mover->position         = position;
 }
 
 
@@ -65,8 +67,5 @@ void ParticleSystem::emit()
 
 void ParticleSystem::render(cbmath::mat4 viewProjMatrix)
 {
-    for(Particle *p : m_particles)
-    {
-        p->render(viewProjMatrix);
-    }
+    for(Particle *p : m_particles) { p->render(viewProjMatrix); }
 }

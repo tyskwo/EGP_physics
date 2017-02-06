@@ -30,7 +30,11 @@
 
 class Particle
 {
-    
+public:
+    struct Data
+    {
+        
+    };
     
 private:
     
