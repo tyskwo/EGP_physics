@@ -18,6 +18,7 @@
 
 
 #include "egpfw/egpfw.h"
+#include "cbmath/cbtkMatrix.h"
 #include "Shader.h"
 
 
@@ -39,6 +40,8 @@ public:
     
     inline Shader* getShader() { return m_shader; }
     inline egpVertexArrayObjectDescriptor* getVAO() { return m_vao; }
+    
+    void renderAt(cbmath::mat4 matrix);
 };
 
 

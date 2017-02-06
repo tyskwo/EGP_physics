@@ -67,20 +67,10 @@ void Particle::render(cbmath::mat4 viewProjMatrix)
     if(m_isActive)
     {
 		this->m_mover->updateMoverGraphics();
+        this->m_model->renderAt(viewProjMatrix * this->m_mover->modelMatrix);
         
-        
-        egpProgram temp = m_model->getShader()->getProgram();
-        egpActivateProgram(&temp);
-        
-        
-        egpSendUniformFloatMatrix(m_model->getShader()->getMVPUniform(), UNIF_MAT4, 1, 0, (viewProjMatrix * this->m_mover->modelMatrix).m);
-        
-        egpActivateVAO(m_model->getVAO());
-        
-        egpDrawActiveVAO();
-
 
 		// random colors
-		//egpDrawWireCubeImmediate((viewProjMatrix * this->m_mover->modelMatrix).m, 0, 0, static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX);
+		//static_cast<float>(rand()) / RAND_MAX
     }
 }

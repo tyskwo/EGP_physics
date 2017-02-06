@@ -134,10 +134,10 @@
 		20256B361E478F1200B3DC6C /* ParticleDomain */ = {
 			isa = PBXGroup;
 			children = (
-				20256B371E478F7000B3DC6C /* Particle.cpp */,
 				20256B381E478F7000B3DC6C /* Particle.h */,
-				20256B3A1E478F8F00B3DC6C /* ParticleSystem.cpp */,
+				20256B371E478F7000B3DC6C /* Particle.cpp */,
 				20256B3B1E478F8F00B3DC6C /* ParticleSystem.h */,
+				20256B3A1E478F8F00B3DC6C /* ParticleSystem.cpp */,
 			);
 			name = ParticleDomain;
 			sourceTree = "<group>";
@@ -288,13 +288,26 @@
 			path = stone;
 			sourceTree = "<group>";
 		};
-		20BFF2DD1E44D19A0078886D /* gPhysics */ = {
+		20A47EE81E4929F8005DB927 /* GraphicsDomain */ = {
+			isa = PBXGroup;
+			children = (
+				20B7AD6D1E4904AB0020DA19 /* Shader.h */,
+				20B7AD6C1E4904AB0020DA19 /* Shader.cpp */,
+				20B7AD6B1E4903030020DA19 /* Model.h */,
+				20B7AD6F1E4908330020DA19 /* Model.cpp */,
+				20B7AD721E490C9C0020DA19 /* Geometry.h */,
+				20B7AD711E490C9C0020DA19 /* Geometry.cpp */,
+			);
+			name = GraphicsDomain;
+			sourceTree = "<group>";
+		};
+		20BFF2DD1E44D19A0078886D /* PhysicsDomain */ = {
 			isa = PBXGroup;
 			children = (
 				20256B3D1E47A08F00B3DC6C /* Mover.cpp */,
 				20256B3E1E47A08F00B3DC6C /* Mover.h */,
 			);
-			name = gPhysics;
+			name = PhysicsDomain;
 			sourceTree = "<group>";
 		};
 		BBF58ECF1E3D35B800AD1858 = {
@@ -352,16 +365,11 @@
 			isa = PBXGroup;
 			children = (
 				20A007971E48EA7700B80C3C /* resource */,
+				20A47EE81E4929F8005DB927 /* GraphicsDomain */,
 				20256B361E478F1200B3DC6C /* ParticleDomain */,
-				20BFF2DD1E44D19A0078886D /* gPhysics */,
+				20BFF2DD1E44D19A0078886D /* PhysicsDomain */,
 				BBF58EF51E3D53D100AD1858 /* egpfwDemo.h */,
 				BBF58EF41E3D53D100AD1858 /* egpfwDemo.cpp */,
-				20B7AD6D1E4904AB0020DA19 /* Shader.h */,
-				20B7AD6C1E4904AB0020DA19 /* Shader.cpp */,
-				20B7AD6B1E4903030020DA19 /* Model.h */,
-				20B7AD6F1E4908330020DA19 /* Model.cpp */,
-				20B7AD721E490C9C0020DA19 /* Geometry.h */,
-				20B7AD711E490C9C0020DA19 /* Geometry.cpp */,
 			);
 			name = egpfwDemo;
 			sourceTree = "<group>";

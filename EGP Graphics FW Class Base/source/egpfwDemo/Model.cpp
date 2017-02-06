@@ -23,3 +23,15 @@ Model::Model(Shader* shader, egpVertexArrayObjectDescriptor* vao)
     this->m_shader = shader;
     this->m_vao    = vao;
 }
+
+void Model::renderAt(cbmath::mat4 matrix)
+{
+    egpProgram temp = m_shader->getProgram();
+    egpActivateProgram(&temp);
+    
+    egpSendUniformFloatMatrix(m_shader->getMVPUniform(), UNIF_MAT4, 1, 0, matrix.m);
+    
+    egpActivateVAO(m_vao);
+    egpDrawActiveVAO();
+}
+
