@@ -36,6 +36,8 @@ private:
         unif_dm,
         unif_sm,
         
+        unif_color,
+        
         //-----------------------------
         GLSLCommonUniformCount
     };
@@ -50,8 +52,9 @@ public:
     Shader(const char* vertexPath, const char* fragmentPath);
     ~Shader() { egpReleaseProgram(&m_program); }
     
-    inline egpProgram getProgram()    { return m_program; }
-    inline int        getMVPUniform() { return glslCommonUniforms[unif_mvp]; }
+    inline egpProgram getProgram()      { return m_program; }
+    inline int        getMVPUniform()   { return glslCommonUniforms[unif_mvp];   }
+    inline int        getColorUniform() { return glslCommonUniforms[unif_color]; }
 };
 
 

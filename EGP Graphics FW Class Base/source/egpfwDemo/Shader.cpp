@@ -30,6 +30,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
         (const char *)("eyePos"),
         (const char *)("tex_dm"),
         (const char *)("tex_sm"),
+        (const char *)("color"),
     };
     
     

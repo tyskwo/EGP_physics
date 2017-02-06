@@ -16,7 +16,6 @@
 //		layout (location = <attribute index>) in <type> <name>;
 
 layout (location = 0) in vec4 position;
-layout (location = 3) in vec4 color;
 
 
 // ****
@@ -27,6 +26,7 @@ layout (location = 3) in vec4 color;
 //		uniform <type> <name>;
 
 uniform mat4 mvp;
+uniform vec4 color;
 
 // ****
 // varyings: data passed to the next stage in the pipeline
