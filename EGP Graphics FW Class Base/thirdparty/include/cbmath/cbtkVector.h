@@ -104,6 +104,7 @@ union vec3
 	real v[3];
 };
 static const vec3 v3zero;
+static const vec3 v3one(1, 1, 1);
 static const vec3 v3x(1, 0, 0);
 static const vec3 v3y(0, 1, 0);
 static const vec3 v3z(0, 0, 1);
@@ -136,6 +137,7 @@ union vec4
 	real v[4];
 };
 static const vec4 v4zero;
+static const vec4 v4one(1, 1, 1, 1);
 static const vec4 v4x(1, 0, 0, 0);
 static const vec4 v4y(0, 1, 0, 0);
 static const vec4 v4z(0, 0, 1, 0);
