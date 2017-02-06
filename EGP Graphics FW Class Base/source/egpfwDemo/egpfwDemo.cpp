@@ -141,12 +141,7 @@ egpIndexBufferObjectDescriptor  ibo[iboCount] = { 0 };
 // our game objects
 
 
-// gravity constant: ACCELERATION due to gravity
-const cbmath::vec3 gravityAccel(0.0f, -9.81f, 0.0f);
-
 // movables
-const unsigned int numMovers = 2;
-Mover mover[numMovers];
 ParticleSystem *particleSystem;
 Particle *modelParticle;
 
@@ -160,15 +155,6 @@ void initParticleSystem()
 void resetPhysics()
 {
 	particleSystem->emit();
-	//egp_particleSystem = new ParticleSystem()
-    
-	//mover = new Mover();
-	//(mover + 1) = new Mover();
-
-    //(mover+0)->setMass(0.001f); //feather
-    //(mover+1)->setMass(5.0f); //bowling ball
-	//(mover+0)->setDamping(0.99f);
-	//(mover+1)->setDamping(0.99f);
 }
 
 // update physics only
@@ -177,20 +163,6 @@ void updatePhysics(float dt)
 	// basic physics update: 
 	//	-> integrate
 	//	-> update anything that has to do with graphics
-	
-
-	//unsigned int i;
-	//Mover *m;
-	//for (i = 0, m = mover; i < numMovers; ++i, ++m)
-	//{
-	//	// physics
-	//	m->updateMoverDisplacement(dt);
-
-
-	//	// graphics
-	//	m->updateMoverGraphics();
-	//}
-
 
 	// particles
 	particleSystem->update(dt);
@@ -612,18 +584,11 @@ void renderGameState()
 	//	egpfwDrawColoredUnitQuadImmediate(viewProjMat.m, 0);
 	//	egpfwDrawTexturedUnitQuadImmediate(viewProjMat.m, 0);
 
+		// draw each physics object in immediate mode
+		
+		// viewProjMat * modelMat
 
 		particleSystem->render(viewProjMat);
-		//cbmath::mat4 mvp;
-
-
-
-		// draw each physics object in immediate mode
-		/*mvp = viewProjMat * mover[0].modelMatrix;
-		egpDrawWireCubeImmediate(mvp.m, 0, 0, 1.0f, 0.5f, 0.0f);
-
-		mvp = viewProjMat * mover[1].modelMatrix;
-		egpDrawWireCubeImmediate(mvp.m, 0, 0, 0.0f, 1.0f, 0.5f);*/
 	}
 
 
