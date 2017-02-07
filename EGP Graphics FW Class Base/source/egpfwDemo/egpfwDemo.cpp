@@ -42,6 +42,8 @@
 
 
 #include "gphysics/egpfwMover.h"
+#include "gphysics/egpfwForces.h"
+#include "gphysics/egpfwShapes.h"
 
 
 //-----------------------------------------------------------------------------
@@ -61,7 +63,7 @@ const int viewport_nb = -(int)viewport_b;
 unsigned int viewport_tw = win_w + viewport_tb;
 unsigned int viewport_th = win_h + viewport_tb;
 float win_aspect;
-float fovy = 1.0f, znear = 0.5f, zfar = 50.0f;
+float fovy = 1.0f, znear = 0.5f, zfar = 5000.0f;
 float maxClipDist = 0.0f, minClipDist = 0.0f;
 
 // update flag: play speed as a percentage
@@ -70,7 +72,7 @@ unsigned int playrate = 100;
 
 
 // timers
-egpTimer renderTimer[1], secondTimer[1];
+egpTimer physicsTimer[1], renderTimer[1], secondTimer[1];
 
 // controls
 egpMouse mouse[1];
@@ -82,7 +84,7 @@ cbtk::cbmath::mat4 viewMatrix, projectionMatrix, viewProjMat;
 // camera controls
 float cameraElevation = 0.0f, cameraAzimuth = 0.0f;
 float cameraRotateSpeed = 0.1f, cameraMoveSpeed = 1.0f, cameraDistance = 8.0f;
-cbtk::cbmath::vec4 cameraPosWorld(0.0f, 0.0f, cameraDistance, 1.0f), deltaCamPos;
+cbtk::cbmath::vec4 cameraPosWorld(0.0f, 5.0f, cameraDistance, 1.0f), deltaCamPos;
 
 
 
@@ -92,23 +94,14 @@ cbtk::cbmath::vec4 cameraPosWorld(0.0f, 0.0f, cameraDistance, 1.0f), deltaCamPos
 
 
 // test vertex buffers for built-in primitive data
-enum VAOIndex
+enum ModelIndex
 {
-	axesVAO, 
+	axesModel, 
 
-	sphere8x6VAO, sphere32x24VAO, cubeVAO, cubeWireVAO, cubeIndexedVAO, cubeWireIndexedVAO,
+	sphere8x6Model, sphere32x24Model, cubeModel, cubeWireModel, cubeIndexedModel, cubeWireIndexedModel,
 
 //-----------------------------
-	vaoCount
-};
-enum VBOIndex
-{
-	axesVBO, 
-
-	sphere8x6VBO, sphere32x24VBO, cubeVBO, cubeWireVBO, cubeIndexedVBO, cubeWireIndexedVBO,
-
-//-----------------------------
-	vboCount
+	modelCount
 };
 enum IBOIndex
 {
@@ -118,8 +111,8 @@ enum IBOIndex
 	iboCount
 };
 
-egpVertexArrayObjectDescriptor vao[vaoCount] = { 0 };
-egpVertexBufferObjectDescriptor vbo[vboCount] = { 0 };
+egpVertexArrayObjectDescriptor vao[modelCount] = { 0 };
+egpVertexBufferObjectDescriptor vbo[modelCount] = { 0 };
 egpIndexBufferObjectDescriptor ibo[iboCount] = { 0 };
 
 
@@ -132,29 +125,110 @@ egpIndexBufferObjectDescriptor ibo[iboCount] = { 0 };
 const cbmath::vec3 gravityAccel(0.0f, -9.81f, 0.0f);
 
 // movables
-const unsigned int numMovers = 2;
+const unsigned int numMovers = 3;
 egpfwMover mover[numMovers];
+
+// shapes
+const egpfwSphere bowlingBall[] = { { 0.11 } };	// 11cm radius
+const egpfwPlane feather[] = { { 0.1, 0.02 } };	// 10cm x 2cm
+const double bowlingBallDragArea = getSphereCrossSectionArea(bowlingBall);
+const double featherDragArea = getPlaneArea(feather);
+
+// constraints
+const float groundHeight = 0.0f;
+cbmath::vec3 springConstraint = cbmath::vec3(0.0f, 8.0f, 0.0f);
+
+// springs
+const unsigned int numSprings = 1;
+egpfwSpring springBallSpring[numSprings];
+const egpfwSphere springBall[] = { { 1.0 } };
+const double springBallDragArea = getSphereCrossSectionArea(springBall);
 
 
 // quickly reset physics
 void resetPhysics()
 {
-	mover[0] = { cbmath::m4Identity, cbmath::vec3(-5.0f, 0.0f, 0.0f), cbmath::vec3(4.0f, 3.0f, 0.0f), gravityAccel };
-	mover[1] = { cbmath::m4Identity, cbmath::vec3(0.0f, 0.0f, 0.0f), cbmath::vec3(0.0f, 5.0f, 0.0f), gravityAccel };
+	// 5 kg bowling ball (11 lbs)
+	mover[0] = { cbmath::m4Identity, cbmath::vec3(-4.0f, 8.0f, 0.0f), cbmath::v3zero, gravityAccel };	
+	setMass(mover + 0, 5.0f);
+
+	// 50 mg feather
+	mover[1] = { cbmath::m4Identity, cbmath::vec3(+4.0f, 8.0f, 0.0f), cbmath::v3zero, gravityAccel };
+	setMass(mover + 1, 0.00005f);
+	
+	// unit sphere affected by spring
+	mover[2] = { cbmath::m4Identity, springConstraint-cbmath::v3y, cbmath::v3zero, gravityAccel };
+	setMass(mover + 2, 1.0f);
+
+	// prepare and force update spring
+	springBallSpring[0] = { &(springConstraint), &((mover + 2)->position), 1.0f };
+	updateSpring(springBallSpring);
 }
 
 // update physics only
 void updatePhysics(float dt)
 {
+	dt *= (float)(playrate * playing) * 0.01f;
+
+	unsigned int i;
+	egpfwMover *m;
+	cbmath::vec3 newForce;
+
+	// fluid density of atmosphere at 0C is 1.293kg/m^3
+	const float airDensity = 1.293f;
+
+	// drag coefficients and affected areas
+	const float dragCoeff[] = {
+		0.5f, // bowling ball is a sphere
+		2.0f, // feather is a plane going against air
+		0.5f, // spring ball is a sphere
+	};
+	const float dragAreas[] = {
+		(float)bowlingBallDragArea,
+		(float)featherDragArea,
+		(float)springBallDragArea,
+	};
+	const float restitutionCoeff[] = {
+		0.25f, 0.0f, 0.0f, 
+	};
+
+
+	// add drag to all objects
+	for (i = 0, m = mover; i < numMovers; ++i, ++m)
+	{
+		newForce = getForceDrag(dragCoeff[i], dragAreas[i], airDensity, m->velocity);
+		addForce(m, newForce);
+	}
+
+	// ****
+	// accumulate other forces
+	// spring
+	if (dt > 0.0f)
+	{
+		m = mover + 2;
+		const float maxSpringStiffness = getSpringCoefficient(m->mass, dt);
+		// ****
+		const float springStiffness = 0.0001f * maxSpringStiffness;
+		// ****
+		updateSpring(springBallSpring);
+		newForce = getForceStiffSpring(	// ****
+			springBallSpring,
+			springStiffness
+		);
+		addForce(m, newForce);
+	}
+
+
 	// basic physics update: 
 	//	-> integrate
 	//	-> update anything that has to do with graphics
-	unsigned int i;
-	egpfwMover *m;
 	for (i = 0, m = mover; i < numMovers; ++i, ++m)
 	{
 		// physics
 		updateMoverFirstOrder(m, dt);
+
+		// hax bounce
+		clampMoverToGround(m, groundHeight, restitutionCoeff[i]);
 
 		// graphics
 		updateMoverGraphics(m);
@@ -263,64 +337,62 @@ void setupGeometry()
 	//	so prepare those first
 	egpAttributeDescriptor attribs[] = {
 		egpCreateAttributeDescriptor(ATTRIB_POSITION, ATTRIB_VEC3, 0),
-		egpCreateAttributeDescriptor(ATTRIB_NORMAL, ATTRIB_VEC3, 0),
 		egpCreateAttributeDescriptor(ATTRIB_COLOR, ATTRIB_VEC3, 0),
+		egpCreateAttributeDescriptor(ATTRIB_NORMAL, ATTRIB_VEC3, 0),
 		egpCreateAttributeDescriptor(ATTRIB_TEXCOORD, ATTRIB_VEC2, 0),
 	};
 
+	// axes
+	attribs[0].data = egpGetAxesPositions();
+	attribs[1].data = egpGetAxesColors();
+	vao[axesModel] = egpCreateVAOInterleaved(PRIM_LINES, attribs, 2, egpGetAxesVertexCount(), (vbo + axesModel), 0);
+
 	// low-res sphere
 	attribs[0].data = egpGetSphere8x6Positions();
-	attribs[1].data = egpGetSphere8x6Normals();
-	attribs[2].data = egpGetSphere8x6Colors();
+	attribs[1].data = egpGetSphere8x6Colors();
+	attribs[2].data = egpGetSphere8x6Normals();
 	attribs[3].data = egpGetSphere8x6Texcoords();
-	vao[sphere8x6VAO] = egpCreateVAOInterleaved(PRIM_TRIANGLES, attribs, 4, egpGetSphere8x6VertexCount(), (vbo + sphere8x6VBO), 0);
+	vao[sphere8x6Model] = egpCreateVAOInterleaved(PRIM_TRIANGLES, attribs, 4, egpGetSphere8x6VertexCount(), (vbo + sphere8x6Model), 0);
 
 	// high-res sphere
 	attribs[0].data = egpGetSphere32x24Positions();
-	attribs[1].data = egpGetSphere32x24Normals();
-	attribs[2].data = egpGetSphere32x24Colors();
+	attribs[1].data = egpGetSphere32x24Colors();
+	attribs[2].data = egpGetSphere32x24Normals();
 	attribs[3].data = egpGetSphere32x24Texcoords();
-	vao[sphere32x24VAO] = egpCreateVAOInterleaved(PRIM_TRIANGLES, attribs, 4, egpGetSphere32x24VertexCount(), (vbo + sphere32x24VBO), 0);
+	vao[sphere32x24Model] = egpCreateVAOInterleaved(PRIM_TRIANGLES, attribs, 4, egpGetSphere32x24VertexCount(), (vbo + sphere32x24Model), 0);
 
 	// cube
 	attribs[0].data = egpGetCubePositions();
 	attribs[1].data = egpGetCubeNormals();
 	attribs[2].data = egpGetCubeColors();
 	attribs[3].data = egpGetCubeTexcoords();
-	vao[cubeVAO] = egpCreateVAOInterleaved(PRIM_TRIANGLES, attribs, 4, egpGetCubeVertexCount(), (vbo + cubeVBO), 0);
+	vao[cubeModel] = egpCreateVAOInterleaved(PRIM_TRIANGLES, attribs, 4, egpGetCubeVertexCount(), (vbo + cubeModel), 0);
 
 	// wire cube
 	attribs[0].data = egpGetWireCubePositions();
-	vao[cubeWireVAO] = egpCreateVAOInterleaved(PRIM_LINES, attribs, 1, egpGetWireCubeVertexCount(), (vbo + cubeWireVBO), 0);
+	vao[cubeWireModel] = egpCreateVAOInterleaved(PRIM_LINES, attribs, 1, egpGetWireCubeVertexCount(), (vbo + cubeWireModel), 0);
 
 	// indexed cube
 	attribs[0].data = egpGetCubeIndexedPositions();
 	attribs[1].data = egpGetCubeIndexedNormals();
 	attribs[2].data = egpGetCubeIndexedColors();
 	attribs[3].data = egpGetCubeIndexedTexcoords();
-	vao[cubeIndexedVAO] = egpCreateVAOInterleavedIndexed(PRIM_TRIANGLES, attribs, 4, egpGetCubeIndexedVertexCount(), (vbo + cubeIndexedVBO), INDEX_UINT, egpGetCubeIndexCount(), egpGetCubeIndices(), (ibo + cubeIndexedIBO));
+	vao[cubeIndexedModel] = egpCreateVAOInterleavedIndexed(PRIM_TRIANGLES, attribs, 4, egpGetCubeIndexedVertexCount(), (vbo + cubeIndexedModel), INDEX_UINT, egpGetCubeIndexCount(), egpGetCubeIndices(), (ibo + cubeIndexedIBO));
 
 	// indexed wire cube
 	attribs[0].data = egpGetWireCubeIndexedPositions();
-	vao[cubeWireIndexedVAO] = egpCreateVAOInterleavedIndexed(PRIM_LINES, attribs, 1, egpGetCubeIndexedVertexCount(), (vbo + cubeWireIndexedVBO), INDEX_UINT, egpGetWireCubeIndexCount(), egpGetWireCubeIndices(), (ibo + cubeWireIndexedIBO));
-
-
-	// axes
-	const egpAttributeDescriptor axesAttribs[2] = {
-		egpCreateAttributeDescriptor(ATTRIB_POSITION, ATTRIB_VEC3, egpGetAxesPositions()),
-		egpCreateAttributeDescriptor(ATTRIB_COLOR, ATTRIB_VEC3, egpGetAxesColors()),
-	};
-	vao[axesVAO] = egpCreateVAOInterleaved(PRIM_LINES, axesAttribs, 2, egpGetAxesVertexCount(), (vbo + axesVBO), 0);
+	vao[cubeWireIndexedModel] = egpCreateVAOInterleavedIndexed(PRIM_LINES, attribs, 1, egpGetCubeIndexedVertexCount(), (vbo + cubeWireIndexedModel), INDEX_UINT, egpGetWireCubeIndexCount(), egpGetWireCubeIndices(), (ibo + cubeWireIndexedIBO));
 }
 
 void deleteGeometry()
 {
 	// delete VAOs first (because referencing), then VBOs and IBOs
 	unsigned int i;
-	for (i = 0; i < vaoCount; ++i)
+	for (i = 0; i < modelCount; ++i)
+	{
 		egpReleaseVAO(vao + i);
-	for (i = 0; i < vboCount; ++i)
 		egpReleaseVBO(vbo + i);
+	}
 	for (i = 0; i < iboCount; ++i)
 		egpReleaseIBO(ibo + i);
 }
@@ -329,8 +401,12 @@ void deleteGeometry()
 // restart all timers and time counters
 void resetTimers()
 {
+	const double physicsFPS = 200.0;
 	const double renderFPS = 30.0;
 	const double secondFPS = 1.0;
+
+	egpTimerSet(physicsTimer, physicsFPS);
+	egpTimerStart(physicsTimer);
 
 	egpTimerSet(renderTimer, renderFPS);
 	egpTimerStart(renderTimer);
@@ -498,9 +574,9 @@ void updateGameState(float dt)
 	// scale time first
 	dt *= (float)(playrate * playing) * 0.01f;
 
-	// ****update objects here
+	// update objects here
 	{
-		updatePhysics(dt);
+
 	}
 }
 
@@ -510,7 +586,7 @@ void updateGameState(float dt)
 void renderGameState()
 {
 //-----------------------------------------------------------------------------
-	// ****DRAW ALL OBJECTS - ALGORITHM: 
+	// DRAW ALL OBJECTS - ALGORITHM: 
 	//	- activate shader program if different from last object
 	//	- bind texture we want to apply (skybox)
 	//	- send appropriate uniforms if different from last time we used this program
@@ -520,52 +596,38 @@ void renderGameState()
 
 //-----------------------------------------------------------------------------
 
-	// first pass: scene
-	{
-		// ****
-		// TEST DRAW: demo shapes
-		{
-			// target back-buffer and clear
-			drawToBackBuffer(viewport_nb, viewport_nb, viewport_tw, viewport_th);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// target back-buffer and clear
+	drawToBackBuffer(viewport_nb, viewport_nb, viewport_tw, viewport_th);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			// uncomment to draw everything as wireframe
-		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-			// draw 3D primitives with immediate mode (terrible)
-		//	egpDrawSphere8x6Immediate(viewProjMat.m, 0, 1.0f, 0.0f, 0.0f);
-		//	egpDrawSphere32x24Immediate(viewProjMat.m, 0, 0.0f, 1.0f, 0.0f);
-		//	egpDrawCubeImmediate(viewProjMat.m, 0, 1, 0.0f, 0.0f, 1.0f);
-		//	egpDrawWireCubeImmediate(viewProjMat.m, 0, 1, 1.0f, 0.5f, 0.0f);
-
-			// draw 3D primitives with retained mode (VAOs, proper)
-		//	egpActivateVAO(vao + sphere8x6VAO);
-		//	egpActivateVAO(vao + sphere32x24VAO);
-		//	egpActivateVAO(vao + cubeVAO);
-		//	egpActivateVAO(vao + cubeWireVAO);
-		//	egpActivateVAO(vao + cubeIndexedVAO);
-		//	egpActivateVAO(vao + cubeWireIndexedVAO);
-		//	egpDrawActiveVAO();
-		}
-	}
-
-
-	// ****
 	// TEST YOUR SHAPES
 	{
-	//	egpfwDrawColoredTriangleImmediate(viewProjMat.m, 0);
-	//	egpfwDrawColoredUnitQuadImmediate(viewProjMat.m, 0);
-	//	egpfwDrawTexturedUnitQuadImmediate(viewProjMat.m, 0);
-
-
 		cbmath::mat4 mvp;
 
 		// draw each physics object in immediate mode
-		mvp = viewProjMat * mover[0].modelMatrix;
+
+		// bowling ball scale is the radius
+		mvp = viewProjMat * mover[0].modelMatrix * cbmath::makeScale4((float)bowlingBall->radius);
+		egpDrawSphere8x6Immediate(mvp.m, 0, 1.0f, 0.0f, 0.5f);
+
+		// feather is flat
+		mvp = viewProjMat * mover[1].modelMatrix * cbmath::makeScale4(0.5f*(float)feather->width, 0.005f, 0.5f*(float)feather->height);
+		egpDrawWireCubeImmediate(mvp.m, 0, 0, 0.5f, 0.0f, 1.0f);
+
+		// spring ball is a unit sphere
+		mvp = viewProjMat * mover[2].modelMatrix;
+		egpDrawSphere8x6Immediate(mvp.m, 0, 0.5f, 0.0f, 1.0f);
+
+
+		// draw constraints
+		mvp = viewProjMat * cbmath::makeScaleTranslate(0.1f, springConstraint);
 		egpDrawWireCubeImmediate(mvp.m, 0, 0, 1.0f, 0.5f, 0.0f);
 
-		mvp = viewProjMat * mover[1].modelMatrix;
-		egpDrawWireCubeImmediate(mvp.m, 0, 0, 0.0f, 1.0f, 0.5f);
+		// draw ground plane
+		mvp = cbmath::makeScale4(zfar, 0.01f, zfar);
+		mvp.c3.y = groundHeight - 0.1f;
+		mvp = viewProjMat * mvp;
+		egpDrawCubeImmediate(mvp.m, 0, 0, 0.5f, 0.5f, 0.5f);
 	}
 
 
@@ -595,6 +657,12 @@ int idle()
 	int ret = 0;
 	// timer checks
 	// pro tip: see what happens if you don't do the 'if'  ;)
+
+	// physics
+	if (egpTimerUpdate(physicsTimer))
+	{
+		updatePhysics(physicsTimer->dt);
+	}
 
 	// trigger render if it is time
 	if (egpTimerUpdate(renderTimer))
