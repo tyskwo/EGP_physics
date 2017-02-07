@@ -201,13 +201,13 @@ void initParticleSystem()
     particle.massDelta = 0.5f;
     
     particle.startColor = cbmath::vec4(1.0f,0.0f,0.0f,1.0f);
-    particle.endColor   = cbmath::vec4(0.0f,1.0f,0.0f,1.0f);
+    particle.endColor   = cbmath::vec4(0.0f,0.0f,1.0f,0.0f);
 
     particle.velocity      = cbmath::vec3(0.0f, 2.0f, 0.0f);
     particle.velocityDelta = cbmath::vec3(2.0f, 5.0f, 2.0f);
 
     
-	particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 25);
+	particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 500);
 }
 
 // quickly reset physics
@@ -685,19 +685,18 @@ int idle()
 	// pro tip: see what happens if you don't do the 'if'  ;)
 
 	// trigger render if it is time
-	if (egpTimerUpdate(renderTimer))
+    if (egpTimerUpdate(renderTimer))
 	{
-		///////////////////////////////////////////////////////////////////////
 		updateGameState(renderTimer->dt);
 		handleInputState();
 		renderGameState();
-		///////////////////////////////////////////////////////////////////////
-		ret = 1;
+
+        ret = 1;
 	}
 
-//	if (egpTimerUpdate(secondTimer))
+//    if (egpTimerUpdate(secondTimer))
 //	{
-//		printf("\n %u frames rendered over %u seconds", renderTimer->ticks, secondTimer->ticks);
+//		printf("\n %u fps", renderTimer->ticks / secondTimer->ticks);
 //	}
 
 	return ret;
