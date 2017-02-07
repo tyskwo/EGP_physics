@@ -45,7 +45,7 @@ public:
 private:
     
     // the particle this system will be emitting
-    Particle *m_modelParticle;
+    Particle::Data m_particleData;
     
     // the list of particles this system is responsible for
     std::vector<Particle*> m_particles;
@@ -59,14 +59,14 @@ private:
 public:
     
     ParticleSystem();
-    ParticleSystem(Particle*     modelParticle,
-                   Emitter::Mode mode           = Emitter::Mode::Burst,
-                   cbmath::vec3  position       = cbmath::vec3(0.0f,0.0f,0.0f),
-                   cbmath::vec3  emitDirection  = cbmath::vec3(0.0f,1.0f,0.0f),
-                   int           numberToEmit   = 100);
+    ParticleSystem(Particle::Data particleData,
+                   Emitter::Mode  mode           = Emitter::Mode::Burst,
+                   cbmath::vec3   position       = cbmath::vec3(0.0f,0.0f,0.0f),
+                   cbmath::vec3   emitDirection  = cbmath::vec3(0.0f,1.0f,0.0f),
+                   int            numberToEmit   = 100);
 
-    inline Particle*              getModelParticle() { return m_modelParticle; }
-    inline std::vector<Particle*> getParticles()     { return m_particles;     }
+    inline Particle::Data         getParticleData() { return m_particleData; }
+    inline std::vector<Particle*> getParticles()    { return m_particles;    }
     
     void update(const float dt);
     

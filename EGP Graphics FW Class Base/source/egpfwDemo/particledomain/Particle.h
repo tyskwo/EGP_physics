@@ -37,7 +37,18 @@ class Particle
 public:
     struct Data
     {
+        cbmath::vec3 position;
         
+        float lifespan, lifespanDelta;
+        
+        cbmath::vec4 startColor, endColor;
+        
+        cbmath::vec3 velocity, velocityDelta;
+        
+        cbmath::vec3 startScale, endScale;
+        
+        float mass, massDelta;
+
     };
     
 private:
@@ -45,7 +56,6 @@ private:
     // reference to the mover struct of this particle for physics simulation
     Mover *m_mover;
     
-    // how long this particle lives for
     float m_lifespan;
     
     // how long this particle has been alive
@@ -56,12 +66,16 @@ private:
     
     Model* m_model;
     
+    cbmath::vec4 m_color, m_startColor, m_goalColor;
+    
+    
+    
     
     
 public:
     
     Particle();
-    Particle(cbmath::vec3 position, cbmath::vec3 velocity = cbmath::v3zero, float mass = 1.0f, float lifespan = 1.0f);
+    Particle(Data data);
     
     inline Mover* getMover() { return m_mover;    }
     inline bool   isAlive()  { return m_isActive; }

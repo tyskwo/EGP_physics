@@ -104,9 +104,9 @@ egpKeyboard keybd[1];
 // general: camera's view matrix and projection matrix
 cbtk::cbmath::mat4 viewMatrix, projectionMatrix, viewProjMat;
 // camera controls
-float cameraElevation = 0.0f, cameraAzimuth = 0.0f;
+float cameraElevation = -0.5f, cameraAzimuth = 0.0f;
 float cameraRotateSpeed = 0.1f, cameraMoveSpeed = 1.0f, cameraDistance = 8.0f;
-cbtk::cbmath::vec4 cameraPosWorld(0.0f, 0.0f, cameraDistance, 1.0f), deltaCamPos;
+cbtk::cbmath::vec4 cameraPosWorld(0.0f, 6.0f, cameraDistance, 1.0f), deltaCamPos;
 
 
 
@@ -130,7 +130,7 @@ enum VAOIndex
     
     quadVAO,
     
-    octahedronVAO,
+    octahedronVAO, isocahedronVAO,
 
 //-----------------------------
 	vaoCount
@@ -143,7 +143,7 @@ enum VBOIndex
     
     quadVBO,
     
-    octahedronVBO,
+    octahedronVBO, isocahedronVBO,
     
 //-----------------------------
 	vboCount
@@ -152,7 +152,7 @@ enum IBOIndex
 {
 	cubeIndexedIBO, cubeWireIndexedIBO,
     
-    octahedronIBO,
+    octahedronIBO, isocahedronIBO,
 
 //-----------------------------
 	iboCount
@@ -192,8 +192,22 @@ Model *model;
 
 void initParticleSystem()
 {
-	modelParticle  = new Particle(cbmath::v3zero, cbmath::v3y, 1.0f, 1.0f);
-	particleSystem = new ParticleSystem(modelParticle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 500);
+    Particle::Data particle;
+    
+    particle.lifespan      = 5.0f;
+    particle.lifespanDelta = 5.0f;
+    
+    particle.mass = 1.0f;
+    particle.massDelta = 0.5f;
+    
+    particle.startColor = cbmath::vec4(1.0f,0.0f,0.0f,1.0f);
+    particle.endColor   = cbmath::vec4(0.0f,1.0f,0.0f,1.0f);
+
+    particle.velocity      = cbmath::vec3(0.0f, 2.0f, 0.0f);
+    particle.velocityDelta = cbmath::vec3(2.0f, 5.0f, 2.0f);
+
+    
+	particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 25);
 }
 
 // quickly reset physics
@@ -205,11 +219,6 @@ void resetPhysics()
 // update physics only
 void updatePhysics(float dt)
 {
-	// basic physics update: 
-	//	-> integrate
-	//	-> update anything that has to do with graphics
-
-	// particles
 	particleSystem->update(dt);
 }
 
@@ -378,6 +387,15 @@ void setupGeometry()
     
     vao[octahedronVAO] = egpCreateVAOInterleavedIndexed(PRIM_TRIANGLES, octAttribs, 2, Octahedron::getVertexCount(), vbo+octahedronVBO,
                                                         INDEX_UINT, Octahedron::getIndexCount(), Octahedron::getIndeces(), ibo+octahedronIBO);
+    
+    // isocahedron
+    egpAttributeDescriptor isoAttribs[] = {
+        egpCreateAttributeDescriptor(ATTRIB_POSITION, ATTRIB_VEC3, Isocahedron::getPositions()),
+        egpCreateAttributeDescriptor(ATTRIB_COLOR,    ATTRIB_VEC3, Isocahedron::getColors())
+    };
+    
+    vao[isocahedronVAO] = egpCreateVAOInterleavedIndexed(PRIM_TRIANGLES, isoAttribs, 2, Isocahedron::getVertexCount(), vbo+isocahedronVBO,
+                                                        INDEX_UINT, Isocahedron::getIndexCount(), Isocahedron::getIndeces(), ibo+isocahedronIBO);
 }
 
 void deleteGeometry()
@@ -407,7 +425,7 @@ void setupShaders()
     Shader* shader = new Shader("../../../../../../../../resource/glsl/4x/vs/passColor_vs4x.glsl",
                                 "../../../../../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl");
     
-    model = new Model(shader, vao+octahedronVAO);
+    model = new Model(shader, vao+isocahedronVAO);
 }
 
 void deleteShaders()

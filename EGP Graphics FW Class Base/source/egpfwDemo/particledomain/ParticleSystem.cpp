@@ -19,16 +19,17 @@
 
 ParticleSystem::ParticleSystem() {}
 
-ParticleSystem::ParticleSystem(Particle*     modelParticle,
-                               Emitter::Mode mode,
-                               cbmath::vec3  position,
-                               cbmath::vec3  emitDirection,
-                               int           numberToEmit)
+ParticleSystem::ParticleSystem(Particle::Data particleData,
+                               Emitter::Mode  mode,
+                               cbmath::vec3   position,
+                               cbmath::vec3   emitDirection,
+                               int            numberToEmit)
 {
 	m_mover = new Mover();
     this->m_mover->position         = position;
 
-    this->m_modelParticle           = modelParticle;
+    this->m_particleData            = particleData;
+    m_particleData.position         = position;
     
     this->m_emitter.m_mode          = mode;
     this->m_emitter.m_emitDirection = emitDirection;
@@ -59,7 +60,7 @@ void ParticleSystem::emit(Model* model)
 {
     for(int i = 0; i < m_emitter.m_numberToEmit; i++)
     {
-        m_particles.push_back(new Particle(m_mover->position, m_emitter.m_emitDirection + cbmath::v3x * (static_cast<float>(rand()) / (RAND_MAX * 0.5f)) + cbmath::v3y * (static_cast<float>(rand()) / (RAND_MAX * 0.5f)) + cbmath::v3z * (static_cast<float>(rand()) / (RAND_MAX * 0.5f)), 0.5f, 5.0f));
+        m_particles.push_back(new Particle(m_particleData));
         
         m_particles.back()->SetModel(model);
     }

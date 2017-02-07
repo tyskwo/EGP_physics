@@ -26,14 +26,16 @@ Model::Model(Shader* shader, egpVertexArrayObjectDescriptor* vao)
     this->m_vao    = vao;
 }
 
-void Model::renderAt(cbmath::mat4 matrix)
+void Model::renderAt(cbmath::mat4 matrix, cbmath::vec4 color)
 {
     egpProgram temp = m_shader->getProgram();
     egpActivateProgram(&temp);
     
     egpSendUniformFloatMatrix(m_shader->getMVPUniform(), UNIF_MAT4, 1, 0, matrix.m);
     
-    cbmath::vec4 color = cbmath::vec4(static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX, 1.0f);
+    /*cbmath::vec4 color = cbmath::vec4(static_cast<float>(rand()) / RAND_MAX,
+                                      static_cast<float>(rand()) / RAND_MAX,
+                                      static_cast<float>(rand()) / RAND_MAX, 1.0f);*/
     
     egpSendUniformFloat(m_shader->getColorUniform(), UNIF_VEC4, 1, color.v);
     

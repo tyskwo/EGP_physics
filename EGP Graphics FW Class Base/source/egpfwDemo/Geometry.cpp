@@ -24,3 +24,10 @@ const unsigned int *Octahedron::getIndeces()     { return Octahedron::IndexOrder
       unsigned int  Octahedron::getIndexCount()  { return Octahedron::Indices;    }
 
 
+
+// isocahedron
+const float        *Isocahedron::getPositions()   { return Isocahedron::Positions;  }
+const float        *Isocahedron::getColors()      { return Isocahedron::Colors;     }
+const unsigned int *Isocahedron::getIndeces()     { return Isocahedron::IndexOrder; }
+      unsigned int  Isocahedron::getVertexCount() { return Isocahedron::Vertices;   }
+      unsigned int  Isocahedron::getIndexCount()  { return Isocahedron::Indices;    }

@@ -13,8 +13,7 @@
 
 
 #include "Particle.h"
-
-#include <stdlib.h> 
+#include <stdlib.h>
 
 #ifdef _WIN32
     #include "egpfw\egpfw\utils\egpfwPrimitiveDataUtils.h"
@@ -23,26 +22,65 @@
 #endif
 
 
+
+
+
+template <typename T>
+T lerp(T start, T end, float percent)
+{
+    return (start + percent*(end - start));
+}
+
+float randomDelta(float a)
+{
+    float random = ((float) rand()) / (float) RAND_MAX;
+    float r = random * a;
+    
+    return a + r;
+}
+
+float randomDeltaPosNeg(float a)
+{
+    return ((float(rand()) / float(RAND_MAX)) * (2 * a)) - a;
+}
+
+
+
+
+
+
+
+
+
+
+
 Particle::Particle() {}
 
 
 
-Particle::Particle(cbmath::vec3 position, cbmath::vec3 velocity, float mass, float lifespan)
+Particle::Particle(Data data)
 {
 	m_mover = new Mover();
 
     // set the physics values
-    m_mover->position = position;
-	m_mover->velocity = velocity;
-	m_mover->setMass(mass);
+    m_mover->position = data.position;
+    m_mover->velocity = cbmath::vec3(data.velocity.x + randomDeltaPosNeg(data.velocityDelta.x),
+                                     data.velocity.y + randomDeltaPosNeg(data.velocityDelta.y),
+                                     data.velocity.z + randomDeltaPosNeg(data.velocityDelta.z));
+	m_mover->setMass(data.mass + randomDelta(data.massDelta));
+    
 	m_mover->setDamping(0.5f);
     
     // set the lifespan values
-    this->m_lifespan = lifespan;
+    this->m_lifespan = data.lifespan + randomDelta(data.lifespanDelta);
     this->m_currentLife = 0.0f;
     
     // this particle is now alive
     this->m_isActive = true;
+    
+    this->m_color      = data.startColor;
+    this->m_startColor = data.startColor;
+    this->m_goalColor  = data.endColor;
 }
 
 
@@ -56,7 +94,13 @@ void Particle::update(const float dt)
         
         m_currentLife += dt;
         
-        if(m_currentLife > m_lifespan) m_isActive = false;
+        if(m_currentLife > m_lifespan)
+        {
+            m_isActive = false;
+            return;
+        }
+    
+        m_color = lerp(m_startColor, m_goalColor, m_currentLife / m_lifespan);
     }
 }
 
@@ -67,10 +111,6 @@ void Particle::render(cbmath::mat4 viewProjMatrix)
     if(m_isActive)
     {
 		this->m_mover->updateMoverGraphics();
-        this->m_model->renderAt(viewProjMatrix * this->m_mover->modelMatrix);
-        
-
-		// random colors
-		//static_cast<float>(rand()) / RAND_MAX
+        this->m_model->renderAt(viewProjMatrix * this->m_mover->modelMatrix, m_color);
     }
 }
