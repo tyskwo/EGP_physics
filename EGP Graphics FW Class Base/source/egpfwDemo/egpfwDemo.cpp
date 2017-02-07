@@ -226,9 +226,12 @@ void updatePhysics(float dt)
 	{
 		// physics
 		updateMoverFirstOrder(m, dt);
+        
 
 		// hax bounce
-		clampMoverToGround(m, groundHeight, restitutionCoeff[i]);
+        //clampMoverToGround(m, groundHeight, restitutionCoeff[i]);
+        
+        if(i == 0) printf("\n %f", m->velocity.y);
 
 		// graphics
 		updateMoverGraphics(m);

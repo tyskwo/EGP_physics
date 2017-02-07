@@ -18,7 +18,11 @@
 //	object velocity is the velocity of the object relative to the fluid
 cbmath::vec3 getForceDrag(const float dragCoeff, const float surfaceArea, const float fluidDensity, const cbmath::vec3 objectVelocity)
 {
-	return cbmath::v3zero;
+    cbmath::vec3 square = cbmath::vec3(objectVelocity.x*objectVelocity.x,
+                                       objectVelocity.y*objectVelocity.y,
+                                       objectVelocity.z*objectVelocity.z);
+
+	return (dragCoeff*fluidDensity*surfaceArea*(square)) / 2;
 }
 
 

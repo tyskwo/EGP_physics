@@ -92,7 +92,6 @@ void updateMoverDisplacement(egpfwMover *mover, const float dt)
 
 
 
-
 // graphics updates
 void updateMoverGraphics(egpfwMover *mover)
 {
@@ -106,7 +105,11 @@ void updateMoverGraphics(egpfwMover *mover)
 //	use the remaining velocity for a bounce
 void clampMoverToGround(egpfwMover *mover, const float groundHeight, const float restitution)
 {
-
+    if(mover->position.y < groundHeight)
+    {
+        mover->velocity   *=  restitution;
+        mover->velocity.y  = -mover->velocity.y;
+    }
 }
 
 
