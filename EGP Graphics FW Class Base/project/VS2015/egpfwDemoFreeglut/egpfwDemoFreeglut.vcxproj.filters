@@ -13,59 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Resource Files\glsl">
-      <UniqueIdentifier>{e1b585a1-8984-4012-8ad4-a7d9256874f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\glsl\410">
-      <UniqueIdentifier>{3732daa2-f39b-455c-8c20-feb4c5c4d87c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\glsl\410\vs">
-      <UniqueIdentifier>{d42b0a54-8852-42cf-95d2-f0fa9bee3bb1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\glsl\410\fs">
-      <UniqueIdentifier>{fc6b44a0-0e94-4222-957d-83a95bd0733f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\glsl\410\gs">
-      <UniqueIdentifier>{94db529d-6b04-4aa4-9d0e-9e16272617cb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\egpfwDemo">
       <UniqueIdentifier>{7dec6d87-16bc-4d69-80ec-968456751b2f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\egpfwDemo\gphysics">
-      <UniqueIdentifier>{56fe9b4f-8bcd-4062-9747-6372f8ae6c43}</UniqueIdentifier>
+      <UniqueIdentifier>{024dcf71-eb0d-45ef-a811-b706a6fa9fc5}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\resource\glsl\410\fs\drawColor_fs410.glsl">
-      <Filter>Resource Files\glsl\410\fs</Filter>
-    </None>
-    <None Include="..\..\..\resource\glsl\410\fs\drawTexture_fs410.glsl">
-      <Filter>Resource Files\glsl\410\fs</Filter>
-    </None>
-    <None Include="..\..\..\resource\glsl\410\fs\phong_fs410.glsl">
-      <Filter>Resource Files\glsl\410\fs</Filter>
-    </None>
-    <None Include="..\..\..\resource\glsl\410\fs\phong_nm_fs410.glsl">
-      <Filter>Resource Files\glsl\410\fs</Filter>
-    </None>
-    <None Include="..\..\..\resource\glsl\410\gs\drawTangents_gs410.glsl">
-      <Filter>Resource Files\glsl\410\gs</Filter>
-    </None>
-    <None Include="..\..\..\resource\glsl\410\vs\passColor_vs410.glsl">
-      <Filter>Resource Files\glsl\410\vs</Filter>
-    </None>
-    <None Include="..\..\..\resource\glsl\410\vs\passTexcoord_passthruPosition_vs410.glsl">
-      <Filter>Resource Files\glsl\410\vs</Filter>
-    </None>
-    <None Include="..\..\..\resource\glsl\410\vs\passTexcoord_vs410.glsl">
-      <Filter>Resource Files\glsl\410\vs</Filter>
-    </None>
-    <None Include="..\..\..\resource\glsl\410\vs\phong_skin_vs410.glsl">
-      <Filter>Resource Files\glsl\410\vs</Filter>
-    </None>
-    <None Include="..\..\..\resource\glsl\410\vs\phong_vs410.glsl">
-      <Filter>Resource Files\glsl\410\vs</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\egpfwDemo\egpfwDemo.cpp">
@@ -83,6 +36,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwMover.h">
+      <Filter>Source Files\egpfwDemo\gphysics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwForces.h">
+      <Filter>Source Files\egpfwDemo\gphysics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwShapes.h">
       <Filter>Source Files\egpfwDemo\gphysics</Filter>
     </ClInclude>
   </ItemGroup>

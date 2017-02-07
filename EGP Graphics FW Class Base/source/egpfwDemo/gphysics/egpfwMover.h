@@ -19,6 +19,7 @@ struct egpfwMover
     
 	// movement
 	cbmath::vec3 position, velocity, accelerationFixed;
+<<<<<<< HEAD
     
     
     // Newton equations
@@ -47,6 +48,40 @@ void addForce(egpfwMover *mover, const cbmath::vec3 force)
 }
 
 
+=======
+
+	// Newton's stuff
+	cbmath::vec3 acceleration;
+	cbmath::vec3 force;
+	float mass, massInv;
+};
+
+
+// force
+void addForce(egpfwMover *mover, const cbmath::vec3 force)
+{
+	mover->force += force;
+}
+
+
+// mass
+void setMass(egpfwMover *mover, const float mass)
+{
+	if (mass > 0.0f)
+		mover->massInv = 1.0f / (mover->mass = mass);
+	else
+		mover->massInv = (mover->mass = 0.0f);
+}
+
+
+// acceleration
+void updateAcceleration(egpfwMover *mover)
+{
+	// F = ma ---> a = F/m
+	mover->acceleration = (mover->force * mover->massInv) + mover->accelerationFixed;
+	mover->force.set();
+}
+>>>>>>> a77d1e387d4c0d13d911c84747bb4db89a6555e7
 
 
 // physics (integration) updates
@@ -64,10 +99,17 @@ void updateVelocity(egpfwMover *mover, const float dt)
 
 void updateAcceleration(egpfwMover *mover)
 {
+<<<<<<< HEAD
     // a = F/m = F * im
     mover->acceleration = (mover->force + mover->accelerationFixed) * mover->massInverse;
     
     mover->force.set();
+=======
+	mover->position += mover->velocity * dt;
+	mover->velocity += mover->acceleration * dt;
+
+	updateAcceleration(mover);
+>>>>>>> a77d1e387d4c0d13d911c84747bb4db89a6555e7
 }
 
 
@@ -89,6 +131,16 @@ void updateMoverDisplacement(egpfwMover *mover, const float dt)
 void updateMoverGraphics(egpfwMover *mover)
 {
 	mover->modelMatrix.c3.xyz = mover->position;
+}
+
+
+// ****
+// clamp to ground (simple bounce): 
+//	if object goes into ground, clamp it to the ground and 
+//	use the remaining velocity for a bounce
+void clampMoverToGround(egpfwMover *mover, const float groundHeight, const float restitution)
+{
+
 }
 
 
