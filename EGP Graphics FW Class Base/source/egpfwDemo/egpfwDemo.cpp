@@ -604,6 +604,9 @@ void handleInputState()
 	// reset physics
 	if (egpKeyboardIsKeyPressed(keybd, 'y'))
 		resetPhysics();
+    
+    
+    //TODO: add a SaveManager of sorts that keeps track of ParticleData. Allow saving when P + 1,2,3,etc. are pressed. Load with L + 1,2,3,etc.
 
 
 	// finish by updating input state
