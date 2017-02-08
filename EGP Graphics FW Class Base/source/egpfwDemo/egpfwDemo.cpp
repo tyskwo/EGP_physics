@@ -46,6 +46,10 @@
 
 #include "egpfw/egpfw.h"
 
+#include "Shader.h"
+#include "Model.h"
+#include "Geometry.h"
+
 #ifdef _WIN32
     #include "gphysics/Mover.h"
     #include "particledomain\ParticleSystem.h"
@@ -54,9 +58,6 @@
     #include "Mover.h"
     #include "ParticleSystem.h"
     #include "Particle.h"
-    #include "Shader.h"
-    #include "Model.h"
-    #include "Geometry.h"
 #endif
 
 
@@ -421,9 +422,21 @@ void setupShaders()
 {
     // activate a VAO for validation (automatically deactivated in shader constructor)
     egpActivateVAO(vao);
-    
-    Shader* shader = new Shader("../../../../../../../../resource/glsl/4x/vs/passColor_vs4x.glsl",
-                                "../../../../../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl");
+
+	std::string vertShaderPath = "";
+	std::string fragShaderPath = "";
+
+#ifdef _WIN32
+	vertShaderPath = "../../../../resource/glsl/4x/vs/passColor_vs4x.glsl";
+	fragShaderPath = "../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl";
+#else
+	vertShaderPath = "../../../../../../../../resource/glsl/4x/vs/passColor_vs4x.glsl";
+	fragShaderPath = "../../../../../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl";
+#endif
+
+	Shader* shader = new Shader(vertShaderPath.c_str(), fragShaderPath.c_str());
+
+		
     
     model = new Model(shader, vao+isocahedronVAO);
 }

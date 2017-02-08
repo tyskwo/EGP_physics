@@ -86,6 +86,15 @@
     <ClCompile Include="..\..\..\source\egpfwDemo\gphysics\Mover.cpp">
       <Filter>Source Files\egpfwDemo\gphysics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\egpfwDemo\Geometry.cpp">
+      <Filter>Source Files\egpfwDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\egpfwDemo\Model.cpp">
+      <Filter>Source Files\egpfwDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\egpfwDemo\Shader.cpp">
+      <Filter>Source Files\egpfwDemo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\egpfwDemo\egpfwDemo.h">
@@ -102,6 +111,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\Mover.h">
       <Filter>Source Files\egpfwDemo\gphysics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\Geometry.h">
+      <Filter>Source Files\egpfwDemo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\Model.h">
+      <Filter>Source Files\egpfwDemo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\Shader.h">
+      <Filter>Source Files\egpfwDemo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
