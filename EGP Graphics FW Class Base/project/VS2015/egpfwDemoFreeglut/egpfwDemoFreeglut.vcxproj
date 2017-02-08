@@ -321,16 +321,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\egpfwDemo\egpfwDemo.cpp" />
+    <ClCompile Include="..\..\..\source\egpfwDemo\Geometry.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\gphysics\Mover.cpp" />
+    <ClCompile Include="..\..\..\source\egpfwDemo\Model.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\particledomain\Particle.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.cpp" />
+    <ClCompile Include="..\..\..\source\egpfwDemo\Shader.cpp" />
     <ClCompile Include="egpfwDemoFreeglut\egpDemoFreeglutMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\egpfwDemo\egpfwDemo.h" />
+    <ClInclude Include="..\..\..\source\egpfwDemo\Geometry.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\Mover.h" />
+    <ClInclude Include="..\..\..\source\egpfwDemo\Model.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\Particle.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.h" />
+    <ClInclude Include="..\..\..\source\egpfwDemo\Shader.h" />
     <ClInclude Include="egpfwDemoFreeglut\resource.h" />
   </ItemGroup>
   <ItemGroup>

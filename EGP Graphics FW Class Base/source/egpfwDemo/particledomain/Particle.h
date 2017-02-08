@@ -21,10 +21,10 @@
 
 #include "egpfw/egpfw.h"
 
-
 #ifdef _WIN32
 	#include "cbmath\cbtkMatrix.h"
 	#include "..\gphysics\Mover.h"
+	#include "..\Model.h"
 #else
 	#include "Mover.h"
     #include "Model.h"

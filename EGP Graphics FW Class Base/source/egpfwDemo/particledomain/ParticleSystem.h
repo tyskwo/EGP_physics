@@ -20,8 +20,13 @@
 #include <stdio.h>
 #include <vector>
 
-#include "Particle.h"
-#include "Model.h"
+#ifdef _WIN32
+	#include "..\particledomain\Particle.h"
+	#include "..\Model.h"
+#else
+	#include "Particle.h"
+	#include "Model.h"
+#endif
 
 
 
