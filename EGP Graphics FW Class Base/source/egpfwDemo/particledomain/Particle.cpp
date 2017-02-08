@@ -14,42 +14,14 @@
 
 #include "Particle.h"
 #include <stdlib.h>
+#include "Eases.h"
+#include "Utils.h"
 
 #ifdef _WIN32
     #include "egpfw\egpfw\utils\egpfwPrimitiveDataUtils.h"
 #else
     #include "../../../include/egpfw/egpfw/utils/egpfwPrimitiveDataUtils.h"
 #endif
-
-
-
-
-
-template <typename T>
-T lerp(T start, T end, float percent)
-{
-    return (start + percent*(end - start));
-}
-
-float randomDelta(float a)
-{
-    float random = ((float) rand()) / (float) RAND_MAX;
-    float r = random * a;
-    
-    return a + r;
-}
-
-float randomDeltaPosNeg(float a)
-{
-    return ((float(rand()) / float(RAND_MAX)) * (2 * a)) - a;
-}
-
-
-
-
-
-
-
 
 
 
@@ -100,7 +72,7 @@ void Particle::update(const float dt)
             return;
         }
     
-        m_color = lerp(m_startColor, m_goalColor, m_currentLife / m_lifespan);
+        m_color = lerp(m_startColor, m_goalColor, m_currentLife / m_lifespan, TimingFunctions::CircularEaseOut);
     }
 }
 

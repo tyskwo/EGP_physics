@@ -63,6 +63,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		200400C81E4BCDE9002D1E12 /* Eases.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Eases.h; path = ../../../source/egpfwDemo/Eases.h; sourceTree = "<group>"; };
+		200400CA1E4BCE1D002D1E12 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = ../../../source/egpfwDemo/Utils.h; sourceTree = "<group>"; };
 		20256B371E478F7000B3DC6C /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Particle.cpp; path = ../../../source/egpfwDemo/particledomain/Particle.cpp; sourceTree = "<group>"; };
 		20256B381E478F7000B3DC6C /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Particle.h; path = ../../../source/egpfwDemo/particledomain/Particle.h; sourceTree = "<group>"; };
 		20256B3A1E478F8F00B3DC6C /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleSystem.cpp; path = ../../../source/egpfwDemo/particledomain/ParticleSystem.cpp; sourceTree = "<group>"; };
@@ -364,12 +366,14 @@
 		BBF58EF31E3D53C000AD1858 /* egpfwDemo */ = {
 			isa = PBXGroup;
 			children = (
+				200400CA1E4BCE1D002D1E12 /* Utils.h */,
 				20A007971E48EA7700B80C3C /* resource */,
 				20A47EE81E4929F8005DB927 /* GraphicsDomain */,
 				20256B361E478F1200B3DC6C /* ParticleDomain */,
 				20BFF2DD1E44D19A0078886D /* PhysicsDomain */,
 				BBF58EF51E3D53D100AD1858 /* egpfwDemo.h */,
 				BBF58EF41E3D53D100AD1858 /* egpfwDemo.cpp */,
+				200400C81E4BCDE9002D1E12 /* Eases.h */,
 			);
 			name = egpfwDemo;
 			sourceTree = "<group>";
