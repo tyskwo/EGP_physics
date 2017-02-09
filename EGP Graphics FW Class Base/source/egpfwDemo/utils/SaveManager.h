@@ -12,17 +12,12 @@
 #include "cbmath\cbtkMatrix.h"
 
 #include <string>
-#include <vector>
 #include <map>
+#include <stdlib.h>
 
 class SaveManager
 {
 private:
-	struct Data
-	{
-		std::vector<std::string> m_dataTypes;
-	};
-
 	std::map<std::string, cbmath::vec3> m_mapVec3;
 	std::map<std::string, cbmath::vec4> m_mapVec4;
 	std::map<std::string, float> m_mapFloat;
@@ -37,12 +32,18 @@ public:
 	SaveManager(std::string dataFilePath);
 	~SaveManager();
 
-	//void getData(DataType type, )
-
 	void loadData();
 	void saveData();
 
 	void printData();
+
+
+	// getData functions
+	template <typename T>
+	void getData(std::string name);
+
+	template <>
+	void getData<float>(std::string name);
 };
 
 

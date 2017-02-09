@@ -116,3 +116,17 @@ void SaveManager::printData()
 {
 	std::cout << m_mapVec3["position"].x;
 }
+
+
+
+template <typename T>
+void SaveManager::getData(std::string name)
+{
+	std::cout << name;
+}
+
+template <>
+void SaveManager::getData<float>(std::string name)
+{
+	std::cout << m_mapFloat[name];
+}
