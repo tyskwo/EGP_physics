@@ -28,6 +28,7 @@ layout (location = 0) in vec4 position;
 uniform mat4 mvp;
 uniform vec4 color;
 
+
 // ****
 // varyings: data passed to the next stage in the pipeline
 // in GLSL 4.x you can use structure format: 

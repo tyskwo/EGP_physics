@@ -433,7 +433,8 @@ void setupGeometry()
     // isocahedron
     egpAttributeDescriptor isoAttribs[] = {
         egpCreateAttributeDescriptor(ATTRIB_POSITION, ATTRIB_VEC3, Isocahedron::getPositions()),
-        egpCreateAttributeDescriptor(ATTRIB_COLOR,    ATTRIB_VEC3, Isocahedron::getColors())
+        egpCreateAttributeDescriptor(ATTRIB_COLOR,    ATTRIB_VEC3, Isocahedron::getColors()),
+        egpCreateAttributeDescriptor(ATTRIB_NORMAL,   ATTRIB_VEC3, Isocahedron::getNormals()),
     };
     
     vao[isocahedronVAO] = egpCreateVAOInterleavedIndexed(PRIM_TRIANGLES, isoAttribs, 2, Isocahedron::getVertexCount(), vbo+isocahedronVBO,
@@ -471,8 +472,8 @@ void setupShaders()
 	vertShaderPath = "../../../../resource/glsl/4x/vs/passColor_vs4x.glsl";
 	fragShaderPath = "../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl";
 #else
-	vertShaderPath = "../../../../../../../../resource/glsl/4x/vs/passColor_vs4x.glsl";
-	fragShaderPath = "../../../../../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl";
+    vertShaderPath = "../../../../../../../../resource/glsl/4x/vs/phong_vs4x.glsl"; //passColor
+	fragShaderPath = "../../../../../../../../resource/glsl/4x/fs/phong_fs4x.glsl";
 #endif
 
 	Shader* shader = new Shader(vertShaderPath.c_str(), fragShaderPath.c_str());
