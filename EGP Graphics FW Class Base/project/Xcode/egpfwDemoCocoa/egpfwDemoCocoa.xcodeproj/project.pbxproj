@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		200400CC1E4BEBD3002D1E12 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 200400CB1E4BEBD3002D1E12 /* Utils.cpp */; };
 		20256B391E478F7000B3DC6C /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20256B371E478F7000B3DC6C /* Particle.cpp */; };
 		20256B3C1E478F8F00B3DC6C /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20256B3A1E478F8F00B3DC6C /* ParticleSystem.cpp */; };
 		20256B3F1E47A08F00B3DC6C /* Mover.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20256B3D1E47A08F00B3DC6C /* Mover.cpp */; };
@@ -65,6 +66,7 @@
 /* Begin PBXFileReference section */
 		200400C81E4BCDE9002D1E12 /* Eases.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Eases.h; path = ../../../source/egpfwDemo/Eases.h; sourceTree = "<group>"; };
 		200400CA1E4BCE1D002D1E12 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = ../../../source/egpfwDemo/Utils.h; sourceTree = "<group>"; };
+		200400CB1E4BEBD3002D1E12 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Utils.cpp; path = ../../../source/egpfwDemo/Utils.cpp; sourceTree = "<group>"; };
 		20256B371E478F7000B3DC6C /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Particle.cpp; path = ../../../source/egpfwDemo/particledomain/Particle.cpp; sourceTree = "<group>"; };
 		20256B381E478F7000B3DC6C /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Particle.h; path = ../../../source/egpfwDemo/particledomain/Particle.h; sourceTree = "<group>"; };
 		20256B3A1E478F8F00B3DC6C /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleSystem.cpp; path = ../../../source/egpfwDemo/particledomain/ParticleSystem.cpp; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 			isa = PBXGroup;
 			children = (
 				200400CA1E4BCE1D002D1E12 /* Utils.h */,
+				200400CB1E4BEBD3002D1E12 /* Utils.cpp */,
 				20A007971E48EA7700B80C3C /* resource */,
 				20A47EE81E4929F8005DB927 /* GraphicsDomain */,
 				20256B361E478F1200B3DC6C /* ParticleDomain */,
@@ -483,6 +486,7 @@
 				20B7AD731E490C9C0020DA19 /* Geometry.cpp in Sources */,
 				BBF58EDD1E3D35B800AD1858 /* AppDelegate.m in Sources */,
 				BBF58EF61E3D53D100AD1858 /* egpfwDemo.cpp in Sources */,
+				200400CC1E4BEBD3002D1E12 /* Utils.cpp in Sources */,
 				BBF58EFA1E3D60F900AD1858 /* egpfwGLView.m in Sources */,
 				20256B3F1E47A08F00B3DC6C /* Mover.cpp in Sources */,
 			);

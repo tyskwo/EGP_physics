@@ -28,7 +28,6 @@
 #include <math.h>
 
 // third party math lib
-#include "cbmath/cbtkMatrix.h"
 
 // OpenGL
 #ifdef _WIN32
@@ -50,14 +49,14 @@
 #include "Model.h"
 #include "Geometry.h"
 
+
 #ifdef _WIN32
     #include "gphysics/Mover.h"
     #include "particledomain\ParticleSystem.h"
-    #include "particledomain\Particle.h"
 #else
+    #include <string>
     #include "Mover.h"
     #include "ParticleSystem.h"
-    #include "Particle.h"
 #endif
 
 
@@ -193,20 +192,51 @@ Model *model;
 
 void initParticleSystem()
 {
+//    // coals burning
+//    Particle::Data particle;
+//                                                   //v, d,   midpoint
+//    particle.lifespan = Particle::DeltaType<float> { 5, 5,   false };
+//    particle.mass     = Particle::DeltaType<float> { 1, 0.5, false };
+//    
+//    particle.velocity = Particle::DeltaType<cbmath::vec3> { cbmath::vec3(0.0f, 2.0f, 0.0f), cbmath::vec3(2.0f, 5.0f, 2.0f), true };
+//
+//    
+//    particle.color = Particle::LifetimeType<cbmath::vec4> {  cbmath::vec4(1.0f,0.0f,0.0f,1.0f),     /* start */
+//                                                             cbmath::vec4(0.0f,0.0f,1.0f,0.0f),     /* end   */
+//                                                             TimingFunctions::CircularEaseOut };    /* ease  */
+    
+    
+    // smoke
     Particle::Data particle;
     
-    particle.lifespan      = 5.0f;
-    particle.lifespanDelta = 5.0f;
+    particle.lifespan = Particle::DeltaType<float> {  5,   5, false };
+    particle.mass     = Particle::DeltaType<float> { -1, 0.5, false };
     
-    particle.mass = 1.0f;
-    particle.massDelta = 0.5f;
+    particle.velocity = Particle::DeltaType<cbmath::vec3> { cbmath::vec3(0.0f, 2.0f, 0.0f), cbmath::vec3(2.0f, 2.5f, 2.0f), true };
     
-    particle.startColor = cbmath::vec4(1.0f,0.0f,0.0f,1.0f);
-    particle.endColor   = cbmath::vec4(0.0f,0.0f,1.0f,0.0f);
+    
+    particle.color = Particle::LifetimeType<cbmath::vec4> {  cbmath::vec4(0.2f,0.2f,0.2f,1.0f),
+                                                             cbmath::vec4(1.0f,1.0f,1.0f,0.0f),
+                                                             TimingFunctions::CircularEaseOut };
+    
+    
+//    // bouncy balls
+//    Particle::Data particle;
+//    
+//    particle.lifespan = Particle::DeltaType<float> {  5, 5, false };
+//    particle.mass     = Particle::DeltaType<float> { 10, 5, true  };
+//    
+//    particle.velocity = Particle::DeltaType<cbmath::vec3> { cbmath::vec3(0.0f, -4.0f, 0.0f), cbmath::vec3(5.0f, 2.5f, 5.0f), true };
+//    
+//    
+//    particle.color = Particle::LifetimeType<cbmath::vec4> {  cbmath::vec4(0.33,0.5f,0.8f,1.0f),
+//                                                             cbmath::vec4(0.9f,0.3f,0.5f,1.0f),
+//                                                             TimingFunctions::ExponentialEaseIn };
 
-    particle.velocity      = cbmath::vec3(0.0f, 2.0f, 0.0f);
-    particle.velocityDelta = cbmath::vec3(2.0f, 5.0f, 2.0f);
+    
 
+    
+    
     
 	particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 500);
 }

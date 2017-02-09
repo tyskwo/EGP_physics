@@ -20,9 +20,10 @@
 #include <stdio.h>
 
 #include "egpfw/egpfw.h"
+#include "Utils.h"
+#include "Eases.h"
 
 #ifdef _WIN32
-	#include "cbmath\cbtkMatrix.h"
 	#include "..\gphysics\Mover.h"
 	#include "..\Model.h"
 #else
@@ -35,21 +36,54 @@
 class Particle
 {
 public:
+    
+    template <typename T>
+    struct DeltaType
+    {
+        T value, delta;
+        bool isDeltaMidpoint;
+        
+        T init()
+        {
+            if(isDeltaMidpoint)
+            {
+                return value + Utils::randomDeltaPosNeg(delta);
+            }
+            else
+            {
+                return value + Utils::randomDelta(delta);
+            }
+        }
+    };
+    
+    template <typename T>
+    struct LifetimeType
+    {
+        typedef float (*TimingFunction)(float);
+        
+        T start, end;
+        TimingFunction ease;
+        T current;
+        
+        T lerp(float percent)
+        {
+            return Eases::lerp(start, end, percent, ease);
+        }
+    };
+    
     struct Data
     {
         cbmath::vec3 position;
         
-        float lifespan, lifespanDelta;
-        
-        cbmath::vec4 startColor, endColor;
-        
-        cbmath::vec3 velocity, velocityDelta;
-        
-        cbmath::vec3 startScale, endScale;
-        
-        float mass, massDelta;
+        DeltaType<float>        lifespan;
+        DeltaType<float>        mass;
+        DeltaType<cbmath::vec3> velocity;
 
+        LifetimeType<cbmath::vec4> color;
+        LifetimeType<cbmath::vec3> scale;
     };
+    
+
     
 private:
     
@@ -66,7 +100,7 @@ private:
     
     Model* m_model;
     
-    cbmath::vec4 m_color, m_startColor, m_goalColor;
+    LifetimeType<cbmath::vec4> m_color;
     
     
     

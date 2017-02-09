@@ -1,29 +1,41 @@
+//  David Hartman 0923439
+//  Ty Wood       0901793
 //
-//  Utils.h
-//  egpfwDemoCocoa
+//  EGP 425.01
+//  Simple Particle Engine
+//  17.02.05
 //
-//  Created by Ty Wood on 2/8/17.
-//  Copyright © 2017 Dan Buckstein. All rights reserved.
-//
+//  We certify that this work is entirely our own.
+//  The assessor of this project may reproduce this project and provide copies to other academic staff,
+//  and/or communicate a copy of this project to a plagiarism-checking service,
+//  which may retain a copy of the project on its database.
 
 #ifndef Utils_h
 #define Utils_h
 
+#include <stdlib.h>
+#include "cbmath/cbtkMatrix.h"
 
-
-float randomDelta(float a)
+namespace Utils
 {
-    float random = ((float) rand()) / (float) RAND_MAX;
-    float r = random * a;
-    
-    return a + r;
-}
+    template <typename T>
+    T randomDelta(T a)
+    {
+        float random = ((float) rand()) / (float) RAND_MAX;
+        T r = random * a;
+        
+        return a + r;
+    }
 
-float randomDeltaPosNeg(float a)
-{
-    return ((float(rand()) / float(RAND_MAX)) * (2 * a)) - a;
-}
+    template <typename T>
+    T randomDeltaPosNeg(T a)
+    {
+        return ((float(rand()) / float(RAND_MAX)) * (2 * a)) - a;
+    }
 
+    template <>
+    cbmath::vec3 randomDeltaPosNeg<cbmath::vec3>(cbmath::vec3 a);
+}
 
 
 #endif /* Utils_h */

@@ -1,38 +1,43 @@
+//  David Hartman 0923439
+//  Ty Wood       0901793
 //
-//  Eases.hpp
-//  egpfwDemoCocoa
+//  EGP 425.01
+//  Simple Particle Engine
+//  17.02.05
 //
-//  Created by Ty Wood on 2/8/17.
-//  Copyright © 2017 Dan Buckstein. All rights reserved.
-//
+//  We certify that this work is entirely our own.
+//  The assessor of this project may reproduce this project and provide copies to other academic staff,
+//  and/or communicate a copy of this project to a plagiarism-checking service,
+//  which may retain a copy of the project on its database.
 
 #ifndef Eases_h
 #define Eases_h
 
 #include <stdio.h>
-
+#include "cbmath/cbtkMatrix.h"
+#include <cmath>
 
 
 
 
 namespace TimingFunctions
 {
-    float Linear(float t)
+    inline float Linear(float t)
     {
         return t;
     }
     
-    float QuadraticEaseIn(float t)
+    inline float QuadraticEaseIn(float t)
     {
         return t * t;
     }
     
-    float QuadraticEaseOut(float t)
+    inline float QuadraticEaseOut(float t)
     {
         return t * (2.0 - t);
     }
     
-    float QuadraticEaseInOut(float t)
+    inline float QuadraticEaseInOut(float t)
     {
         if (t < 0.5)
         {
@@ -45,18 +50,18 @@ namespace TimingFunctions
         }
     }
     
-    float CubicEaseIn(float t)
+    inline float CubicEaseIn(float t)
     {
         return t * t * t;
     }
     
-    float CubicEaseOut(float t) 
+    inline float CubicEaseOut(float t)
     {
         float f = t - 1.0;
         return 1.0 + f * f * f;
     }
     
-    float CubicEaseInOut(float t)
+    inline float CubicEaseInOut(float t)
     {
         if (t < 0.5)
         {
@@ -69,18 +74,18 @@ namespace TimingFunctions
         }
     }
     
-    float QuarticEaseIn(float t)
+    inline float QuarticEaseIn(float t)
     {
         return t * t * t * t;
     }
     
-    float QuarticEaseOut(float t)
+    inline float QuarticEaseOut(float t)
     {
         float f = t - 1.0;
         return 1.0 - f * f * f * f;
     }
     
-    float QuarticEaseInOut(float t)
+    inline float QuarticEaseInOut(float t)
     {
         if (t < 0.5)
         {
@@ -93,18 +98,18 @@ namespace TimingFunctions
         }
     }
     
-    float QuinticEaseIn(float t)
+    inline float QuinticEaseIn(float t)
     {
         return t * t * t * t * t;
     }
     
-    float QuinticEaseOut(float t)
+    inline float QuinticEaseOut(float t)
     {
         float f = t - 1.0;
         return 1.0 + f * f * f * f * f;
     }
     
-    float QuinticEaseInOut(float t)
+    inline float QuinticEaseInOut(float t)
     {
         if (t < 0.5)
         {
@@ -117,32 +122,32 @@ namespace TimingFunctions
         }
     }
     
-    float SineEaseIn(float t)
+    inline float SineEaseIn(float t)
     {
-        return sin((t - 1.0) * M_PI/2) + 1.0;
+        return sin((t - 1.0) * Pi()/2) + 1.0;
     }
     
-    float SineEaseOut(float t)
+    inline float SineEaseOut(float t)
     {
-        return sin(t * M_PI/2);
+        return sin(t * Pi()/2);
     }
     
-    float SineEaseInOut(float t)
+    inline float SineEaseInOut(float t)
     {
-        return 0.5 * (1.0 - cos(t * M_PI));
+        return 0.5 * (1.0 - cos(t * Pi()));
     }
     
-    float CircularEaseIn(float t)
+    inline float CircularEaseIn(float t)
     {
         return 1.0 - sqrt(1.0 - t * t);
     }
     
-    float CircularEaseOut(float t)
+    inline float CircularEaseOut(float t)
     {
         return sqrt((2.0 - t) * t);
     }
     
-    float CircularEaseInOut(float t)
+    inline float CircularEaseInOut(float t)
     {
         if (t < 0.5)
         {
@@ -154,17 +159,17 @@ namespace TimingFunctions
         }
     }
     
-    float ExponentialEaseIn(float t)
+    inline float ExponentialEaseIn(float t)
     {
         return (t == 0.0) ? t : pow(2.0, 10.0 * (t - 1.0));
     }
     
-    float ExponentialEaseOut(float t)
+    inline float ExponentialEaseOut(float t)
     {
         return (t == 1.0) ? t : 1.0 - pow(2.0, -10.0 * t);
     }
     
-    float ExponentialEaseInOut(float t)
+    inline float ExponentialEaseInOut(float t)
     {
         if (t == 0.0 || t == 1.0)
         {
@@ -180,12 +185,12 @@ namespace TimingFunctions
         }
     }
     
-    float Smoothstep(float t)
+    inline float Smoothstep(float t)
     {
         return t * t * (3 - 2 * t);
     }
     
-    float Smootherstep(float t)
+    inline float Smootherstep(float t)
     {
         return 6 * pow(t, 5) - 15 * pow(t, 4) + 10 * pow(t, 3);
     }
@@ -195,11 +200,12 @@ namespace TimingFunctions
 
 
 
-
-
-template <typename T>
-T lerp(T start, T end, float percent, float (*f)(float))
+namespace Eases
 {
-    return (start + (*f)(percent)*(end - start));
+    template <typename T>
+    T lerp(T start, T end, float percent, float (*f)(float))
+    {
+        return (start + (*f)(percent)*(end - start));
+    }
 }
 #endif /* Eases_h */

@@ -14,8 +14,6 @@
 
 #include "Particle.h"
 #include <stdlib.h>
-#include "Eases.h"
-#include "Utils.h"
 
 #ifdef _WIN32
     #include "egpfw\egpfw\utils\egpfwPrimitiveDataUtils.h"
@@ -36,23 +34,25 @@ Particle::Particle(Data data)
 
     // set the physics values
     m_mover->position = data.position;
-    m_mover->velocity = cbmath::vec3(data.velocity.x + randomDeltaPosNeg(data.velocityDelta.x),
-                                     data.velocity.y + randomDeltaPosNeg(data.velocityDelta.y),
-                                     data.velocity.z + randomDeltaPosNeg(data.velocityDelta.z));
-	m_mover->setMass(data.mass + randomDelta(data.massDelta));
+    
+    m_mover->velocity = data.velocity.init();
+
+	m_mover->setMass(data.mass.init());
     
 	m_mover->setDamping(0.5f);
     
+    
+    this->m_color = data.color;
+    
+    
     // set the lifespan values
-    this->m_lifespan = data.lifespan + randomDelta(data.lifespanDelta);
+    this->m_lifespan = data.lifespan.init();
     this->m_currentLife = 0.0f;
     
     // this particle is now alive
     this->m_isActive = true;
     
-    this->m_color      = data.startColor;
-    this->m_startColor = data.startColor;
-    this->m_goalColor  = data.endColor;
+
 }
 
 
@@ -72,7 +72,7 @@ void Particle::update(const float dt)
             return;
         }
     
-        m_color = lerp(m_startColor, m_goalColor, m_currentLife / m_lifespan, TimingFunctions::CircularEaseOut);
+        m_color.current = m_color.lerp(m_currentLife / m_lifespan);
     }
 }
 
@@ -83,6 +83,6 @@ void Particle::render(cbmath::mat4 viewProjMatrix)
     if(m_isActive)
     {
 		this->m_mover->updateMoverGraphics();
-        this->m_model->renderAt(viewProjMatrix * this->m_mover->modelMatrix, m_color);
+        this->m_model->renderAt(viewProjMatrix * this->m_mover->modelMatrix, m_color.current);
     }
 }
