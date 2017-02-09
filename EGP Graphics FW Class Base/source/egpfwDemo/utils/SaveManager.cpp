@@ -31,8 +31,7 @@ void SaveManager::loadData()
 {
 	// read data type
 	// read in variable values based on type
-	// assign values to a ParticleData struct
-	std::cout << std::endl << m_dataFilePath << std::endl;
+	// assign values to a Particle::Data struct
 
 	std::ifstream ifs;
 
@@ -95,7 +94,6 @@ void SaveManager::parseVec3(std::string name, std::string data)
 		if (data[i] != ' ')
 		{
 			sstream << data[i];
-			std::cout << std::endl << data[i] << std::endl;
 		}
 
 		if (data[i] == ' ' || i == data.size() - 1)
@@ -124,7 +122,6 @@ void SaveManager::parseVec4(std::string name, std::string data)
 		if (data[i] != ' ')
 		{
 			sstream << data[i];
-			std::cout << std::endl << data[i] << std::endl;
 		}
 
 		if (data[i] == ' ' || i == data.size() - 1)
