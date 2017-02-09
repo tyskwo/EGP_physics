@@ -41,9 +41,6 @@ public:
 	// getData functions
 	template <typename T>
 	T getData(std::string name);
-
-	template <>
-	float getData<float>(std::string name);
 };
 
 

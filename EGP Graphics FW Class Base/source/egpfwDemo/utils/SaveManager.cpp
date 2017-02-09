@@ -83,13 +83,13 @@ void SaveManager::loadData()
 					}
 				}
 
-				// assign the data values to an actual vec3
+				// assign the data values to an actual vec4
 				cbmath::vec4 vec = cbmath::vec4(vec4values[0], vec4values[1], vec4values[2], vec4values[3]);
-				m_mapVec3.insert(std::pair<std::string, cbmath::vec3>(name, vec));
+				m_mapVec4.insert(std::pair<std::string, cbmath::vec4>(name, vec));
 			}
 			else if (type == "float")
 			{
-				m_mapFloat.insert(std::pair<std::string, float>(name, atoi(data.c_str())));
+				m_mapFloat.insert(std::pair<std::string, float>(name, static_cast<float>(atof(data.c_str()))));
 			}
 			else if (type == "bool")
 			{
@@ -127,7 +127,31 @@ T SaveManager::getData(std::string name)
 }
 
 template <>
+cbmath::vec3 SaveManager::getData<cbmath::vec3>(std::string name)
+{
+	return m_mapVec3[name];
+}
+
+template <>
+cbmath::vec4 SaveManager::getData<cbmath::vec4>(std::string name)
+{
+	return m_mapVec4[name];
+}
+
+template <>
 float SaveManager::getData<float>(std::string name)
 {
 	return m_mapFloat[name];
+}
+
+template <>
+bool SaveManager::getData<bool>(std::string name)
+{
+	return m_mapBool[name];
+}
+
+template <>
+char SaveManager::getData<char>(std::string name)
+{
+	return m_mapChar[name];
 }

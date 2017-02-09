@@ -194,6 +194,35 @@ ParticleSystem *particleSystem;
 Particle *modelParticle;
 Model *model;
 
+void initParticleData()
+{
+	float lifespanValue, lifespanDelta;
+	float massValue, massDelta;
+	cbmath::vec3 velocityValue, velocityDelta;
+	cbmath::vec4 colorStart, colorEnd;
+
+	lifespanValue = saveManager->getData<float>("lifespanValue");
+	lifespanDelta = saveManager->getData<float>("lifespanDelta");
+	massValue = saveManager->getData<float>("massValue");
+	massDelta = saveManager->getData<float>("massDelta");
+
+	velocityValue = saveManager->getData<cbmath::vec3>("velocityValue");
+	velocityDelta = saveManager->getData<cbmath::vec3>("velocityDelta");
+	colorStart = saveManager->getData<cbmath::vec4>("colorStart");
+	colorEnd = saveManager->getData<cbmath::vec4>("colorEnd");
+
+
+	Particle::Data particle;
+
+	particle.lifespan = Particle::DeltaType<float>{ lifespanValue, lifespanDelta, false };
+	particle.mass = Particle::DeltaType<float>{ massValue, massDelta, false };
+
+	particle.velocity = Particle::DeltaType<cbmath::vec3>{ velocityValue, velocityDelta, true };
+
+	particle.color = Particle::LifetimeType<cbmath::vec4>{ colorStart, colorEnd, TimingFunctions::CircularEaseOut };
+	
+	particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 500);
+}
 
 void initParticleSystem()
 {
@@ -585,7 +614,9 @@ int initGame()
 	// physics
 	saveManager = new SaveManager("..\\..\\..\\..\\source\\egpfwDemo\\utils\\data.txt");
 	saveManager->loadData();
-	initParticleSystem();
+	initParticleData();
+
+	//initParticleSystem();
 	resetPhysics();
 
 
@@ -659,8 +690,8 @@ void handleInputState()
     //TODO: add a SaveManager of sorts that keeps track of ParticleData. Allow saving when P + 1,2,3,etc. are pressed. Load with L + 1,2,3,etc.
 	if (egpKeyboardIsKeyPressed(keybd, '1'))
 	{
-		std::string test = "lifetime";
-		std::cout << saveManager->getData<float>(test);
+		std::string test = "position";
+		std::cout << saveManager->getData<cbmath::vec3>(test).x;
 		//std::cout << "NUM KEY PRESSED";
 	}
 

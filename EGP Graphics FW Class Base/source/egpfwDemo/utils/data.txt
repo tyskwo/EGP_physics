@@ -1,23 +1,31 @@
-vec3
-position
-0 0 0
+float
+lifespanValue
+0.5
 
 float
-lifespan
-5
+lifespanDelta
+0
 
 float
-mass
-1
+massValue
+-1
+
+float
+massDelta
+2
 
 vec3
-velocity
-0 1 0
+velocityValue
+0 2 2
+
+vec3
+velocityDelta
+1 0 1
 
 vec4
-color
+colorStart
 1 0 0 1
 
-vec3
-scale
-1 1 1
+vec4
+colorEnd
+1 1 0 1
