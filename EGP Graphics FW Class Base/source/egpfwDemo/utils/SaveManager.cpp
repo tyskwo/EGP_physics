@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 SaveManager::SaveManager(std::string dataFilePath)
 :m_dataFilePath(dataFilePath)
@@ -19,6 +20,12 @@ SaveManager::SaveManager(std::string dataFilePath)
 SaveManager::~SaveManager()
 {
 }
+
+
+
+
+//-----------------------------------------------------------------------------
+// data loading and parsing
 
 void SaveManager::loadData()
 {
@@ -47,45 +54,14 @@ void SaveManager::loadData()
 			getline(ifs, data);
 			getline(ifs, empty);
 			
-
 			// parse data based on type
 			if (type == "vec3")
 			{
-				float vec3values[3] = { 0, 0, 0 };
-				int j = 0;
-				// iterate through the data string to get the actual values
-				for (unsigned int i = 0; i < data.size(); i++)
-				{
-					if (data[i] != ' ')
-					{
-						// if this character in the string isn't a space, convert it from a char to a float
-						vec3values[j] = static_cast<float>(data[i] - '0');
-						j++;
-					}
-				}
-
-				// assign the data values to an actual vec3
-				cbmath::vec3 vec = cbmath::vec3(vec3values[0], vec3values[1], vec3values[2]);
-				m_mapVec3.insert(std::pair<std::string, cbmath::vec3>(name, vec));
+				parseVec3(name, data);
 			}
 			else if (type == "vec4")
 			{
-				float vec4values[4] = { 0, 0, 0, 0 };
-				int j = 0;
-				// iterate through the data string to get the actual values
-				for (unsigned int i = 0; i < data.size(); i++)
-				{
-					if (data[i] != ' ')
-					{
-						// if this character in the string isn't a space, convert it from a char to a float
-						vec4values[j] = static_cast<float>(data[i] - '0');
-						j++;
-					}
-				}
-
-				// assign the data values to an actual vec4
-				cbmath::vec4 vec = cbmath::vec4(vec4values[0], vec4values[1], vec4values[2], vec4values[3]);
-				m_mapVec4.insert(std::pair<std::string, cbmath::vec4>(name, vec));
+				parseVec4(name, data);
 			}
 			else if (type == "float")
 			{
@@ -108,16 +84,79 @@ void SaveManager::loadData()
 	ifs.close();
 }
 
+void SaveManager::parseVec3(std::string name, std::string data)
+{	
+	float vec3values[3] = { 0, 0, 0 };
+	int j = 0;
+	std::stringstream sstream;
+	// iterate through the data string to get the actual values
+	for (unsigned int i = 0; i < data.size(); i++)
+	{
+		if (data[i] != ' ')
+		{
+			sstream << data[i];
+			std::cout << std::endl << data[i] << std::endl;
+		}
+
+		if (data[i] == ' ' || i == data.size() - 1)
+		{
+			// if this character in the string isn't a space, cast the stringstream data to a float
+			vec3values[j] = static_cast<float>(atof(sstream.str().c_str()));
+			j++;
+
+			sstream.str("");
+		}
+	}
+
+	// assign the data values to an actual vec3
+	cbmath::vec3 vec = cbmath::vec3(vec3values[0], vec3values[1], vec3values[2]);
+	m_mapVec3.insert(std::pair<std::string, cbmath::vec3>(name, vec));
+}
+
+void SaveManager::parseVec4(std::string name, std::string data)
+{
+	float vec4values[4] = { 0, 0, 0, 0 };
+	int j = 0;
+	std::stringstream sstream;
+	// iterate through the data string to get the actual values
+	for (unsigned int i = 0; i < data.size(); i++)
+	{
+		if (data[i] != ' ')
+		{
+			sstream << data[i];
+			std::cout << std::endl << data[i] << std::endl;
+		}
+
+		if (data[i] == ' ' || i == data.size() - 1)
+		{
+			// if this character in the string isn't a space, cast the stringstream data to a float
+			vec4values[j] = static_cast<float>(atof(sstream.str().c_str()));
+			j++;
+
+			sstream.str("");
+		}
+	}
+
+	// assign the data values to an actual vec4
+	cbmath::vec4 vec = cbmath::vec4(vec4values[0], vec4values[1], vec4values[2], vec4values[3]);
+	m_mapVec4.insert(std::pair<std::string, cbmath::vec4>(name, vec));
+}
+
+
+
+
+//-----------------------------------------------------------------------------
+// saving data
+
 void SaveManager::saveData()
 {
 }
 
-void SaveManager::printData()
-{
-	std::cout << m_mapVec3["position"].x;
-}
 
 
+
+//-----------------------------------------------------------------------------
+// getData template functions
 
 template <typename T>
 T SaveManager::getData(std::string name)

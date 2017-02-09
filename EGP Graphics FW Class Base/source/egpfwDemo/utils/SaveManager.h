@@ -18,6 +18,9 @@
 class SaveManager
 {
 private:
+	void parseVec3(std::string name, std::string data);
+	void parseVec4(std::string name, std::string data);
+	
 	std::map<std::string, cbmath::vec3> m_mapVec3;
 	std::map<std::string, cbmath::vec4> m_mapVec4;
 	std::map<std::string, float> m_mapFloat;
@@ -34,8 +37,6 @@ public:
 
 	void loadData();
 	void saveData();
-
-	void printData();
 
 
 	// getData functions
