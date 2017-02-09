@@ -101,6 +101,9 @@
     <ClCompile Include="..\..\..\source\egpfwDemo\utils\SaveManager.cpp">
       <Filter>Source Files\egpfwDemo\utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\egpfwDemo\Utils.cpp">
+      <Filter>Source Files\egpfwDemo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\egpfwDemo\egpfwDemo.h">
