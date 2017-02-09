@@ -3,7 +3,7 @@
 //  egpfwDemo
 //
 //  Created by Wednesday-David Hartman on 2/8/17.
-//  Copyright © 2017 Dan Buckstein. All rights reserved.
+//  Copyright ï¿½ 2017 Dan Buckstein. All rights reserved.
 //
 
 #include "SaveManager.h"
@@ -140,6 +140,38 @@ void SaveManager::parseVec4(std::string name, std::string data)
 	// assign the data values to an actual vec4
 	cbmath::vec4 vec = cbmath::vec4(vec4values[0], vec4values[1], vec4values[2], vec4values[3]);
 	m_mapVec4.insert(std::pair<std::string, cbmath::vec4>(name, vec));
+}
+
+
+
+Particle::Data SaveManager::prepareData()
+{
+    float lifespanValue, lifespanDelta;
+    float massValue, massDelta;
+    cbmath::vec3 velocityValue, velocityDelta;
+    cbmath::vec4 colorStart, colorEnd;
+    
+    lifespanValue = m_mapFloat["lifespanValue"];
+    lifespanDelta = m_mapFloat["lifespanDelta"];
+    massValue     = m_mapFloat["massValue"];
+    massDelta     = m_mapFloat["massDelta"];
+    velocityValue = m_mapVec3["velocityValue"];
+    velocityDelta = m_mapVec3["velocityDelta"];
+    colorStart    = m_mapVec4["colorStart"];
+    colorEnd      = m_mapVec4["colorEnd"];
+    
+    
+    Particle::Data particle;
+    
+    particle.lifespan = Particle::DeltaType<float>{ lifespanValue, lifespanDelta, false };
+    particle.mass = Particle::DeltaType<float>{ massValue, massDelta, false };
+    
+    particle.velocity = Particle::DeltaType<cbmath::vec3>{ velocityValue, velocityDelta, true };
+    
+    particle.color = Particle::LifetimeType<cbmath::vec4>{ colorStart, colorEnd, TimingFunctions::CircularEaseOut };
+    
+    
+    return particle;
 }
 
 

@@ -196,30 +196,7 @@ Model *model;
 
 void initParticleData()
 {
-	float lifespanValue, lifespanDelta;
-	float massValue, massDelta;
-	cbmath::vec3 velocityValue, velocityDelta;
-	cbmath::vec4 colorStart, colorEnd;
-
-	lifespanValue = saveManager->getData<float>("lifespanValue");
-	lifespanDelta = saveManager->getData<float>("lifespanDelta");
-	massValue = saveManager->getData<float>("massValue");
-	massDelta = saveManager->getData<float>("massDelta");
-
-	velocityValue = saveManager->getData<cbmath::vec3>("velocityValue");
-	velocityDelta = saveManager->getData<cbmath::vec3>("velocityDelta");
-	colorStart = saveManager->getData<cbmath::vec4>("colorStart");
-	colorEnd = saveManager->getData<cbmath::vec4>("colorEnd");
-
-
-	Particle::Data particle;
-
-	particle.lifespan = Particle::DeltaType<float>{ lifespanValue, lifespanDelta, false };
-	particle.mass = Particle::DeltaType<float>{ massValue, massDelta, false };
-
-	particle.velocity = Particle::DeltaType<cbmath::vec3>{ velocityValue, velocityDelta, true };
-
-	particle.color = Particle::LifetimeType<cbmath::vec4>{ colorStart, colorEnd, TimingFunctions::CircularEaseOut };
+    Particle::Data particle = saveManager->prepareData();
 	
 	particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 500);
 }
@@ -612,7 +589,12 @@ int initGame()
     setupShaders();
 
 	// physics
-	saveManager = new SaveManager("..\\..\\..\\..\\source\\egpfwDemo\\utils\\data.txt");
+#ifdef _WIN32
+    saveManager = new SaveManager("..\\..\\..\\..\\source\\egpfwDemo\\utils\\data.txt");
+#else
+    saveManager = new SaveManager("../../../../../../../../source/egpfwDemo/utils/data.txt");
+#endif
+    
 	saveManager->loadData();
 	initParticleData();
 

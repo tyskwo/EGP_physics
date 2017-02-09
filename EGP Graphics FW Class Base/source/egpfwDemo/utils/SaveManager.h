@@ -10,6 +10,7 @@
 #define SAVEMANAGER_H
 
 #include "cbmath/cbtkMatrix.h"
+#include "Particle.h"
 
 #include <string>
 #include <map>
@@ -37,6 +38,8 @@ public:
 
 	void loadData();
 	void saveData();
+    
+    Particle::Data prepareData();
 
 
 	// getData functions
