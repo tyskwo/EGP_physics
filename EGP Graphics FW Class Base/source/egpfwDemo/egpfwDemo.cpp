@@ -609,7 +609,7 @@ int initGame()
 	// setup geometry
 	setupGeometry();
 
-    setupShaders();
+	setupShaders();
 
 	// physics
 	saveManager = new SaveManager("..\\..\\..\\..\\source\\egpfwDemo\\utils\\data.txt");
@@ -632,11 +632,14 @@ int initGame()
 // destroy game objects (mem)
 int termGame()
 {
+	// TODO: CLEANUP PARTICLE STUFF ****
+
+
 	// good practice to do this in reverse order of creation
 	//	in case something is referencing something else
 
-    deleteShaders();
-    deleteGeometry();
+	deleteShaders();
+	deleteGeometry();
 
 	// done
 	return 1;
@@ -685,15 +688,19 @@ void handleInputState()
 	// reset physics
 	if (egpKeyboardIsKeyPressed(keybd, 'y'))
 		resetPhysics();
-    
-    
-    //TODO: add a SaveManager of sorts that keeps track of ParticleData. Allow saving when P + 1,2,3,etc. are pressed. Load with L + 1,2,3,etc.
+
+
+	//TODO: add a SaveManager of sorts that keeps track of ParticleData. Allow saving when P + 1,2,3,etc. are pressed. Load with L + 1,2,3,etc.
 	if (egpKeyboardIsKeyPressed(keybd, '1'))
 	{
-		std::string test = "position";
-		std::cout << saveManager->getData<cbmath::vec3>(test).x;
-		//std::cout << "NUM KEY PRESSED";
+		//TODO: switch active particle value with number keys
 	}
+	if (egpMouseIsButtonDown(mouse, 2))
+	{
+		//TODO: use mouseDeltaX to modify selected particle value
+		std::cout << egpMouseDeltaX(mouse) << std::endl;
+	}
+
 
 	// finish by updating input state
 	egpMouseUpdate(mouse);

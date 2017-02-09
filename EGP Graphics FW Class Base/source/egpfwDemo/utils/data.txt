@@ -1,6 +1,6 @@
 float
 lifespanValue
-0.5
+4.25
 
 float
 lifespanDelta
