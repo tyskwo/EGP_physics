@@ -203,33 +203,33 @@ void initParticleData()
 
 void initParticleSystem()
 {
-//    // coals burning
-//    Particle::Data particle;
-//                                                   //v, d,   midpoint
-//    particle.lifespan = Particle::DeltaType<float> { 5, 5,   false };
-//    particle.mass     = Particle::DeltaType<float> { 1, 0.5, false };
-//    
-//    particle.velocity = Particle::DeltaType<cbmath::vec3> { cbmath::vec3(0.0f, 2.0f, 0.0f), cbmath::vec3(2.0f, 5.0f, 2.0f), true };
-//
-//    
-//    particle.color = Particle::LifetimeType<cbmath::vec4> {  cbmath::vec4(1.0f,0.0f,0.0f,1.0f),     /* start */
-//                                                             cbmath::vec4(0.0f,0.0f,1.0f,0.0f),     /* end   */
-//                                                             TimingFunctions::CircularEaseOut };    /* ease  */
-    
-    
-    // smoke
+    // coals burning
     Particle::Data particle;
+                                                   //v, d,   midpoint
+    particle.lifespan = Particle::DeltaType<float> { 5, 5,   false };
+    particle.mass     = Particle::DeltaType<float> { 1, 0.5, false };
     
-    particle.lifespan = Particle::DeltaType<float> {  5,   5, false };
-    particle.mass     = Particle::DeltaType<float> { -1, 0.5, false };
+    particle.velocity = Particle::DeltaType<cbmath::vec3> { cbmath::vec3(0.0f, 2.0f, 0.0f), cbmath::vec3(2.0f, 5.0f, 2.0f), true };
+
     
-    particle.velocity = Particle::DeltaType<cbmath::vec3> { cbmath::vec3(0.0f, 2.0f, 0.0f), cbmath::vec3(2.0f, 2.5f, 2.0f), true };
+    particle.color = Particle::LifetimeType<cbmath::vec4> {  cbmath::vec4(1.0f,0.0f,0.0f,1.0f),     /* start */
+                                                             cbmath::vec4(0.0f,0.0f,1.0f,0.0f),     /* end   */
+                                                             TimingFunctions::CircularEaseOut };    /* ease  */
     
     
-    particle.color = Particle::LifetimeType<cbmath::vec4> {  cbmath::vec4(0.2f,0.2f,0.2f,1.0f),
-                                                             cbmath::vec4(1.0f,1.0f,1.0f,0.0f),
-                                                             TimingFunctions::CircularEaseOut };
-    
+//    // smoke
+//    Particle::Data particle;
+//    
+//    particle.lifespan = Particle::DeltaType<float> {  5,   5, false };
+//    particle.mass     = Particle::DeltaType<float> { -1, 0.5, false };
+//    
+//    particle.velocity = Particle::DeltaType<cbmath::vec3> { cbmath::vec3(0.0f, 2.0f, 0.0f), cbmath::vec3(2.0f, 2.5f, 2.0f), true };
+//    
+//    
+//    particle.color = Particle::LifetimeType<cbmath::vec4> {  cbmath::vec4(0.2f,0.2f,0.2f,1.0f),
+//                                                             cbmath::vec4(1.0f,1.0f,1.0f,0.0f),
+//                                                             TimingFunctions::CircularEaseOut };
+ 
     
 //    // bouncy balls
 //    Particle::Data particle;
@@ -472,8 +472,8 @@ void setupShaders()
 	vertShaderPath = "../../../../resource/glsl/4x/vs/passColor_vs4x.glsl";
 	fragShaderPath = "../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl";
 #else
-    vertShaderPath = "../../../../../../../../resource/glsl/4x/vs/phong_vs4x.glsl"; //passColor
-	fragShaderPath = "../../../../../../../../resource/glsl/4x/fs/phong_fs4x.glsl";
+    vertShaderPath = "../../../../../../../../resource/glsl/4x/vs/passColor_vs4x.glsl"; //passColor
+	fragShaderPath = "../../../../../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl";
 #endif
 
 	Shader* shader = new Shader(vertShaderPath.c_str(), fragShaderPath.c_str());
@@ -597,9 +597,9 @@ int initGame()
 #endif
     
 	saveManager->loadData();
-	initParticleData();
+    //initParticleData();
 
-	//initParticleSystem();
+	initParticleSystem();
 	resetPhysics();
 
 
@@ -732,7 +732,7 @@ void renderGameState()
 
 
 
-    particleSystem->render(viewProjMat);
+    particleSystem->render(viewProjMat, cameraPosWorld);
 
 
 

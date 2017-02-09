@@ -68,7 +68,7 @@ void ParticleSystem::emit(Model* model)
 
 
 
-void ParticleSystem::render(cbmath::mat4 viewProjMatrix)
+void ParticleSystem::render(cbmath::mat4 viewProjMatrix, cbmath::vec4 cameraPos)
 {
-    for(Particle *p : m_particles) { p->render(viewProjMatrix); }
+    for(Particle *p : m_particles) { p->render(viewProjMatrix, cameraPos); }
 }

@@ -82,11 +82,11 @@ void Particle::update(const float dt)
 
 
 
-void Particle::render(cbmath::mat4 viewProjMatrix)
+void Particle::render(cbmath::mat4 viewProjMatrix, cbmath::vec4 cameraPos)
 {
     if(m_isActive)
     {
 		this->m_mover->updateMoverGraphics();
-        this->m_model->renderAt(viewProjMatrix * this->m_mover->modelMatrix, m_color.current);
+        this->m_model->renderAt(viewProjMatrix * this->m_mover->modelMatrix, cameraPos, m_color.current);
     }
 }

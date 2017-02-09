@@ -77,7 +77,7 @@ public:
     
     void emit(Model* model);
     
-    void render(cbmath::mat4 viewProjMatrix);
+    void render(cbmath::mat4 viewProjMatrix, cbmath::vec4 cameraPos);
     
 };
 

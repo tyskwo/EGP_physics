@@ -41,7 +41,7 @@ public:
     inline Shader* getShader() { return m_shader; }
     inline egpVertexArrayObjectDescriptor* getVAO() { return m_vao; }
     
-    void renderAt(cbmath::mat4 matrix, cbmath::vec4 color);
+    void renderAt(cbmath::mat4 matrix,cbmath::vec4 cameraPos, cbmath::vec4 color);
 };
 
 

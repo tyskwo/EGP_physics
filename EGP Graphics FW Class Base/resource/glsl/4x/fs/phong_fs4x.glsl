@@ -15,13 +15,14 @@
 
 layout (location = 0) out vec4 fragColor;
 
-in pass
+in Pass
 {
     vec4 color;
     //vec2 uv;
     vec4 lightVec;
     vec4 normal;
-}
+    vec4 view;
+} pass;
 
 
 // ****
@@ -35,35 +36,23 @@ in pass
 // shader function
 void main()
 {
-	// ****
-	// this example: phong shading algorithm
+    vec4 normal = normalize(pass.normal);
+    vec4 light = normalize(pass.lightVec);
     
-    vec3 normal = normalize(pass.normal);
+    vec4 specular = 2 * dot(light, normal) * normal - light;
     
-    float lambertian = max(dot(lightVec,normal), 0.0);
-    float specular = 0.0;
+    float reflection = dot(specular, normalize(pass.view));
     
-    if(lambertian > 0.0)
-    {
-        
-        vec3 viewDir = normalize(-vertPos);
+    
+    fragColor.rgb = vec3(pass.color * dot(light, normal) + dot(light, normal) * (specular * reflection));
+    fragColor.a = pass.color.a;
+    
+    
+    //get the diffuse multiplier
+    float diffuseMultiplier = dot(normalize(pass.view), light);
+    
+    //pass the calculated color to the renderer
+    fragColor = diffuseMultiplier * pass.color;
 
-        
-        vec3 reflectDir = reflect(-lightVec, normal);
-        specAngle = max(dot(reflectDir, viewDir), 0.0);
-
-        specular = pow(specAngle, shininess/4.0);
-    }
-    
-    
-    
-    fragColor.rgb = vec3(kd);
-    fragColor.a = color.a;
-
-	// ****
-	// output: phong
-
-	// ****
-	// extra: apply textures as well
     //fragColor *= texture(tex_dm, passUV);
 }

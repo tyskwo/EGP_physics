@@ -56,6 +56,7 @@ public:
     inline int        getMVPUniform()      { return glslCommonUniforms[unif_mvp];      }
     inline int        getColorUniform()    { return glslCommonUniforms[unif_color];    }
     inline int        getLightPosUniform() { return glslCommonUniforms[unif_lightPos]; }
+    inline int        getEyePosUniform()   { return glslCommonUniforms[unif_eyePos];   }
 };
 
 

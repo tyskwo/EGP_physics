@@ -118,7 +118,7 @@ public:
     
     void update(const float dt);
     
-    void render(cbmath::mat4 viewProjMatrix);
+    void render(cbmath::mat4 viewProjMatrix, cbmath::vec4 cameraPos);
     
     inline void SetModel(Model* model) { m_model = model; }
 };

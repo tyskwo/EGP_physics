@@ -16,7 +16,6 @@
 
 #include "Model.h"
 
-
 #include <stdlib.h>
 
 
@@ -26,7 +25,7 @@ Model::Model(Shader* shader, egpVertexArrayObjectDescriptor* vao)
     this->m_vao    = vao;
 }
 
-void Model::renderAt(cbmath::mat4 matrix, cbmath::vec4 color)
+void Model::renderAt(cbmath::mat4 matrix, cbmath::vec4 cameraPos, cbmath::vec4 color)
 {
     egpProgram temp = m_shader->getProgram();
     egpActivateProgram(&temp);
@@ -35,6 +34,7 @@ void Model::renderAt(cbmath::mat4 matrix, cbmath::vec4 color)
 
     egpSendUniformFloat(m_shader->getColorUniform(), UNIF_VEC4, 1, color.v);
     egpSendUniformFloat(m_shader->getLightPosUniform(), UNIF_VEC4, 1, cbmath::vec4(1.0f,1.0f,1.0f, 0.0f).v);
+    egpSendUniformFloat(m_shader->getEyePosUniform(), UNIF_VEC4, 1, cameraPos.v);
     
     egpActivateVAO(m_vao);
     egpDrawActiveVAO();
