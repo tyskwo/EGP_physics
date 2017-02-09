@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <iostream>>
 
 // third party math lib
 #include "cbmath/cbtkMatrix.h"
@@ -54,10 +55,12 @@
     #include "gphysics/Mover.h"
     #include "particledomain\ParticleSystem.h"
     #include "particledomain\Particle.h"
+	#include "utils\SaveManager.h"
 #else
     #include "Mover.h"
     #include "ParticleSystem.h"
     #include "Particle.h"
+	#include "SaveManager.h"
 #endif
 
 
@@ -184,6 +187,8 @@ egpIndexBufferObjectDescriptor  ibo[iboCount] = { 0 };
 //-----------------------------------------------------------------------------
 // our game objects
 
+// SaveManager
+SaveManager *saveManager;
 
 // movables
 ParticleSystem *particleSystem;
@@ -548,6 +553,8 @@ int initGame()
     setupShaders();
 
 	// physics
+	saveManager = new SaveManager("..\\..\\..\\..\\source\\egpfwDemo\\utils\\data.txt");
+	saveManager->loadData();
 	initParticleSystem();
 	resetPhysics();
 
@@ -620,7 +627,10 @@ void handleInputState()
     
     
     //TODO: add a SaveManager of sorts that keeps track of ParticleData. Allow saving when P + 1,2,3,etc. are pressed. Load with L + 1,2,3,etc.
-
+	if (egpKeyboardIsKeyPressed(keybd, '1'))
+	{
+		std::cout << "NUM KEY PRESSED";
+	}
 
 	// finish by updating input state
 	egpMouseUpdate(mouse);
