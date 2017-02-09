@@ -3,13 +3,13 @@
 //  egpfwDemo
 //
 //  Created by Wednesday-David Hartman on 2/8/17.
-//  Copyright © 2017 Dan Buckstein. All rights reserved.
+//  Copyright ï¿½ 2017 Dan Buckstein. All rights reserved.
 //
 
 #ifndef SAVEMANAGER_H
 #define SAVEMANAGER_H
 
-#include "cbmath\cbtkMatrix.h"
+#include "cbmath/cbtkMatrix.h"
 
 #include <string>
 #include <map>
