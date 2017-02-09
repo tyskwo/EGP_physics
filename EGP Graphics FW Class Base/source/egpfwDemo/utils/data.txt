@@ -1,0 +1,11 @@
+vec3
+position
+0 0 0
+
+float
+intensity
+3
+
+vec4
+test
+0 2 3 4

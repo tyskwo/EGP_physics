@@ -17,8 +17,12 @@
 
 #ifdef _WIN32
     #include "egpfw\egpfw\utils\egpfwPrimitiveDataUtils.h"
+	#include "..\Eases.h"
+	#include "..\Utils.h"
 #else
     #include "../../../include/egpfw/egpfw/utils/egpfwPrimitiveDataUtils.h"
+	#include "Eases.h"
+	#include "Utils.h"
 #endif
 
 

@@ -37,6 +37,9 @@
     <Filter Include="Source Files\egpfwDemo\particleDomain">
       <UniqueIdentifier>{92fa5fb5-73f1-4edb-baad-d60a9af7651b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\egpfwDemo\utils">
+      <UniqueIdentifier>{5acd0798-b206-42de-8c87-3490f5dd94f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\resource\glsl\410\fs\drawColor_fs410.glsl">
@@ -95,6 +98,9 @@
     <ClCompile Include="..\..\..\source\egpfwDemo\Shader.cpp">
       <Filter>Source Files\egpfwDemo</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\egpfwDemo\utils\SaveManager.cpp">
+      <Filter>Source Files\egpfwDemo\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\egpfwDemo\egpfwDemo.h">
@@ -121,6 +127,15 @@
     <ClInclude Include="..\..\..\source\egpfwDemo\Shader.h">
       <Filter>Source Files\egpfwDemo</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\Eases.h">
+      <Filter>Source Files\egpfwDemo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\Utils.h">
+      <Filter>Source Files\egpfwDemo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\utils\SaveManager.h">
+      <Filter>Source Files\egpfwDemo\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="egpfwDemoFreeglut\egpfwDemoFreeglut.rc">
@@ -131,5 +146,10 @@
     <Image Include="egpfwDemoFreeglut\icon1.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\source\egpfwDemo\utils\data.txt">
+      <Filter>Source Files\egpfwDemo\utils</Filter>
+    </Text>
   </ItemGroup>
 </Project>
