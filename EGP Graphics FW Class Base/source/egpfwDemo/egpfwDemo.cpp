@@ -659,7 +659,8 @@ void handleInputState()
     //TODO: add a SaveManager of sorts that keeps track of ParticleData. Allow saving when P + 1,2,3,etc. are pressed. Load with L + 1,2,3,etc.
 	if (egpKeyboardIsKeyPressed(keybd, '1'))
 	{
-		std::cout << "NUM KEY PRESSED";
+		//saveManager->getData<float>("lol");
+		//std::cout << "NUM KEY PRESSED";
 	}
 
 	// finish by updating input state

@@ -3,9 +3,21 @@ position
 0 0 0
 
 float
-intensity
-3
+lifespan
+5
+
+float
+mass
+1
+
+vec3
+velocity
+0 1 0
 
 vec4
-test
-0 2 3 4
+color
+1 0 0 1
+
+vec3
+scale
+1 1 1

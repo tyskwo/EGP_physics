@@ -20,15 +20,17 @@
 #include <stdio.h>
 
 #include "egpfw/egpfw.h"
-#include "Utils.h"
-#include "Eases.h"
 
 #ifdef _WIN32
 	#include "..\gphysics\Mover.h"
 	#include "..\Model.h"
+	#include "..\Utils.h"
+	#include "..\Eases.h"
 #else
 	#include "Mover.h"
     #include "Model.h"
+	#include "Utils.h"
+	#include "Eases.h"
 #endif
 
 

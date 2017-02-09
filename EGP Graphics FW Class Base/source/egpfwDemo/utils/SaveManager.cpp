@@ -91,6 +91,14 @@ void SaveManager::loadData()
 			{
 				m_mapFloat.insert(std::pair<std::string, float>(name, atoi(data.c_str())));
 			}
+			else if (type == "bool")
+			{
+				m_mapBool.insert(std::pair<std::string, bool>(name, data == "0" ? false : true));
+			}
+			else if (type == "char")
+			{
+				m_mapChar.insert(std::pair<std::string, char>(name, data[0]));
+			}
 		}
 	}
 	else
