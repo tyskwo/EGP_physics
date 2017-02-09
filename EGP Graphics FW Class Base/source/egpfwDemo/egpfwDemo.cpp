@@ -660,7 +660,7 @@ void handleInputState()
 	if (egpKeyboardIsKeyPressed(keybd, '1'))
 	{
 		std::string test = "lifetime";
-		saveManager->getData<float>(test);
+		std::cout << saveManager->getData<float>(test);
 		//std::cout << "NUM KEY PRESSED";
 	}
 

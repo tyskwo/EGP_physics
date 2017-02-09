@@ -120,13 +120,14 @@ void SaveManager::printData()
 
 
 template <typename T>
-void SaveManager::getData(std::string name)
+T SaveManager::getData(std::string name)
 {
-	std::cout << name;
+	T test;
+	return test;
 }
 
 template <>
-void SaveManager::getData<float>(std::string name)
+float SaveManager::getData<float>(std::string name)
 {
-	std::cout << m_mapFloat[name];
+	return m_mapFloat[name];
 }

@@ -40,10 +40,10 @@ public:
 
 	// getData functions
 	template <typename T>
-	void getData(std::string name);
+	T getData(std::string name);
 
 	template <>
-	void getData<float>(std::string name);
+	float getData<float>(std::string name);
 };
 
 
