@@ -39,17 +39,17 @@ void main()
     vec4 normal = normalize(pass.normal);
     vec4 light = normalize(pass.lightVec);
     
+    float diffuseMultiplier = dot(normalize(pass.view), light);
     vec4 specular = 2 * dot(light, normal) * normal - light;
     
     float reflection = dot(specular, normalize(pass.view));
     
-    
-    fragColor.rgb = vec3(pass.color * dot(light, normal) + dot(light, normal) * (specular * reflection));
+    //diffuse color * diffuse shading + specular color * specular shading + ambient color + ambient shading
+    fragColor.rgb = vec3(pass.color * diffuseMultiplier + (specular * reflection));
     fragColor.a = pass.color.a;
     
     
     //get the diffuse multiplier
-    float diffuseMultiplier = dot(normalize(pass.view), light);
     
     //pass the calculated color to the renderer
     fragColor = diffuseMultiplier * pass.color;

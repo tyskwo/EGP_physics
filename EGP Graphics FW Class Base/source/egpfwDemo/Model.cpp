@@ -33,7 +33,7 @@ void Model::renderAt(cbmath::mat4 matrix, cbmath::vec4 cameraPos, cbmath::vec4 c
     egpSendUniformFloatMatrix(m_shader->getMVPUniform(), UNIF_MAT4, 1, 0, matrix.m);
 
     egpSendUniformFloat(m_shader->getColorUniform(), UNIF_VEC4, 1, color.v);
-    egpSendUniformFloat(m_shader->getLightPosUniform(), UNIF_VEC4, 1, cbmath::vec4(1.0f,1.0f,1.0f, 0.0f).v);
+    egpSendUniformFloat(m_shader->getLightPosUniform(), UNIF_VEC4, 1, cbmath::vec4(5.0f,5.0f,5.0f,1.0f).v);
     egpSendUniformFloat(m_shader->getEyePosUniform(), UNIF_VEC4, 1, cameraPos.v);
     
     egpActivateVAO(m_vao);
