@@ -39,6 +39,17 @@ struct egpfwSpring
 void updateSpring(egpfwSpring *spring)
 {
 	// direction of force will be towards anchor
+    spring->xPrev = spring->x;
+    spring->x     = *spring->anchor - *spring->object;
+    
+    spring->v = spring->x - spring->xPrev;
+    
+    spring->l  = cbmath::length(spring->x);
+    spring->vl = cbmath::length(spring->v);
+    spring->dl = spring->l - spring->lRest;
+    
+    spring->xDir = spring->x / spring->l;
+    spring->vDir = spring->v / spring->vl;
 }
 
 
@@ -50,13 +61,15 @@ float getSpringCoefficient(const float mass, const float dt)
 }
 
 
+// get the exact damping parameter needed to return to resting position
+float getDampingCoefficient(const float mass, const float dt)
+{
+    return (mass / dt);
+}
+
+
 // ****
-// get another coefficient... hmmm
-
-
-
-// ****
-// spring: vector implementation of Hook's law: f = -k*dl
+// spring: vector implementation of Hooke's law: f = -k*dl
 //	where k is spring stiffness coefficient, dl is the change in the spring's 
 //	length from its resting state (dl = l - l0)
 cbmath::vec3 getForceStiffSpring(const egpfwSpring *spring, const float stiff)
@@ -65,15 +78,23 @@ cbmath::vec3 getForceStiffSpring(const egpfwSpring *spring, const float stiff)
 	// vector implementation is F = k(|x| - l0) * x/|x|, 
 	//	where x is the vector from the endpoint towards the anchor
 	// the formula experiences the STIFF SPRING PROBLEM: unwanted bouncing
-
-	return cbmath::v3zero;
+    
+    const float stiffSpring = stiff * spring->dl;
+    const cbmath::vec3 f = stiffSpring * spring->xDir;
+    return f;
 }
 
 // ****
 // spring: stable implementation: 
 //	https://www.gamedev.net/resources/_/technical/math-and-physics/towards-a-simpler-stiffer-and-more-stable-spring-r3227
 //	f = -k*C0x - dC1v
-
+cbmath::vec3 getForceStiffSpringDamped(const egpfwSpring *spring, const float stiff, const float damp)
+{
+    const float stiffSpring = stiff * spring->dl;
+    const float dampSpring  = damp  * spring->vl;
+    const cbmath::vec3 f = stiffSpring * spring->xDir + dampSpring * spring->vDir;
+    return f;
+}
 
 
 #endif	// __EGPFW_FORCES_H

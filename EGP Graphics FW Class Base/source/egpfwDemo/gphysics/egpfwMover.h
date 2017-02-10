@@ -107,9 +107,15 @@ void clampMoverToGround(egpfwMover *mover, const float groundHeight, const float
 {
     if(mover->position.y < groundHeight)
     {
-        mover->velocity   *=  restitution;
-        mover->velocity.y  = -mover->velocity.y;
+        
+        cbmath::vec3 reflection = mover->velocity - 2 * cbmath::dot(cbmath::v3y, mover->velocity) * cbmath::v3y;
+        
+        mover->velocity = reflection * restitution;
+
+
+        mover->position.y  = groundHeight + (groundHeight - mover->position.y) * restitution;
     }
+    
 }
 
 

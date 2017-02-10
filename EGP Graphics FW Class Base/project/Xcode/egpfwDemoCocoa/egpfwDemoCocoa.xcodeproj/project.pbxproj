@@ -31,6 +31,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		20456C6D1E4E07ED00E444D5 /* egpfwForces.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = egpfwForces.h; path = ../../../source/egpfwDemo/gphysics/egpfwForces.h; sourceTree = "<group>"; };
+		20456C6E1E4E07ED00E444D5 /* egpfwShapes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = egpfwShapes.h; path = ../../../source/egpfwDemo/gphysics/egpfwShapes.h; sourceTree = "<group>"; };
 		20BFF2DE1E44D1B90078886D /* egpfwMover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = egpfwMover.h; path = ../../../source/egpfwDemo/gphysics/egpfwMover.h; sourceTree = "<group>"; };
 		BBF58ED81E3D35B800AD1858 /* egpfwDemoCocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = egpfwDemoCocoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF58EDB1E3D35B800AD1858 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -65,6 +67,8 @@
 		20BFF2DD1E44D19A0078886D /* gPhysics */ = {
 			isa = PBXGroup;
 			children = (
+				20456C6D1E4E07ED00E444D5 /* egpfwForces.h */,
+				20456C6E1E4E07ED00E444D5 /* egpfwShapes.h */,
 				20BFF2DE1E44D1B90078886D /* egpfwMover.h */,
 			);
 			name = gPhysics;

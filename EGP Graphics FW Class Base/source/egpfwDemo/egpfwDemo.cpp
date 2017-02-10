@@ -149,7 +149,7 @@ const double springBallDragArea = getSphereCrossSectionArea(springBall);
 void resetPhysics()
 {
 	// 5 kg bowling ball (11 lbs)
-	mover[0] = { cbmath::m4Identity, cbmath::vec3(-4.0f, 8.0f, 0.0f), cbmath::v3zero, gravityAccel };	
+	mover[0] = { cbmath::m4Identity, cbmath::vec3(-4.0f, 8.0f, 0.0f), cbmath::v3x * 2, gravityAccel };
 	setMass(mover + 0, 5.0f);
 
 	// 50 mg feather
@@ -207,13 +207,16 @@ void updatePhysics(float dt)
 	{
 		m = mover + 2;
 		const float maxSpringStiffness = getSpringCoefficient(m->mass, dt);
-		// ****
-		const float springStiffness = 0.0001f * maxSpringStiffness;
-		// ****
-		updateSpring(springBallSpring);
-		newForce = getForceStiffSpring(	// ****
-			springBallSpring,
-			springStiffness
+        const float maxSpringDamping   = getDampingCoefficient(m->mass, 0.005f);
+
+        const float springStiffness = 0.0001f * maxSpringStiffness;
+        const float springDamping   = 0.2f * maxSpringDamping;
+
+        updateSpring(springBallSpring);
+		newForce = getForceStiffSpringDamped(
+            springBallSpring,
+			springStiffness,
+            springDamping
 		);
 		addForce(m, newForce);
 	}
@@ -227,12 +230,9 @@ void updatePhysics(float dt)
 		// physics
 		updateMoverFirstOrder(m, dt);
         
-
 		// hax bounce
-        //clampMoverToGround(m, groundHeight, restitutionCoeff[i]);
+        clampMoverToGround(m, groundHeight, restitutionCoeff[i]);
         
-        if(i == 0) printf("\n %f", m->velocity.y);
-
 		// graphics
 		updateMoverGraphics(m);
 	}
