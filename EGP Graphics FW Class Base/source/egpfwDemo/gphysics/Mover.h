@@ -13,12 +13,15 @@
 
 #include "cbmath/cbtkMatrix.h"
 
+#include "..\gphysics\Spring.h"
 
 
 class Mover
 {
     
 public:
+	Spring* m_spring;
+
 	// graphics: leave it at the start of the structure for consistency
 	cbmath::mat4 modelMatrix;
 
@@ -43,6 +46,8 @@ private:
 public:
 	Mover();
 	~Mover();
+
+	void setSpringAnchor(cbmath::vec3 anchor);
 
 	void setMass(float mass);
 

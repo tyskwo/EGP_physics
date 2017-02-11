@@ -198,7 +198,7 @@ void initParticleData()
 {
     Particle::Data particle = saveManager->prepareData();
 	
-	particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 500);
+	particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 5);
 }
 
 void initParticleSystem()

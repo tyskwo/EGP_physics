@@ -323,6 +323,7 @@
     <ClCompile Include="..\..\..\source\egpfwDemo\egpfwDemo.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\Geometry.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\gphysics\Mover.cpp" />
+    <ClCompile Include="..\..\..\source\egpfwDemo\gphysics\Spring.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\Model.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\particledomain\Particle.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.cpp" />
@@ -336,6 +337,7 @@
     <ClInclude Include="..\..\..\source\egpfwDemo\egpfwDemo.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\Geometry.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\Mover.h" />
+    <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\Spring.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\Model.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\Particle.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.h" />

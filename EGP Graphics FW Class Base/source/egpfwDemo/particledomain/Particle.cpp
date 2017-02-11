@@ -65,6 +65,19 @@ void Particle::update(const float dt)
     if(m_isActive)
     {
         this->m_mover->updateMoverDisplacement(dt);
+		
+		/*if (this->m_mover->m_spring != nullptr)
+		{
+			// TODO: move this to mover?
+			const float maxSpringStiffness = this->m_mover->m_spring->getSpringCoefficient(this->m_mover->mass, 0.005f);
+			const float maxSpringDamping = this->m_mover->m_spring->getDampingCoefficient(this->m_mover->mass, 0.005f);
+			const float springStiffness = 0.001f * maxSpringStiffness;
+			const float springDamping = 0.5f * maxSpringDamping;
+			this->m_mover->m_spring->updateSpring(this->m_mover->position);
+			cbmath::vec3 newForce = this->m_mover->m_spring->getForceStiffSpringDamped(springStiffness, springDamping);
+			this->m_mover->addForce(newForce);
+		}*/
+		
 		this->m_mover->clampMoverToGround(0.0f, 0.8f);
         
         m_currentLife += dt;

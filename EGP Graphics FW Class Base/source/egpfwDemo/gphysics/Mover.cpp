@@ -16,6 +16,7 @@
 
 Mover::Mover()
 {
+	m_spring = nullptr;
 	modelMatrix = cbmath::m4Identity;
 	accelerationFixed = cbmath::v3y * GRAVITATIONAL_CONSTANT;
 }
@@ -25,6 +26,12 @@ Mover::~Mover()
 }
 
 
+
+
+void Mover::setSpringAnchor(cbmath::vec3 anchor)
+{
+	m_spring = new Spring(&anchor);
+}
 
 
 void Mover::setMass(float mass)

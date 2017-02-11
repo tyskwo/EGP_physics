@@ -104,6 +104,9 @@
     <ClCompile Include="..\..\..\source\egpfwDemo\Utils.cpp">
       <Filter>Source Files\egpfwDemo</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\egpfwDemo\gphysics\Spring.cpp">
+      <Filter>Source Files\egpfwDemo\gphysics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\egpfwDemo\egpfwDemo.h">
@@ -138,6 +141,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\source\egpfwDemo\utils\SaveManager.h">
       <Filter>Source Files\egpfwDemo\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\Spring.h">
+      <Filter>Source Files\egpfwDemo\gphysics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
