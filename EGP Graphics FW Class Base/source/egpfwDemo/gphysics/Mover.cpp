@@ -33,11 +33,6 @@ void Mover::setMass(float mass)
 	else             massInverse = this->mass = 0.0f;
 }
 
-void Mover::setDamping(float damping)
-{
-	this->damping = damping;
-}
-
 void Mover::addForce(const cbmath::vec3 force)
 {
 	this->force += force;
@@ -52,13 +47,7 @@ void Mover::updateVelocity(const float dt)
 	// v = v0 + a*dt
 	velocity += acceleration * dt;
 
-	if (position.y < 0.0f)
-	{
-		position.y = 0.0f;
-		velocity.y = -velocity.y;
-	}
-
-	velocity *= powf(damping, dt);
+	//velocity *= powf(damping, dt);
 }
 
 
@@ -73,11 +62,28 @@ void Mover::updateAcceleration()
 
 void Mover::updateMoverDisplacement(const float dt)
 {
-	//x = x0 + v * dt + 0.5 * a * dt^2
+	// x = x0 + v * dt + 0.5 * a * dt^2
 	position += velocity * dt + 0.5 * acceleration * (dt * dt);
 
 	updateVelocity(dt);
 	updateAcceleration();
+}
+
+
+void Mover::clampMoverToGround(const float groundHeight, const float restitution)
+{
+	if (position.y < groundHeight)
+	{
+		// fix position
+		position.y = groundHeight + (groundHeight - position.y) * restitution;
+
+		// fix velocity using reflection vector
+		// reflectionVector = v - (2*dot(N, v)*N)
+		cbmath::vec3 v = velocity;
+		cbmath::vec3 N = cbmath::v3y;
+		cbmath::vec3 reflVec = v - (2 * cbmath::dot(N, v) * N);
+		velocity = reflVec * restitution;
+	}
 }
 
 

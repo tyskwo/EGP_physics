@@ -30,7 +30,7 @@ public:
     cbmath::vec3 acceleration;
     
     // mass
-    float mass, massInverse, damping;
+    float mass, massInverse;
 
     
     
@@ -45,13 +45,14 @@ public:
 	~Mover();
 
 	void setMass(float mass);
-	void setDamping(float damping);
 
 	void addForce(const cbmath::vec3 force);
 
 	void updateMoverDisplacement(const float dt);
 
 	void updateMoverGraphics();
+
+	void clampMoverToGround(const float groundHeight, const float restitution);
 };
 
 #endif	// __MOVER_H

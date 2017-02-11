@@ -43,8 +43,6 @@ Particle::Particle(Data data)
 
 	m_mover->setMass(data.mass.init());
     
-	m_mover->setDamping(0.5f);
-    
     
     this->m_color = data.color;
     
@@ -67,6 +65,7 @@ void Particle::update(const float dt)
     if(m_isActive)
     {
         this->m_mover->updateMoverDisplacement(dt);
+		this->m_mover->clampMoverToGround(0.0f, 0.8f);
         
         m_currentLife += dt;
         

@@ -9,12 +9,18 @@
 #ifndef SAVEMANAGER_H
 #define SAVEMANAGER_H
 
-#include "cbmath/cbtkMatrix.h"
-#include "Particle.h"
-
 #include <string>
 #include <map>
 #include <stdlib.h>
+
+#include "cbmath/cbtkMatrix.h"
+
+#ifdef _WIN32
+	#include "..\particledomain\Particle.h"
+#else
+	#include "Particle.h"
+#endif
+
 
 class SaveManager
 {

@@ -595,9 +595,9 @@ int initGame()
 #endif
     
 	saveManager->loadData();
-    //initParticleData();
+    initParticleData();
 
-	initParticleSystem();
+	//initParticleSystem();
 	resetPhysics();
 
 
