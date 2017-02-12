@@ -30,7 +30,7 @@ Mover::~Mover()
 
 void Mover::setSpringAnchor(cbmath::vec3 anchor)
 {
-	m_spring = new Spring(&anchor);
+	m_spring = new Spring(anchor);
 }
 
 

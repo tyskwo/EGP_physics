@@ -10,12 +10,12 @@
 class Spring
 {
 private:
-	cbmath::vec3 *anchor;
+	cbmath::vec3 anchor;
 	float lRest, l, dl, vl;
 	cbmath::vec3 x, v, xDir, vDir, xPrev;
 
 public:
-	Spring(cbmath::vec3* _anchor);
+	Spring(cbmath::vec3 _anchor);
 	~Spring() {};
 
 	void updateSpring(const cbmath::vec3 position);

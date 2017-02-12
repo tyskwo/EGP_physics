@@ -14,15 +14,16 @@
 
 #include <math.h>
 
-Spring::Spring(cbmath::vec3* _anchor)
+Spring::Spring(cbmath::vec3 _anchor)
 :anchor(_anchor)
 {
+	lRest = 1.0f;
 }
 
 void Spring::updateSpring(const cbmath::vec3 position)
 {
 	xPrev = x;
-	x = *anchor - position;
+	x = anchor - position;
 	v = x - xPrev;
 
 	l = cbmath::length(x);

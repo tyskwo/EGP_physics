@@ -100,6 +100,8 @@ private:
     // whether or not this particle is dead
     bool  m_isActive;
     
+	bool  m_springInitialized;
+
     Model* m_model;
     
     LifetimeType<cbmath::vec4> m_color;
