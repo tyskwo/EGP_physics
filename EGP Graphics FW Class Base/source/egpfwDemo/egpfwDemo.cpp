@@ -614,7 +614,7 @@ int initGame()
 int termGame()
 {
 	// TODO: CLEANUP PARTICLE STUFF ****
-
+	saveManager->saveData();
 
 	// good practice to do this in reverse order of creation
 	//	in case something is referencing something else

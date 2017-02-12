@@ -179,6 +179,18 @@ Particle::Data SaveManager::prepareData()
 
 void SaveManager::saveData()
 {
+	std::ofstream ofs;
+
+	ofs.open("..\\..\\..\\..\\source\\egpfwDemo\\utils\\data.txt");
+	if (ofs.is_open())
+	{
+		printData<cbmath::vec3>(ofs);
+		printData<cbmath::vec4>(ofs);
+		printData<float>(ofs);
+		printData<bool>(ofs);
+		printData<char>(ofs);
+	}
+	ofs.close();
 }
 
 
@@ -222,4 +234,87 @@ template <>
 char SaveManager::getData<char>(std::string name)
 {
 	return m_mapChar[name];
+}
+
+
+
+
+//-----------------------------------------------------------------------------
+// printData template functions
+
+template <typename T>
+void SaveManager::printData(std::ofstream& ofs)
+{
+}
+
+template <>
+void SaveManager::printData<cbmath::vec3>(std::ofstream& ofs)
+{
+	for (std::map<std::string, cbmath::vec3>::iterator iter = m_mapVec3.begin(); iter != m_mapVec3.end(); ++iter)
+	{
+		ofs << "vec3"		<< std::endl;
+		ofs << iter->first	<< std::endl;
+		
+		ofs << iter->second.x << " "
+			<< iter->second.y << " "
+			<< iter->second.z << std::endl;
+
+		ofs << std::endl;
+	}
+}
+
+template <>
+void SaveManager::printData<cbmath::vec4>(std::ofstream& ofs)
+{
+	for (std::map<std::string, cbmath::vec4>::iterator iter = m_mapVec4.begin(); iter != m_mapVec4.end(); ++iter)
+	{
+		ofs << "vec4"		<< std::endl;
+		ofs << iter->first	<< std::endl;
+
+		ofs << iter->second.x << " "
+			<< iter->second.y << " "
+			<< iter->second.z << " "
+			<< iter->second.w << std::endl;
+
+		ofs << std::endl;
+	}
+}
+
+template <>
+void SaveManager::printData<float>(std::ofstream& ofs)
+{
+	for (std::map<std::string, float>::iterator iter = m_mapFloat.begin(); iter != m_mapFloat.end(); ++iter)
+	{
+		ofs << "float"		<< std::endl;
+		ofs << iter->first	<< std::endl;
+		ofs << iter->second << std::endl;
+
+		ofs << std::endl;
+	}
+}
+
+template <>
+void SaveManager::printData<bool>(std::ofstream& ofs)
+{
+	for (std::map<std::string, bool>::iterator iter = m_mapBool.begin(); iter != m_mapBool.end(); ++iter)
+	{
+		ofs << "bool"		<< std::endl;
+		ofs << iter->first	<< std::endl;
+		ofs << iter->second << std::endl;
+
+		ofs << std::endl;
+	}
+}
+
+template <>
+void SaveManager::printData<char>(std::ofstream& ofs)
+{
+	for (std::map<std::string, char>::iterator iter = m_mapChar.begin(); iter != m_mapChar.end(); ++iter)
+	{
+		ofs << "char"		<< std::endl;
+		ofs << iter->first	<< std::endl;
+		ofs << iter->second << std::endl;
+
+		ofs << std::endl;
+	}
 }
