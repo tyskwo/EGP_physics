@@ -181,7 +181,7 @@ void SaveManager::saveData()
 {
 	std::ofstream ofs;
 
-	ofs.open("..\\..\\..\\..\\source\\egpfwDemo\\utils\\data.txt");
+	ofs.open(m_dataFilePath);
 	if (ofs.is_open())
 	{
 		printData<cbmath::vec3>(ofs);

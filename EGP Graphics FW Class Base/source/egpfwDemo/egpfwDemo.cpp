@@ -186,6 +186,10 @@ egpIndexBufferObjectDescriptor  ibo[iboCount] = { 0 };
 //-----------------------------------------------------------------------------
 // our game objects
 
+// display
+std::vector<std::string> displayVect;
+int displaySelection = 0;
+
 // SaveManager
 SaveManager *saveManager;
 
@@ -193,6 +197,17 @@ SaveManager *saveManager;
 ParticleSystem *particleSystem;
 Particle *modelParticle;
 Model *model;
+
+void initDisplay()
+{
+	displayVect.push_back("one");
+	displayVect.push_back("two");
+	displayVect.push_back("three");
+	displayVect.push_back("four");
+	displayVect.push_back("five");
+
+	displaySelection = 0;
+}
 
 void initParticleData()
 {
@@ -594,11 +609,14 @@ int initGame()
     saveManager = new SaveManager("../../../../../../../../source/egpfwDemo/utils/data.txt");
 #endif
     
+
 	saveManager->loadData();
-    initParticleData();
+	initParticleData();
 
 	//initParticleSystem();
 	resetPhysics();
+
+	initDisplay();
 
 
 	// other
@@ -646,6 +664,17 @@ void displayControls()
 }
 
 
+void updateDisplay()
+{
+//#ifdef _WIN32
+//	system("cls");
+//#else
+//	system("clear");
+//#endif
+
+	printf(displayVect[displaySelection].c_str());
+}
+
 
 
 
@@ -671,16 +700,36 @@ void handleInputState()
 		resetPhysics();
 
 
+
 	//TODO: add a SaveManager of sorts that keeps track of ParticleData. Allow saving when P + 1,2,3,etc. are pressed. Load with L + 1,2,3,etc.
 	if (egpKeyboardIsKeyPressed(keybd, '1'))
 	{
 		//TODO: switch active particle value with number keys
+		displaySelection = 0;
 	}
+	else if (egpKeyboardIsKeyPressed(keybd, '2'))
+	{
+		displaySelection = 1;
+	}
+	else if (egpKeyboardIsKeyPressed(keybd, '3'))
+	{
+		displaySelection = 2;
+	}
+	else if (egpKeyboardIsKeyPressed(keybd, '4'))
+	{
+		displaySelection = 3;
+	}
+	else if (egpKeyboardIsKeyPressed(keybd, '5'))
+	{
+		displaySelection = 4;
+	}
+
 	if (egpMouseIsButtonDown(mouse, 2))
 	{
 		//TODO: use mouseDeltaX to modify selected particle value
-		std::cout << egpMouseDeltaX(mouse) << std::endl;
+		std::cout << cbmath::clamp(egpMouseDeltaX(mouse), -10, 10) << std::endl;
 	}
+
 
 
 	// finish by updating input state
@@ -699,6 +748,8 @@ void updateGameState(float dt)
 	// update camera
 	updateCameraControlled(dt, mouse);
 	//	updateCameraOrbit(dt);
+	
+	updateDisplay();
 
 	// update view matrix
 	// 'c3' in a 4x4 matrix is the translation part
