@@ -19,6 +19,18 @@
     <Filter Include="Source Files\egpfwDemo\gphysics">
       <UniqueIdentifier>{024dcf71-eb0d-45ef-a811-b706a6fa9fc5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\glsl">
+      <UniqueIdentifier>{1af40fab-8ff8-4d7a-b09e-d206ba14a418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\glsl\4x">
+      <UniqueIdentifier>{befdcf21-eabf-489c-b644-02c3f548a422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\glsl\4x\fs">
+      <UniqueIdentifier>{bea4c498-acc5-48a8-8c2c-c6cb7f6a3308}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\glsl\4x\vs">
+      <UniqueIdentifier>{5bae0f03-cd7c-42b3-9655-2bf94694ebc2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\egpfwDemo\egpfwDemo.cpp">
@@ -44,6 +56,9 @@
     <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwShapes.h">
       <Filter>Source Files\egpfwDemo\gphysics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwCollisions.h">
+      <Filter>Source Files\egpfwDemo\gphysics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="egpfwDemoFreeglut\egpfwDemoFreeglut.rc">
@@ -54,5 +69,13 @@
     <Image Include="egpfwDemoFreeglut\icon1.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\resource\glsl\4x\vs\setClipPos_vs4x.glsl">
+      <Filter>Resource Files\glsl\4x\vs</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\fs\drawSolid_fs4x.glsl">
+      <Filter>Resource Files\glsl\4x\fs</Filter>
+    </None>
   </ItemGroup>
 </Project>
