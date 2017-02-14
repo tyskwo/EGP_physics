@@ -44,12 +44,18 @@ extern"C"
 		double width, height, depth;
 	};
 
+	struct egpfwCylinder
+	{
+		double radius, height;
+	};
+
 
 #ifndef __cplusplus
-	typedef struct egpfwCircle	egpfwCircle;
-	typedef struct egpfwSphere	egpfwSphere;
-	typedef struct egpfwPlane	egpfwPlane;
-	typedef struct egpfwBox		egpfwBox;
+	typedef struct egpfwCircle		egpfwCircle;
+	typedef struct egpfwSphere		egpfwSphere;
+	typedef struct egpfwPlane		egpfwPlane;
+	typedef struct egpfwBox			egpfwBox;
+	typedef struct egpfwCylinder	egpfwCylinder;
 #endif	// !__cplusplus
 
 
@@ -97,6 +103,27 @@ extern"C"
 	inline double getBoxVolume(const egpfwBox *box)
 	{
 		return (box->width * box->height * box->depth);
+	}
+
+	inline double getCylinderSurfaceArea(const egpfwCylinder *cylinder)
+	{
+		const double cap = (pi_egp * cylinder->radius*cylinder->radius);
+		return ((twopi_egp * cylinder->radius) * cylinder->height + cap + cap);
+	}
+
+	inline double getCylinderCrossSectionAreaCircle(const egpfwCylinder *cylinder)
+	{
+		return (pi_egp * cylinder->radius*cylinder->radius);
+	}
+
+	inline double getCylinderCrossSectionAreaPlane(const egpfwCylinder *cylinder)
+	{
+		return (cylinder->radius + cylinder->radius) * cylinder->height;
+	}
+
+	inline double getCylinderVolume(const egpfwCylinder *cylinder)
+	{
+		return (pi_egp * cylinder->radius*cylinder->radius * cylinder->height);
 	}
 
 

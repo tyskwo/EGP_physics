@@ -313,6 +313,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\egpfwDemo\egpfwDemo.h" />
+    <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwCollisions.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwForces.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwMover.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\gphysics\egpfwShapes.h" />
@@ -323,6 +324,10 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="egpfwDemoFreeglut\icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\resource\glsl\4x\fs\drawSolid_fs4x.glsl" />
+    <None Include="..\..\..\resource\glsl\4x\vs\setClipPos_vs4x.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -44,6 +44,7 @@
 #include "gphysics/egpfwMover.h"
 #include "gphysics/egpfwForces.h"
 #include "gphysics/egpfwShapes.h"
+#include "gphysics/egpfwCollisions.h"
 
 
 //-----------------------------------------------------------------------------
@@ -83,8 +84,13 @@ egpKeyboard keybd[1];
 cbtk::cbmath::mat4 viewMatrix, projectionMatrix, viewProjMat;
 // camera controls
 float cameraElevation = 0.0f, cameraAzimuth = 0.0f;
-float cameraRotateSpeed = 0.1f, cameraMoveSpeed = 1.0f, cameraDistance = 8.0f;
-cbtk::cbmath::vec4 cameraPosWorld(0.0f, 5.0f, cameraDistance, 1.0f), deltaCamPos;
+float cameraRotateSpeed = 0.1f, cameraMoveSpeed = 4.0f, cameraDistance = 16.0f;
+cbtk::cbmath::vec4 cameraPosWorld(0.0f, 0.0f, cameraDistance, 1.0f), deltaCamPos;
+
+
+// colors
+const cbmath::vec4 RED(1.0f, 0.0f, 0.0f, 1.0f), GREEN(0.0f, 1.0f, 0.0f, 1.0f), BLUE(0.0f, 0.0f, 1.0f, 1.0f);
+const cbmath::vec4 ORANGE(1.0f, 0.5f, 0.0f, 1.0f), LIME(0.0f, 1.0f, 0.5f, 1.0f), PURPLE(0.5f, 0.0f, 1.0f, 1.0f);
 
 
 
@@ -116,6 +122,26 @@ egpVertexBufferObjectDescriptor vbo[modelCount] = { 0 };
 egpIndexBufferObjectDescriptor ibo[iboCount] = { 0 };
 
 
+// shaders
+enum GLSLProgramIndex
+{
+	solidColorProgram, 
+
+//-----------------------------
+	glslProgramCount
+};
+enum GLSLCommonUniformIndex
+{
+	mvpLocation, 
+	solidColorLocation, 
+
+//-----------------------------
+	glslCommonUniformCount
+};
+egpProgram glslProgram[glslProgramCount] = { 0 };
+int glslCommonUniform[glslProgramCount][glslCommonUniformCount] = { -1 };
+
+
 
 //-----------------------------------------------------------------------------
 // our game objects
@@ -125,102 +151,41 @@ egpIndexBufferObjectDescriptor ibo[iboCount] = { 0 };
 const cbmath::vec3 gravityAccel(0.0f, -9.81f, 0.0f);
 
 // movables
-const unsigned int numMovers = 3;
+const unsigned int numMovers = 6;
 egpfwMover mover[numMovers];
 
 // shapes
-const egpfwSphere bowlingBall[] = { { 0.11 } };	// 11cm radius
-const egpfwPlane feather[] = { { 0.1, 0.02 } };	// 10cm x 2cm
-const double bowlingBallDragArea = getSphereCrossSectionArea(bowlingBall);
-const double featherDragArea = getPlaneArea(feather);
+const unsigned int numSpheres = 2;
+const unsigned int numBoxes = 4;
+const egpfwSphere sphere[numSpheres] = { {1.0}, {2.0} };
+const egpfwBox box[numBoxes] = { {1.0, 2.0, 3.0}, {2.0, 1.0, 1.0}, {1.0, 1.0, 1.0}, {0.5, 2.0, 1.5} };
 
-// constraints
-const float groundHeight = 0.0f;
-cbmath::vec3 springConstraint = cbmath::vec3(0.0f, 8.0f, 0.0f);
+// colliders
+egpfwBoundingVolumeSphere sphereVolume[numSpheres] = {
+	createSphereVolume(mover + 0, sphere + 0), 
+	createSphereVolume(mover + 1, sphere + 1), 
+};
+egpfwBoundingVolumeBox boxVolume[numBoxes] = { 
+	createBoxVolume(mover + 2, box + 0, 1, 1), 
+	createBoxVolume(mover + 3, box + 1, 1, 1), 
+	createBoxVolume(mover + 4, box + 2, 0, 1), 
+	createBoxVolume(mover + 5, box + 3, 0, 1), 
+};
 
-// springs
-const unsigned int numSprings = 1;
-egpfwSpring springBallSpring[numSprings];
-const egpfwSphere springBall[] = { { 1.0 } };
-const double springBallDragArea = getSphereCrossSectionArea(springBall);
+// collision flags
+int collision[numMovers] = { 0 };
 
-
-// quickly reset physics
-void resetPhysics()
-{
-	// 5 kg bowling ball (11 lbs)
-	mover[0] = { cbmath::m4Identity, cbmath::vec3(-4.0f, 8.0f, 0.0f), cbmath::v3x * 2, gravityAccel };
-	setMass(mover + 0, 5.0f);
-
-	// 50 mg feather
-	mover[1] = { cbmath::m4Identity, cbmath::vec3(+4.0f, 8.0f, 0.0f), cbmath::v3zero, gravityAccel };
-	setMass(mover + 1, 0.00005f);
-	
-	// unit sphere affected by spring
-	mover[2] = { cbmath::m4Identity, springConstraint-cbmath::v3y, cbmath::v3zero, gravityAccel };
-	setMass(mover + 2, 1.0f);
-
-	// prepare and force update spring
-	springBallSpring[0] = { &(springConstraint), &((mover + 2)->position), 1.0f };
-	updateSpring(springBallSpring);
-}
 
 // update physics only
 void updatePhysics(float dt)
 {
 	dt *= (float)(playrate * playing) * 0.01f;
 
-	unsigned int i;
+	unsigned int i, j, k;
 	egpfwMover *m;
-	cbmath::vec3 newForce;
-
-	// fluid density of atmosphere at 0C is 1.293kg/m^3
-	const float airDensity = 1.293f;
-
-	// drag coefficients and affected areas
-	const float dragCoeff[] = {
-		0.5f, // bowling ball is a sphere
-		2.0f, // feather is a plane going against air
-		0.5f, // spring ball is a sphere
-	};
-	const float dragAreas[] = {
-		(float)bowlingBallDragArea,
-		(float)featherDragArea,
-		(float)springBallDragArea,
-	};
-	const float restitutionCoeff[] = {
-		0.25f, 0.0f, 0.0f, 
-	};
-
-
-	// add drag to all objects
-	for (i = 0, m = mover; i < numMovers; ++i, ++m)
-	{
-		newForce = getForceDrag(dragCoeff[i], dragAreas[i], airDensity, m->velocity);
-		addForce(m, newForce);
-	}
-
-	// ****
-	// accumulate other forces
-	// spring
-	if (dt > 0.0f)
-	{
-		m = mover + 2;
-		const float maxSpringStiffness = getSpringCoefficient(m->mass, dt);
-        const float maxSpringDamping   = getDampingCoefficient(m->mass, 0.005f);
-
-        const float springStiffness = 0.0001f * maxSpringStiffness;
-        const float springDamping   = 0.2f * maxSpringDamping;
-
-        updateSpring(springBallSpring);
-		newForce = getForceStiffSpringDamped(
-            springBallSpring,
-			springStiffness,
-            springDamping
-		);
-		addForce(m, newForce);
-	}
-
+	egpfwBoundingVolumeSphere *sbv, *sbv2;
+	egpfwBoundingVolumeBox *bbv, *bbv2;
+	egpfwCollision collisionFlags;
 
 	// basic physics update: 
 	//	-> integrate
@@ -229,13 +194,80 @@ void updatePhysics(float dt)
 	{
 		// physics
 		updateMoverFirstOrder(m, dt);
-        
-		// hax bounce
-        clampMoverToGround(m, groundHeight, restitutionCoeff[i]);
-        
+
 		// graphics
 		updateMoverGraphics(m);
 	}
+
+
+	// update collision volumes
+	for (i = 0, bbv = boxVolume; i < numBoxes; ++i, ++bbv)
+		updateBoxVolume(bbv);
+
+
+	// reset collision flags
+	memset(collision, 0, sizeof(collision));
+
+
+	// test collisions
+	// sphere-sphere
+	for (i = 0, k = numSpheres - 1, sbv = sphereVolume; i < k; ++i, ++sbv)
+		for (j = i + 1, sbv2 = sbv + 1; j < numSpheres; ++j, ++sbv2)
+		{
+			collisionFlags = testCollisionSphereSphere(sbv, sbv2);
+			if (collisionFlags.colliderA != 0)
+				collision[sbv->mover - mover] = collision[sbv2->mover - mover] = 1;
+		}
+
+	// sphere-box
+	for (i = 0, sbv = sphereVolume; i < numSpheres; ++i, ++sbv)
+		for (j = 0, bbv = boxVolume; j < numBoxes; ++j, ++bbv)
+		{
+			collisionFlags = testCollisionSphereBox(sbv, bbv);
+			if (collisionFlags.colliderA != 0)
+				collision[sbv->mover - mover] = collision[bbv->mover - mover] = 1;
+		}
+
+	// box-box
+	for (i = 0, k = numBoxes - 1, bbv = boxVolume; i < k; ++i, ++bbv)
+		for (j = i + 1, bbv2 = bbv + 1; j < numBoxes; ++j, ++bbv2)
+		{
+			collisionFlags = testCollisionBoxBox(bbv, bbv2);
+			if (collisionFlags.colliderA != 0)
+				collision[bbv->mover - mover] = collision[bbv2->mover - mover] = 1;
+		}
+}
+
+// quickly reset physics
+void resetPhysics()
+{
+	// sphere
+	mover[0] = { cbmath::m4Identity, cbmath::v3zero, cbmath::vec3(0.0f, 3.0f, 0.0f), gravityAccel };
+	setMass(mover + 0, 1.0f);
+
+	// other sphere
+	mover[1] = { cbmath::m4Identity, cbmath::vec3(-6.0f, -2.0f, 0.0f), cbmath::vec3(4.0f, 6.0f, 0.0f), gravityAccel };
+	setMass(mover + 1, 4.0f);
+
+	// axis-aligned box
+	mover[2] = { cbmath::m4Identity, cbmath::vec3(8.0f, 4.0f, 2.0f), cbmath::vec3(-3.0f, 2.0f, -1.0f), gravityAccel };
+	setMass(mover + 2, 6.0f);
+
+	// other axis-aligned box
+	mover[3] = { cbmath::m4Identity, cbmath::vec3(0.0f, 8.0f, 0.0f), cbmath::v3zero, gravityAccel };
+	setMass(mover + 3, 2.0f);
+
+	// another box, not axis-aligned
+	mover[4] = { cbmath::makeRotationEuler4XYZ(3.0f, 2.0f, 2.0f), cbmath::vec3(1.0f, 3.0f, 2.0f), cbmath::v3z, gravityAccel };
+	setMass(mover + 4, 1.0f);
+
+	// one more box, not axis-aligned
+	mover[5] = { cbmath::makeRotationEuler4XYZ(-2.0f, -2.0f, 4.0f), cbmath::vec3(-2.0f, 4.0f, 1.0f), cbmath::vec3(2.0f, 2.0f, 2.0f), gravityAccel };
+	setMass(mover + 5, 1.5f);
+
+
+	// force physics update
+	updatePhysics(0.0f);
 }
 
 
@@ -401,6 +433,66 @@ void deleteGeometry()
 }
 
 
+// setup GLSL shader programs
+void setupShaders()
+{
+	egpFileInfo file[2];
+	egpShader shader[2];
+
+
+	egpActivateVAO(vao + sphere8x6Model);
+
+
+	// solid color program
+	{
+		file[0] = egpLoadFileContents("../../../../resource/glsl/4x/vs/setClipPos_vs4x.glsl");
+		file[1] = egpLoadFileContents("../../../../resource/glsl/4x/fs/drawSolid_fs4x.glsl");
+		shader[0] = egpCreateShaderFromSource(EGP_SHADER_VERTEX, file[0].contents);
+		shader[1] = egpCreateShaderFromSource(EGP_SHADER_FRAGMENT, file[1].contents);
+
+		glslProgram[0] = egpCreateProgram();
+		egpAttachShaderToProgram(glslProgram + solidColorProgram, shader + 0);
+		egpAttachShaderToProgram(glslProgram + solidColorProgram, shader + 1);
+		egpLinkProgram(glslProgram + solidColorProgram);
+		egpValidateProgram(glslProgram + solidColorProgram);
+
+		egpReleaseShader(shader + 0);
+		egpReleaseShader(shader + 1);
+		egpReleaseFileContents(file + 0);
+		egpReleaseFileContents(file + 1);
+	}
+
+
+	// uniforms
+	const char *unifName[] = {
+		(const char *)("mvp"), 
+		(const char *)("color"), 
+	};
+
+	egpProgram *prog;
+	int *unifs;
+	unsigned int i, j;
+	for (i = 0; i < glslProgramCount; ++i)
+	{
+		prog = glslProgram + i;
+		unifs = glslCommonUniform[i];
+		for (j = 0; j < glslCommonUniformCount; ++j)
+			unifs[j] = egpGetUniformLocation(prog, unifName[j]);
+	}
+
+
+	// done, deactivate
+	egpActivateVAO(0);
+}
+
+void deleteShaders()
+{
+	unsigned int i;
+	for (i = 0; i < glslProgramCount; ++i)
+		egpReleaseProgram(glslProgram + i);
+}
+
+
 // restart all timers and time counters
 void resetTimers()
 {
@@ -481,12 +573,11 @@ void updateCameraOrbit(float dt)
 // mainly for good memory management, handling ram and vram
 int initGame()
 {
-	// setup framebuffers
-	// don't bother with this here actually... see window resize callback
-	//	setupFramebuffers();
-
 	// setup geometry
 	setupGeometry();
+
+	// shaders
+	setupShaders();
 
 
 	// physics
@@ -506,6 +597,9 @@ int termGame()
 {
 	// good practice to do this in reverse order of creation
 	//	in case something is referencing something else
+
+	// delete shaders
+	deleteShaders();
 
 	// delete geometry
 	deleteGeometry();
@@ -605,32 +699,53 @@ void renderGameState()
 
 	// TEST YOUR SHAPES
 	{
-		cbmath::mat4 mvp;
+		const cbmath::vec4 shapeColors[] = {
+			BLUE, ORANGE, BLUE, ORANGE, LIME, PURPLE
+		}, *col = shapeColors;
 
-		// draw each physics object in immediate mode
+		cbmath::mat4 mvp, modelMatrixFinal;
 
-		// bowling ball scale is the radius
-		mvp = viewProjMat * mover[0].modelMatrix * cbmath::makeScale4((float)bowlingBall->radius);
-		egpDrawSphere8x6Immediate(mvp.m, 0, 1.0f, 0.0f, 0.5f);
+		unsigned int i;
+		const egpfwMover *m = mover;
+		const egpfwSphere *ss = sphere;
+		const egpfwBox *bb = box;
 
-		// feather is flat
-		mvp = viewProjMat * mover[1].modelMatrix * cbmath::makeScale4(0.5f*(float)feather->width, 0.005f, 0.5f*(float)feather->height);
-		egpDrawWireCubeImmediate(mvp.m, 0, 0, 0.5f, 0.0f, 1.0f);
+		int *unifs = glslCommonUniform[solidColorProgram];
+		egpActivateProgram(glslProgram + solidColorProgram);
 
-		// spring ball is a unit sphere
-		mvp = viewProjMat * mover[2].modelMatrix;
-		egpDrawSphere8x6Immediate(mvp.m, 0, 0.5f, 0.0f, 1.0f);
+		// draw shapes with some sort of visible outline
+		// spheres
+		for (i = 0; i < numSpheres; ++i, ++m, ++col, ++ss)
+		{
+			modelMatrixFinal = m->modelMatrix * cbmath::makeScale4((float)ss->radius);
+			mvp = viewProjMat * modelMatrixFinal;
+			egpSendUniformFloatMatrix(unifs[mvpLocation], UNIF_MAT4, 1, 0, mvp.m);
+			egpSendUniformFloat(unifs[solidColorLocation], UNIF_VEC4, 1, col->v);
+			egpActivateVAO(vao + sphere8x6Model);
+			egpDrawActiveVAO();
+			glCullFace(GL_FRONT);
+			egpSendUniformFloat(unifs[solidColorLocation], UNIF_VEC4, 1, (collision[m - mover] ? GREEN.v : RED.v));
+			egpActivateVAO(vao + sphere32x24Model);
+			egpDrawActiveVAO();
+			glCullFace(GL_BACK);
+		}
 
+		// boxes
+		for (i = 0; i < numBoxes; ++i, ++m, ++col, ++bb)
+		{
+			modelMatrixFinal = m->modelMatrix * cbmath::makeScale4((float)bb->width, (float)bb->height, (float)bb->depth);
+			mvp = viewProjMat * modelMatrixFinal;
+			egpSendUniformFloatMatrix(unifs[mvpLocation], UNIF_MAT4, 1, 0, mvp.m);
+			egpSendUniformFloat(unifs[solidColorLocation], UNIF_VEC4, 1, col->v);
+			egpActivateVAO(vao + cubeModel);
+			egpDrawActiveVAO();
+			egpSendUniformFloat(unifs[solidColorLocation], UNIF_VEC4, 1, (collision[m - mover] ? GREEN.v : RED.v));
+			egpActivateVAO(vao + cubeWireModel);
+			egpDrawActiveVAO();
+		}
 
-		// draw constraints
-		mvp = viewProjMat * cbmath::makeScaleTranslate(0.1f, springConstraint);
-		egpDrawWireCubeImmediate(mvp.m, 0, 0, 1.0f, 0.5f, 0.0f);
-
-		// draw ground plane
-		mvp = cbmath::makeScale4(zfar, 0.01f, zfar);
-		mvp.c3.y = groundHeight - 0.1f;
-		mvp = viewProjMat * mvp;
-		egpDrawCubeImmediate(mvp.m, 0, 0, 0.5f, 0.5f, 0.5f);
+		// done
+		egpActivateProgram(0);
 	}
 
 
