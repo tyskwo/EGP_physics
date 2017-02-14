@@ -178,7 +178,14 @@ inline egpfwCollision testCollisionSphereSphere(const egpfwBoundingVolumeSphere 
 	egpfwCollision result = nullCollision;
 	if (sphereVolumeA && sphereVolumeB)
 	{
-		// ****
+        float distance = cbmath::lengthSq(sphereVolumeA->mover->position - sphereVolumeB->mover->position);
+        
+        float radii = sphereVolumeA->shape->radius + sphereVolumeB->shape->radius;
+        
+        if(distance < radii*radii)
+        {
+            result = { COLLIDER_SPHERE, COLLIDER_SPHERE };
+        }
 	}
 	return result;
 }
@@ -198,7 +205,80 @@ inline egpfwCollision testCollisionBoxBox(const egpfwBoundingVolumeBox *boxVolum
 	egpfwCollision result = nullCollision;
 	if (boxVolumeA && boxVolumeB)
 	{
-		// ****
+		if(boxVolumeA->isAxisAligned && boxVolumeB->isAxisAligned)
+        {
+            const Point maxA = boxVolumeA->worldCorners[7];
+            const Point minA = boxVolumeA->worldCorners[0];
+            const Point maxB = boxVolumeB->worldCorners[7];
+            const Point minB = boxVolumeB->worldCorners[0];
+
+            if(maxA.x >= minB.x && maxB.x >= minA.x &&
+               maxA.y >= minB.y && maxB.y >= minA.y &&
+               maxA.z >= minB.z && maxB.z >= minA.z)
+            {
+                result = { COLLIDER_BOX_AXIS_ALIGNED, COLLIDER_BOX_AXIS_ALIGNED };
+            }
+        }
+        else
+        {
+            // corner index, inverse matric, transformed corner, keep track of max and min
+            unsigned int i;
+            cbmath::mat4 inverseMatrix;
+            Point transformedCorner;
+            Point minOther, maxOther, minLocal, maxLocal;
+            const egpfwBoundingVolumeBox *local, *other;
+            
+            // first test: box B into box A space
+            
+            local = boxVolumeA; other = boxVolumeB;
+            
+            maxLocal = local->localCorners[7]; minLocal = local->localCorners[0];
+            maxOther.set(-100000.0f).w = 1.0f; minOther.set(100000.0f).w = 1.0f;
+            
+            inverseMatrix = cbmath::transformInverseNoScale(local->mover->modelMatrix);
+            for(i = 0; i < other->numCorners; i++)
+            {
+                transformedCorner = inverseMatrix * other->worldCorners[i];
+                if(transformedCorner.x < minOther.x) minOther.x = transformedCorner.x;
+                if(transformedCorner.y < minOther.y) minOther.y = transformedCorner.y;
+                if(transformedCorner.z < minOther.z) minOther.z = transformedCorner.z;
+                
+                if(transformedCorner.x > maxOther.x) maxOther.x = transformedCorner.x;
+                if(transformedCorner.y > maxOther.y) maxOther.y = transformedCorner.y;
+                if(transformedCorner.z > maxOther.z) maxOther.z = transformedCorner.z;
+            }
+            
+            if(maxLocal.x >= minOther.x && maxOther.x >= minLocal.x &&
+               maxLocal.y >= minOther.y && maxOther.y >= minLocal.y &&
+               maxLocal.z >= minOther.z && maxOther.z >= minLocal.z)
+            {
+                local = boxVolumeB; other = boxVolumeA;
+                
+                maxLocal = local->localCorners[7]; minLocal = local->localCorners[0];
+                maxOther.set(-100000.0f).w = 1.0f; minOther.set(100000.0f).w = 1.0f;
+                
+                inverseMatrix = cbmath::transformInverseNoScale(local->mover->modelMatrix);
+                for(i = 0; i < other->numCorners; i++)
+                {
+                    transformedCorner = inverseMatrix * other->worldCorners[i];
+                    if(transformedCorner.x < minOther.x) minOther.x = transformedCorner.x;
+                    if(transformedCorner.y < minOther.y) minOther.y = transformedCorner.y;
+                    if(transformedCorner.z < minOther.z) minOther.z = transformedCorner.z;
+                    
+                    if(transformedCorner.x > maxOther.x) maxOther.x = transformedCorner.x;
+                    if(transformedCorner.y > maxOther.y) maxOther.y = transformedCorner.y;
+                    if(transformedCorner.z > maxOther.z) maxOther.z = transformedCorner.z;
+                }
+                
+                if(maxLocal.x >= minOther.x && maxOther.x >= minLocal.x &&
+                   maxLocal.y >= minOther.y && maxOther.y >= minLocal.y &&
+                   maxLocal.z >= minOther.z && maxOther.z >= minLocal.z)
+                {
+                    result.colliderA = boxVolumeA->isAxisAligned ? COLLIDER_BOX_AXIS_ALIGNED : COLLIDER_BOX_OBJECT;
+                    result.colliderB = boxVolumeB->isAxisAligned ? COLLIDER_BOX_AXIS_ALIGNED : COLLIDER_BOX_OBJECT;
+                }
+            }
+        }
 	}
 	return result;
 }

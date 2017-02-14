@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 // third party math lib
 #include "cbmath/cbtkMatrix.h"
