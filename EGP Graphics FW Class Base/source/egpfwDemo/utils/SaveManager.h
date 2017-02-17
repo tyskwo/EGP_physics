@@ -52,20 +52,24 @@ public:
 	template <typename T>
 	T getData(std::string name);
 
+	// setData functions
+	template <typename T>
+	void setData(std::string name, T data);
+
 	// printData functions
 	template <typename T>
-	void printData(std::ofstream& outf);
+	void writeData(std::ofstream& outf);
 
 	template <>
-	void printData<cbmath::vec3>(std::ofstream& ofs);
+	void writeData<cbmath::vec3>(std::ofstream& ofs);
 	template <>
-	void printData<cbmath::vec4>(std::ofstream& ofs);
+	void writeData<cbmath::vec4>(std::ofstream& ofs);
 	template <>
-	void printData<float>(std::ofstream& ofs);
+	void writeData<float>(std::ofstream& ofs);
 	template <>
-	void printData<bool>(std::ofstream& ofs);
+	void writeData<bool>(std::ofstream& ofs);
 	template <>
-	void printData<char>(std::ofstream& ofs);
+	void writeData<char>(std::ofstream& ofs);
 };
 
 

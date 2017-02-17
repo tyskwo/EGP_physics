@@ -189,6 +189,7 @@ egpIndexBufferObjectDescriptor  ibo[iboCount] = { 0 };
 // display
 std::vector<std::string> displayVect;
 int displaySelection = 0;
+bool shouldDisplay = false;
 
 // SaveManager
 SaveManager *saveManager;
@@ -660,7 +661,7 @@ void displayControls()
 
 	printf("\n y = reset physics");
 
-	printf("\n-------------------------------------------------------");
+	printf("\n-------------------------------------------------------\n");
 }
 
 
@@ -672,7 +673,7 @@ void updateDisplay()
 //	system("clear");
 //#endif
 
-	printf(displayVect[displaySelection].c_str());
+	//printf(displayVect[displaySelection].c_str());
 }
 
 
@@ -706,22 +707,33 @@ void handleInputState()
 	{
 		//TODO: switch active particle value with number keys
 		displaySelection = 0;
+		shouldDisplay = true;
 	}
 	else if (egpKeyboardIsKeyPressed(keybd, '2'))
 	{
 		displaySelection = 1;
+		shouldDisplay = true;
 	}
 	else if (egpKeyboardIsKeyPressed(keybd, '3'))
 	{
 		displaySelection = 2;
+		shouldDisplay = true;
 	}
 	else if (egpKeyboardIsKeyPressed(keybd, '4'))
 	{
 		displaySelection = 3;
+		shouldDisplay = true;
 	}
 	else if (egpKeyboardIsKeyPressed(keybd, '5'))
 	{
 		displaySelection = 4;
+		shouldDisplay = true;
+	}
+
+	if (shouldDisplay)
+	{
+		shouldDisplay = false;
+		std::cout << displayVect[displaySelection] << ": " << cbmath::clamp(egpMouseDeltaX(mouse), -10, 10) << std::endl;
 	}
 
 	if (egpMouseIsButtonDown(mouse, 2))

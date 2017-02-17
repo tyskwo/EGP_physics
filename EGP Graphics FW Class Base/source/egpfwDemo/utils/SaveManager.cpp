@@ -184,11 +184,11 @@ void SaveManager::saveData()
 	ofs.open(m_dataFilePath);
 	if (ofs.is_open())
 	{
-		printData<cbmath::vec3>(ofs);
-		printData<cbmath::vec4>(ofs);
-		printData<float>(ofs);
-		printData<bool>(ofs);
-		printData<char>(ofs);
+		writeData<cbmath::vec3>(ofs);
+		writeData<cbmath::vec4>(ofs);
+		writeData<float>(ofs);
+		writeData<bool>(ofs);
+		writeData<char>(ofs);
 	}
 	ofs.close();
 }
@@ -240,15 +240,56 @@ char SaveManager::getData<char>(std::string name)
 
 
 //-----------------------------------------------------------------------------
-// printData template functions
+// setData template functions
 
 template <typename T>
-void SaveManager::printData(std::ofstream& ofs)
+void SaveManager::setData(std::string name, T data)
 {
 }
 
 template <>
-void SaveManager::printData<cbmath::vec3>(std::ofstream& ofs)
+void SaveManager::setData<cbmath::vec3>(std::string name, cbmath::vec3 data)
+{
+	m_mapVec3[name] = data;
+}
+
+template <>
+void SaveManager::setData<cbmath::vec4>(std::string name, cbmath::vec4 data)
+{
+	m_mapVec4[name] = data;
+}
+
+template <>
+void SaveManager::setData<float>(std::string name, float data)
+{
+	m_mapFloat[name] = data;
+}
+
+template <>
+void SaveManager::setData<bool>(std::string name, bool data)
+{
+	m_mapBool[name] = data;
+}
+
+template <>
+void SaveManager::setData<char>(std::string name, char data)
+{
+	m_mapChar[name] = data;
+}
+
+
+
+
+//-----------------------------------------------------------------------------
+// writeData template functions
+
+template <typename T>
+void SaveManager::writeData(std::ofstream& ofs)
+{
+}
+
+template <>
+void SaveManager::writeData<cbmath::vec3>(std::ofstream& ofs)
 {
 	for (std::map<std::string, cbmath::vec3>::iterator iter = m_mapVec3.begin(); iter != m_mapVec3.end(); ++iter)
 	{
@@ -264,7 +305,7 @@ void SaveManager::printData<cbmath::vec3>(std::ofstream& ofs)
 }
 
 template <>
-void SaveManager::printData<cbmath::vec4>(std::ofstream& ofs)
+void SaveManager::writeData<cbmath::vec4>(std::ofstream& ofs)
 {
 	for (std::map<std::string, cbmath::vec4>::iterator iter = m_mapVec4.begin(); iter != m_mapVec4.end(); ++iter)
 	{
@@ -281,7 +322,7 @@ void SaveManager::printData<cbmath::vec4>(std::ofstream& ofs)
 }
 
 template <>
-void SaveManager::printData<float>(std::ofstream& ofs)
+void SaveManager::writeData<float>(std::ofstream& ofs)
 {
 	for (std::map<std::string, float>::iterator iter = m_mapFloat.begin(); iter != m_mapFloat.end(); ++iter)
 	{
@@ -294,7 +335,7 @@ void SaveManager::printData<float>(std::ofstream& ofs)
 }
 
 template <>
-void SaveManager::printData<bool>(std::ofstream& ofs)
+void SaveManager::writeData<bool>(std::ofstream& ofs)
 {
 	for (std::map<std::string, bool>::iterator iter = m_mapBool.begin(); iter != m_mapBool.end(); ++iter)
 	{
@@ -307,7 +348,7 @@ void SaveManager::printData<bool>(std::ofstream& ofs)
 }
 
 template <>
-void SaveManager::printData<char>(std::ofstream& ofs)
+void SaveManager::writeData<char>(std::ofstream& ofs)
 {
 	for (std::map<std::string, char>::iterator iter = m_mapChar.begin(); iter != m_mapChar.end(); ++iter)
 	{
