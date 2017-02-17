@@ -327,40 +327,40 @@ inline int testCollisionAxisAlignedLocalRay(const Ray *r, const Point *maxLocal,
 	// ...don't get why for loops are used though... no thx
 	float t1 = (minLocal->x - r->origin.x) * r->directionInv.x;
 	float t2 = (minLocal->x - r->origin.x) * r->directionInv.x;
-	float tmin = min(t1, t2);
-	float tmax = max(t1, t2);
+	float tmin = fmin(t1, t2);
+	float tmax = fmax(t1, t2);
 
 	t1 = (minLocal->y - r->origin.y) * r->directionInv.y;
 	t2 = (minLocal->y - r->origin.y) * r->directionInv.y;
-	tmin = max(tmin, min(t1, t2));
-	tmax = min(tmax, max(t1, t2));
+	tmin = fmax(tmin, fmin(t1, t2));
+	tmax = fmin(tmax, fmax(t1, t2));
 
 	t1 = (minLocal->z - r->origin.z) * r->directionInv.z;
 	t2 = (minLocal->z - r->origin.z) * r->directionInv.z;
-	tmin = max(tmin, min(t1, t2));
-	tmax = min(tmax, max(t1, t2));
+	tmin = fmax(tmin, fmin(t1, t2));
+	tmax = fmin(tmax, fmax(t1, t2));
 
-	return (tmax > max(tmin, 0.0f));
+	return (tmax > fmax(tmin, 0.0f));
 }
 
 inline int testCollisionAxisAlignedLocalEdge(const Ray *r, const Point *maxLocal, const Point *minLocal, float *tmax_out, float *tmin_out)
 {
 	float t1 = (minLocal->x - r->origin.x) * r->directionInv.x;
 	float t2 = (minLocal->x - r->origin.x) * r->directionInv.x;
-	float tmin = min(t1, t2);
-	float tmax = max(t1, t2);
+	float tmin = fmin(t1, t2);
+	float tmax = fmax(t1, t2);
 
 	t1 = (minLocal->y - r->origin.y) * r->directionInv.y;
 	t2 = (minLocal->y - r->origin.y) * r->directionInv.y;
-	tmin = max(tmin, min(t1, t2));
-	tmax = min(tmax, max(t1, t2));
+	tmin = fmax(tmin, fmin(t1, t2));
+	tmax = fmin(tmax, fmax(t1, t2));
 
 	t1 = (minLocal->z - r->origin.z) * r->directionInv.z;
 	t2 = (minLocal->z - r->origin.z) * r->directionInv.z;
-	tmin = max(tmin, min(t1, t2));
-	tmax = min(tmax, max(t1, t2));
+	tmin = fmax(tmin, fmin(t1, t2));
+	tmax = fmin(tmax, fmax(t1, t2));
 
-	if (tmax > max(tmin, 0.0f) && tmin < min(tmax, 1.0f))
+	if (tmax > fmax(tmin, 0.0f) && tmin < fmin(tmax, 1.0f))
 	{
 		*tmax_out = tmax;
 		*tmin_out = tmin;
@@ -419,8 +419,54 @@ inline int testCollisionBoxAxisAligned(const egpfwBoundingVolumeBox *boxVol, con
 inline int testPlanesVsCorners(const Plane *localPlane, const Point *otherCorner, Point *otherCornerLocalized, egpfwCollisionContact *contactBase, int contactOwner)
 {
 	int numContacts = 0;
+    
+    float smallestDepth;
+    
+    const Plane *iteratorStart = localPlane,
+                *iteratorEnd = iteratorStart + BOX_NUM_PLANES,
+                *hitPlane;
+    
+    Point *cornerPoint, *hitCorner = nullptr;
 
 	// ****
+    
+    //iterate through each point on the other box
+    for(const Point *cornerEnd = otherCorner + BOX_NUM_CORNERS; otherCorner != cornerEnd; ++otherCorner)
+    {
+        smallestDepth = -1000000.0f;
+        hitPlane = 0;
+        
+        //iterate through each plane on this box
+        for(localPlane = iteratorStart, cornerPoint = otherCornerLocalized; localPlane != iteratorEnd; ++localPlane, ++cornerPoint)
+        {
+            //bring corner into plane's space
+            *cornerPoint = localPlane->worldToPlane * *otherCorner;
+            
+            //point vs plane test
+            //smallest intersection is kept as potential contact
+            if(cornerPoint->z > smallestDepth && cornerPoint->z <= 0.0f && cornerPoint->z >= localPlane->minDepth &&
+               cornerPoint->x <= localPlane->maxLimit.x && cornerPoint->x >= localPlane->minLimit.x &&
+               cornerPoint->y <= localPlane->maxLimit.y && cornerPoint->y >= localPlane->minLimit.y)
+            {
+                hitPlane = localPlane;
+                hitCorner = cornerPoint;
+                smallestDepth = cornerPoint->z;
+            }
+        }
+        
+        //if any contact, store in result
+        if(hitPlane)
+        {
+            contactBase->location = hitPlane->planeToWorld * *hitCorner;
+            contactBase->normal   = hitPlane->planeToWorld.c2;
+            contactBase->depth    = -smallestDepth;
+            contactBase->collider = contactOwner;
+            
+            ++contactBase;
+            ++numContacts;
+        }
+    }
+    
 
 	return numContacts;
 }

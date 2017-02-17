@@ -757,7 +757,7 @@ void renderGameState()
 
 		// can use this to change whose space we draw relative to
 		// (do not assign if using strictly world space)
-		const cbmath::mat4 inverseCenterModelMatrix;// = ((boxVolume + 2)->planes + 0)->localOrientationInverse * cbmath::transformInverseNoScale((mover + 4)->modelMatrix);
+		const cbmath::mat4 inverseCenterModelMatrix = ((boxVolume + 2)->planes + 0)->localOrientationInverse * cbmath::transformInverseNoScale((mover + 4)->modelMatrix);
 		const cbmath::mat4 viewProjMatFinal = viewProjMat * inverseCenterModelMatrix;
 		cbmath::mat4 mvp, modelMatrixFinal;
 
