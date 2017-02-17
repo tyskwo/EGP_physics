@@ -91,6 +91,7 @@ cbtk::cbmath::vec4 cameraPosWorld(0.0f, 0.0f, cameraDistance, 1.0f), deltaCamPos
 // colors
 const cbmath::vec4 RED(1.0f, 0.0f, 0.0f, 1.0f), GREEN(0.0f, 1.0f, 0.0f, 1.0f), BLUE(0.0f, 0.0f, 1.0f, 1.0f);
 const cbmath::vec4 ORANGE(1.0f, 0.5f, 0.0f, 1.0f), LIME(0.0f, 1.0f, 0.5f, 1.0f), PURPLE(0.5f, 0.0f, 1.0f, 1.0f);
+const cbmath::vec4 WHITE(1.0f);
 
 
 
@@ -106,12 +107,16 @@ enum ModelIndex
 
 	sphere8x6Model, sphere32x24Model, cubeModel, cubeWireModel, cubeIndexedModel, cubeWireIndexedModel,
 
+	contactModel, 
+
 //-----------------------------
 	modelCount
 };
 enum IBOIndex
 {
 	cubeIndexedIBO, cubeWireIndexedIBO,
+
+	contactIBO, 
 
 //-----------------------------
 	iboCount
@@ -166,26 +171,32 @@ egpfwBoundingVolumeSphere sphereVolume[numSpheres] = {
 	createSphereVolume(mover + 1, sphere + 1), 
 };
 egpfwBoundingVolumeBox boxVolume[numBoxes] = { 
-	createBoxVolume(mover + 2, box + 0, 1, 1), 
-	createBoxVolume(mover + 3, box + 1, 1, 1), 
-	createBoxVolume(mover + 4, box + 2, 0, 1), 
-	createBoxVolume(mover + 5, box + 3, 0, 1), 
+	createBoxVolume(mover + 2, box + 0, 1), 
+	createBoxVolume(mover + 3, box + 1, 1), 
+	createBoxVolume(mover + 4, box + 2, 0), 
+	createBoxVolume(mover + 5, box + 3, 0), 
 };
 
 // collision flags
 int collision[numMovers] = { 0 };
 
+// contacts to be drawn
+#define MAX_COLLISIONS 64
+#define MAX_CONTACTS MAX_COLLISIONS*4
+egpfwCollisionContact contact[MAX_CONTACTS];
+unsigned int numContacts = 0;
+
 
 // update physics only
 void updatePhysics(float dt)
 {
-	dt *= (float)(playrate * playing) * 0.01f;
-
-	unsigned int i, j, k;
+	unsigned int i, j, k, end, numCollisions = numContacts = 0;
 	egpfwMover *m;
 	egpfwBoundingVolumeSphere *sbv, *sbv2;
 	egpfwBoundingVolumeBox *bbv, *bbv2;
-	egpfwCollision collisionFlags;
+	egpfwCollision collisionFlags, collisionDescriptors[MAX_COLLISIONS], *collisionDesc;
+
+	dt *= (float)(playrate * playing) * 0.01f;
 
 	// basic physics update: 
 	//	-> integrate
@@ -211,12 +222,17 @@ void updatePhysics(float dt)
 
 	// test collisions
 	// sphere-sphere
-	for (i = 0, k = numSpheres - 1, sbv = sphereVolume; i < k; ++i, ++sbv)
+	for (i = 0, end = numSpheres - 1, sbv = sphereVolume; i < end; ++i, ++sbv)
 		for (j = i + 1, sbv2 = sbv + 1; j < numSpheres; ++j, ++sbv2)
 		{
 			collisionFlags = testCollisionSphereSphere(sbv, sbv2);
 			if (collisionFlags.colliderA != 0)
+			{
 				collision[sbv->mover - mover] = collision[sbv2->mover - mover] = 1;
+				collisionDescriptors[numCollisions++] = collisionFlags;
+				for (k = 0; k < collisionFlags.numContacts; ++k)
+					contact[numContacts++] = collisionFlags.contact[k];
+			}
 		}
 
 	// sphere-box
@@ -225,17 +241,34 @@ void updatePhysics(float dt)
 		{
 			collisionFlags = testCollisionSphereBox(sbv, bbv);
 			if (collisionFlags.colliderA != 0)
+			{
 				collision[sbv->mover - mover] = collision[bbv->mover - mover] = 1;
+				collisionDescriptors[numCollisions++] = collisionFlags;
+				for (k = 0; k < collisionFlags.numContacts; ++k)
+					contact[numContacts++] = collisionFlags.contact[k];
+			}
 		}
 
 	// box-box
-	for (i = 0, k = numBoxes - 1, bbv = boxVolume; i < k; ++i, ++bbv)
+	for (i = 0, end = numBoxes - 1, bbv = boxVolume; i < end; ++i, ++bbv)
 		for (j = i + 1, bbv2 = bbv + 1; j < numBoxes; ++j, ++bbv2)
 		{
 			collisionFlags = testCollisionBoxBox(bbv, bbv2);
 			if (collisionFlags.colliderA != 0)
+			{
 				collision[bbv->mover - mover] = collision[bbv2->mover - mover] = 1;
+				collisionDescriptors[numCollisions++] = collisionFlags;
+				for (k = 0; k < collisionFlags.numContacts; ++k)
+					contact[numContacts++] = collisionFlags.contact[k];
+			}
 		}
+
+
+	// PROCESS COLLISIONS
+	for (i = 0, collisionDesc = collisionDescriptors; i < numCollisions; ++i, ++collisionDesc)
+	{
+		// ****
+	}
 }
 
 // quickly reset physics
@@ -417,6 +450,26 @@ void setupGeometry()
 	// indexed wire cube
 	attribs[0].data = egpGetWireCubeIndexedPositions();
 	vao[cubeWireIndexedModel] = egpCreateVAOInterleavedIndexed(PRIM_LINES, attribs, 1, egpGetCubeIndexedVertexCount(), (vbo + cubeWireIndexedModel), INDEX_UINT, egpGetWireCubeIndexCount(), egpGetWireCubeIndices(), (ibo + cubeWireIndexedIBO));
+
+
+	// simple procedural model for contacts
+	{
+		const float contactPoints[] = {
+			+0.1f,  0.0f,  0.0f, 
+			 0.0f, +0.1f,  0.0f, 
+			-0.1f,  0.0f,  0.0f, 
+			 0.0f, -0.1f,  0.0f, 
+			 0.0f,  0.0f, -0.1f, 
+			 0.0f,  0.0f, +1.0f, 
+		};
+		const unsigned int contactIndices[] = {
+			0, 1, 1, 2, 2, 3, 3, 0, 
+			0, 4, 1, 4, 2, 4, 3, 4, 
+			0, 5, 1, 5, 2, 5, 3, 5
+		};
+		attribs[0].data = contactPoints;
+		vao[contactModel] = egpCreateVAOInterleavedIndexed(PRIM_LINES, attribs, 1, 6, (vbo + contactModel), INDEX_UINT, 24, contactIndices, (ibo + contactIBO));
+	}
 }
 
 void deleteGeometry()
@@ -689,8 +742,6 @@ void renderGameState()
 	//	- send appropriate uniforms if different from last time we used this program
 	//	- call appropriate draw function, based on whether we are indexed or not
 
-
-
 //-----------------------------------------------------------------------------
 
 	// target back-buffer and clear
@@ -703,12 +754,17 @@ void renderGameState()
 			BLUE, ORANGE, BLUE, ORANGE, LIME, PURPLE
 		}, *col = shapeColors;
 
+		// can use this to change whose space we draw relative to
+		// (do not assign if using strictly world space)
+		const cbmath::mat4 inverseCenterModelMatrix;// = ((boxVolume + 2)->planes + 0)->localOrientationInverse * cbmath::transformInverseNoScale((mover + 4)->modelMatrix);
+		const cbmath::mat4 viewProjMatFinal = viewProjMat * inverseCenterModelMatrix;
 		cbmath::mat4 mvp, modelMatrixFinal;
 
 		unsigned int i;
 		const egpfwMover *m = mover;
 		const egpfwSphere *ss = sphere;
 		const egpfwBox *bb = box;
+		const egpfwCollisionContact *cc = contact;
 
 		int *unifs = glslCommonUniform[solidColorProgram];
 		egpActivateProgram(glslProgram + solidColorProgram);
@@ -718,7 +774,7 @@ void renderGameState()
 		for (i = 0; i < numSpheres; ++i, ++m, ++col, ++ss)
 		{
 			modelMatrixFinal = m->modelMatrix * cbmath::makeScale4((float)ss->radius);
-			mvp = viewProjMat * modelMatrixFinal;
+			mvp = viewProjMatFinal * modelMatrixFinal;
 			egpSendUniformFloatMatrix(unifs[mvpLocation], UNIF_MAT4, 1, 0, mvp.m);
 			egpSendUniformFloat(unifs[solidColorLocation], UNIF_VEC4, 1, col->v);
 			egpActivateVAO(vao + sphere8x6Model);
@@ -734,7 +790,7 @@ void renderGameState()
 		for (i = 0; i < numBoxes; ++i, ++m, ++col, ++bb)
 		{
 			modelMatrixFinal = m->modelMatrix * cbmath::makeScale4((float)bb->width, (float)bb->height, (float)bb->depth);
-			mvp = viewProjMat * modelMatrixFinal;
+			mvp = viewProjMatFinal * modelMatrixFinal;
 			egpSendUniformFloatMatrix(unifs[mvpLocation], UNIF_MAT4, 1, 0, mvp.m);
 			egpSendUniformFloat(unifs[solidColorLocation], UNIF_VEC4, 1, col->v);
 			egpActivateVAO(vao + cubeModel);
@@ -744,23 +800,42 @@ void renderGameState()
 			egpDrawActiveVAO();
 		}
 
-		// done
-		egpActivateProgram(0);
-	}
 
+		// TEST DRAW: coordinate axes at center of spaces
+		//	and other line objects
+		{
+			cbmath::vec3 upAxis;
 
-	// TEST DRAW: coordinate axes at center of spaces
-	//	and other line objects
-	{
-		// force draw in front of everything
-		glDisable(GL_DEPTH_TEST);
+			// force draw in front of everything
+			glDisable(GL_DEPTH_TEST);
 
-		// center of world
-		// (this is useful to see where the origin is and how big one unit is)
-		egpfwDrawAxesImmediate(viewProjMat.m, 0);
+			// contacts
+			egpSendUniformFloat(unifs[solidColorLocation], UNIF_VEC4, 1, WHITE.v);
+			egpActivateVAO(vao + contactModel);
+			for (i = 0; i < numContacts; ++i, ++cc)
+			{
+				upAxis = cc->normal.y < +0.99f && cc->normal.y > -0.99f ? cbmath::v3y : cbmath::v3x;
+				modelMatrixFinal = cbmath::makeFrenet4((cc->location).xyz, (cc->location - cc->normal).xyz, upAxis);
+				mvp = viewProjMatFinal * modelMatrixFinal;
+				egpSendUniformFloatMatrix(unifs[mvpLocation], UNIF_MAT4, 1, 0, mvp.m);
+				egpDrawActiveVAO();
+			}
 
-		// done
-		glEnable(GL_DEPTH_TEST);
+			// done
+			egpActivateProgram(0);
+
+			// center of actual world space relative to whatever 
+			//	is acting as the center
+			egpfwDrawAxesImmediate(viewProjMatFinal.m, 0);
+
+			// center of observer's world
+			// (this is useful to see where the origin is relative 
+			//	to the camera and how big one unit is)
+			egpfwDrawAxesImmediate(viewProjMat.m, 0);
+
+			// done
+			glEnable(GL_DEPTH_TEST);
+		}
 	}
 }
 
