@@ -194,6 +194,7 @@ int wh_displaySelection = 0;
 bool wh_shouldDisplay = false;
 wh::ParameterOptions wh_paramOption = wh::ParameterOptions::COLOR;
 wh::ParameterSuboptions wh_paramSubobtion = wh::ParameterSuboptions::NONE;
+wh::ParameterType wh_paramType = wh::ParameterType::VALUE;
 
 // SaveManager
 SaveManager *wh_saveManager;
@@ -683,6 +684,11 @@ void displayControls()
 
 	printf("\n y = reset physics");
 
+	printf("\n\n c, v, l, m = edit color, velocity, lifespan, or mass");
+	printf("\n 1, 2, 3, 4 = choose xyzw or rgba when applicable");
+	printf("\n z = toggle between editing parameter delta or value");
+	printf("\n click and drag RMB = adjust selected parameter");
+
 	printf("\n-------------------------------------------------------\n");
 }
 
@@ -773,6 +779,9 @@ void handleInputState()
 
 
 
+	//-----------------------------------------------------------------------------
+	// adjustable parameters
+
 	// select parameter to adjust
 	if (egpKeyboardIsKeyPressed(keybd, 'c'))
 	{
@@ -809,11 +818,26 @@ void handleInputState()
 		setSuboption(wh::ParameterSuboptions::W);
 	}
 
+	// select delta
+	if (egpKeyboardIsKeyPressed(keybd, 'z'))
+	{
+		if (wh_paramType == wh::ParameterType::VALUE)
+		{
+			wh_paramType = wh::ParameterType::DELTA;
+		}
+		else
+		{
+			wh_paramType = wh::ParameterType::VALUE;
+		}
+
+		wh_shouldDisplay = true;
+	}
+
 	// display to console if need
 	if (wh_shouldDisplay)
 	{
 		wh_shouldDisplay = false;
-		std::cout << std::endl << wh_displayVect[wh_displaySelection] << ", ";
+		std::cout << std::endl << wh_displayVect[wh_displaySelection] << ((wh_paramType == wh::ParameterType::VALUE) ? " value " : " delta ") << ", ";
 
 		switch (wh_paramSubobtion)
 		{
@@ -846,23 +870,25 @@ void handleInputState()
 			// color
 			float clampedDeltaX01 = scaleClamp(egpMouseX(mouse), 0.0f, win_w, 0.0f, 1.0f);
 			std::cout << clampedDeltaX01 << std::endl;
-			cbmath::vec4 color = wh_saveManager->getData<cbmath::vec4>("colorStart");
+
+			std::string colorVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "colorStart" : "colorEnd");
+			cbmath::vec4 color = wh_saveManager->getData<cbmath::vec4>(colorVarName);
 
 			switch (wh_paramSubobtion)
 			{
 			case wh::ParameterSuboptions::NONE:
 				break;
 			case wh::ParameterSuboptions::X:
-				wh_saveManager->setData<cbmath::vec4>("colorStart", cbmath::v4x * clampedDeltaX01 + cbmath::v4y * color.y + cbmath::v4z * color.z + cbmath::v4w * color.w);
+				wh_saveManager->setData<cbmath::vec4>(colorVarName, cbmath::v4x * clampedDeltaX01 + cbmath::v4y * color.y + cbmath::v4z * color.z + cbmath::v4w * color.w);
 				break;
 			case wh::ParameterSuboptions::Y:
-				wh_saveManager->setData<cbmath::vec4>("colorStart", cbmath::v4x * color.x + cbmath::v4y * clampedDeltaX01 + cbmath::v4z * color.z + cbmath::v4w * color.w);
+				wh_saveManager->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * clampedDeltaX01 + cbmath::v4z * color.z + cbmath::v4w * color.w);
 				break;
 			case wh::ParameterSuboptions::Z:
-				wh_saveManager->setData<cbmath::vec4>("colorStart", cbmath::v4x * color.x + cbmath::v4y * color.y + cbmath::v4z * clampedDeltaX01 + cbmath::v4w * color.w);
+				wh_saveManager->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * color.y + cbmath::v4z * clampedDeltaX01 + cbmath::v4w * color.w);
 				break;
 			case wh::ParameterSuboptions::W:
-				wh_saveManager->setData<cbmath::vec4>("colorStart", cbmath::v4x * color.x + cbmath::v4y * color.y + cbmath::v4z * color.z + cbmath::v4w * clampedDeltaX01);
+				wh_saveManager->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * color.y + cbmath::v4z * color.z + cbmath::v4w * clampedDeltaX01);
 				break;
 			default:
 				break;
@@ -873,20 +899,22 @@ void handleInputState()
 			// velocity
 			float clampedDeltaXVel = scaleClamp(egpMouseX(mouse), 0.0f, win_w, -10.0f, 10.0f);
 			std::cout << clampedDeltaXVel << std::endl;
-			cbmath::vec3 vel = wh_saveManager->getData<cbmath::vec3>("velocityValue");
+
+			std::string velocityVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "velocityValue" : "velocityDelta");
+			cbmath::vec3 vel = wh_saveManager->getData<cbmath::vec3>(velocityVarName);
 
 			switch (wh_paramSubobtion)
 			{
 			case wh::ParameterSuboptions::NONE:
 				break;
 			case wh::ParameterSuboptions::X:
-				wh_saveManager->setData<cbmath::vec3>("velocityValue", cbmath::v3x * clampedDeltaXVel + cbmath::v3y * vel.y + cbmath::v3z * vel.z);
+				wh_saveManager->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * clampedDeltaXVel + cbmath::v3y * vel.y + cbmath::v3z * vel.z);
 				break;
 			case wh::ParameterSuboptions::Y:
-				wh_saveManager->setData<cbmath::vec3>("velocityValue", cbmath::v3x * vel.x + cbmath::v3y * clampedDeltaXVel + cbmath::v3z * vel.z);
+				wh_saveManager->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * vel.x + cbmath::v3y * clampedDeltaXVel + cbmath::v3z * vel.z);
 				break;
 			case wh::ParameterSuboptions::Z:
-				wh_saveManager->setData<cbmath::vec3>("velocityValue", cbmath::v3x * vel.x + cbmath::v3y * vel.y + cbmath::v3z * clampedDeltaXVel);
+				wh_saveManager->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * vel.x + cbmath::v3y * vel.y + cbmath::v3z * clampedDeltaXVel);
 				break;
 			default:
 				break;
@@ -897,16 +925,21 @@ void handleInputState()
 			// lifespan
 			float clampedDeltaXLife = scaleClamp(egpMouseX(mouse), 0.0f, win_w, 0.0f, 10.0f);
 			std::cout << clampedDeltaXLife << std::endl;
-			wh_saveManager->setData<float>("lifespanValue", clampedDeltaXLife);
+
+			std::string lifespanVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "lifespanValue" : "lifespanDelta");
+			wh_saveManager->setData<float>(lifespanVarName, clampedDeltaXLife);
 		}
 		else if (wh_displaySelection == 3)
 		{
 			// mass
 			float clampedDeltaXMass = scaleClamp(egpMouseX(mouse), 0.0f, win_w, 0.0f, 100.0f);
 			std::cout << clampedDeltaXMass << std::endl;
-			wh_saveManager->setData<float>("massValue", clampedDeltaXMass);
+
+			std::string massVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "massValue" : "massDelta");
+			wh_saveManager->setData<float>(massVarName, clampedDeltaXMass);
 		}
 	}
+
 
 
 

@@ -24,6 +24,12 @@ namespace wh
 		NONE,
 		X, Y, Z, W
 	};
+
+	enum ParameterType
+	{
+		VALUE,
+		DELTA
+	};
 }
 
 
