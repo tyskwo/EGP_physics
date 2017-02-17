@@ -42,6 +42,8 @@
 		20B7AD6E1E4904AB0020DA19 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20B7AD6C1E4904AB0020DA19 /* Shader.cpp */; };
 		20B7AD701E4908330020DA19 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20B7AD6F1E4908330020DA19 /* Model.cpp */; };
 		20B7AD731E490C9C0020DA19 /* Geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20B7AD711E490C9C0020DA19 /* Geometry.cpp */; };
+		20BB239C1E56822000B97833 /* dataBackup.txt in Resources */ = {isa = PBXBuildFile; fileRef = 20BB239B1E56822000B97833 /* dataBackup.txt */; };
+		20BB239F1E56822D00B97833 /* Spring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20BB239D1E56822D00B97833 /* Spring.cpp */; };
 		BBF58EDD1E3D35B800AD1858 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF58EDC1E3D35B800AD1858 /* AppDelegate.m */; };
 		BBF58EE01E3D35B800AD1858 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF58EDF1E3D35B800AD1858 /* main.m */; };
 		BBF58EE21E3D35B800AD1858 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBF58EE11E3D35B800AD1858 /* Assets.xcassets */; };
@@ -110,6 +112,9 @@
 		20B7AD6F1E4908330020DA19 /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Model.cpp; path = ../../../source/egpfwDemo/Model.cpp; sourceTree = "<group>"; };
 		20B7AD711E490C9C0020DA19 /* Geometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Geometry.cpp; path = ../../../source/egpfwDemo/Geometry.cpp; sourceTree = "<group>"; };
 		20B7AD721E490C9C0020DA19 /* Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Geometry.h; path = ../../../source/egpfwDemo/Geometry.h; sourceTree = "<group>"; };
+		20BB239B1E56822000B97833 /* dataBackup.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dataBackup.txt; path = ../../../source/egpfwDemo/utils/dataBackup.txt; sourceTree = "<group>"; };
+		20BB239D1E56822D00B97833 /* Spring.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Spring.cpp; path = ../../../source/egpfwDemo/gphysics/Spring.cpp; sourceTree = "<group>"; };
+		20BB239E1E56822D00B97833 /* Spring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Spring.h; path = ../../../source/egpfwDemo/gphysics/Spring.h; sourceTree = "<group>"; };
 		BBF58ED81E3D35B800AD1858 /* egpfwDemoCocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = egpfwDemoCocoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF58EDB1E3D35B800AD1858 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BBF58EDC1E3D35B800AD1858 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -313,6 +318,8 @@
 		20BFF2DD1E44D19A0078886D /* PhysicsDomain */ = {
 			isa = PBXGroup;
 			children = (
+				20BB239D1E56822D00B97833 /* Spring.cpp */,
+				20BB239E1E56822D00B97833 /* Spring.h */,
 				20256B3D1E47A08F00B3DC6C /* Mover.cpp */,
 				20256B3E1E47A08F00B3DC6C /* Mover.h */,
 			);
@@ -373,6 +380,7 @@
 		BBF58EF31E3D53C000AD1858 /* egpfwDemo */ = {
 			isa = PBXGroup;
 			children = (
+				20BB239B1E56822000B97833 /* dataBackup.txt */,
 				200400D71E4C171F002D1E12 /* data.txt */,
 				200400D81E4C171F002D1E12 /* SaveManager.cpp */,
 				200400D91E4C171F002D1E12 /* SaveManager.h */,
@@ -454,6 +462,7 @@
 				20A007C11E48EA7700B80C3C /* drawTexture_fs4x.glsl in Resources */,
 				20A007C51E48EA7700B80C3C /* passTexcoord_vs4x.glsl in Resources */,
 				20A007C91E48EA7700B80C3C /* resources.txt in Resources */,
+				20BB239C1E56822000B97833 /* dataBackup.txt in Resources */,
 				20A007CC1E48EA7700B80C3C /* sky_water.png in Resources */,
 				20A007C31E48EA7700B80C3C /* passColor_vs4x.glsl in Resources */,
 				20A007CF1E48EA7700B80C3C /* earth_hm_2k.png in Resources */,
@@ -488,6 +497,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				20B7AD701E4908330020DA19 /* Model.cpp in Sources */,
+				20BB239F1E56822D00B97833 /* Spring.cpp in Sources */,
 				BBF58EE01E3D35B800AD1858 /* main.m in Sources */,
 				20256B391E478F7000B3DC6C /* Particle.cpp in Sources */,
 				20B7AD6E1E4904AB0020DA19 /* Shader.cpp in Sources */,

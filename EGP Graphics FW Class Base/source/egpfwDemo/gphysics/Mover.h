@@ -13,7 +13,12 @@
 
 #include "cbmath/cbtkMatrix.h"
 
-#include "..\gphysics\Spring.h"
+#ifdef _WIN32
+    #include "..\gphysics\Spring.h"
+#else	// !_WIN32
+    #include "Spring.h"
+#endif	// _WIN32
+
 
 
 class Mover
