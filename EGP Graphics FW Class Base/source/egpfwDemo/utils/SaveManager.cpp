@@ -184,11 +184,11 @@ void SaveManager::saveData()
 	ofs.open(m_dataFilePath);
 	if (ofs.is_open())
 	{
-		writeData<cbmath::vec3>(ofs);
-		writeData<cbmath::vec4>(ofs);
-		writeData<float>(ofs);
-		writeData<bool>(ofs);
-		writeData<char>(ofs);
+		writeData(ofs, DataType::Vec3);
+		writeData(ofs, DataType::Vec4);
+		writeData(ofs, DataType::Float);
+		writeData(ofs, DataType::Bool);
+		writeData(ofs, DataType::Char);
 	}
 	ofs.close();
 }
@@ -281,81 +281,70 @@ void SaveManager::setData<char>(std::string name, char data)
 
 
 //-----------------------------------------------------------------------------
-// writeData template functions
+// writeData function
 
-template <typename T>
-void SaveManager::writeData(std::ofstream& ofs)
+void SaveManager::writeData(std::ofstream& ofs, DataType type)
 {
-}
-
-template <>
-void SaveManager::writeData<cbmath::vec3>(std::ofstream& ofs)
-{
-	for (std::map<std::string, cbmath::vec3>::iterator iter = m_mapVec3.begin(); iter != m_mapVec3.end(); ++iter)
+	if (type == DataType::Vec3)
 	{
-		ofs << "vec3"		<< std::endl;
-		ofs << iter->first	<< std::endl;
-		
-		ofs << iter->second.x << " "
-			<< iter->second.y << " "
-			<< iter->second.z << std::endl;
+		for (std::map<std::string, cbmath::vec3>::iterator iter = m_mapVec3.begin(); iter != m_mapVec3.end(); ++iter)
+		{
+			ofs << "vec3" << std::endl;
+			ofs << iter->first << std::endl;
 
-		ofs << std::endl;
+			ofs << iter->second.x << " "
+				<< iter->second.y << " "
+				<< iter->second.z << std::endl;
+
+			ofs << std::endl;
+		}
 	}
-}
-
-template <>
-void SaveManager::writeData<cbmath::vec4>(std::ofstream& ofs)
-{
-	for (std::map<std::string, cbmath::vec4>::iterator iter = m_mapVec4.begin(); iter != m_mapVec4.end(); ++iter)
+	else if (type == DataType::Vec4)
 	{
-		ofs << "vec4"		<< std::endl;
-		ofs << iter->first	<< std::endl;
+		for (std::map<std::string, cbmath::vec4>::iterator iter = m_mapVec4.begin(); iter != m_mapVec4.end(); ++iter)
+		{
+			ofs << "vec4" << std::endl;
+			ofs << iter->first << std::endl;
 
-		ofs << iter->second.x << " "
-			<< iter->second.y << " "
-			<< iter->second.z << " "
-			<< iter->second.w << std::endl;
+			ofs << iter->second.x << " "
+				<< iter->second.y << " "
+				<< iter->second.z << " "
+				<< iter->second.w << std::endl;
 
-		ofs << std::endl;
+			ofs << std::endl;
+		}
 	}
-}
-
-template <>
-void SaveManager::writeData<float>(std::ofstream& ofs)
-{
-	for (std::map<std::string, float>::iterator iter = m_mapFloat.begin(); iter != m_mapFloat.end(); ++iter)
+	else if (type == DataType::Float)
 	{
-		ofs << "float"		<< std::endl;
-		ofs << iter->first	<< std::endl;
-		ofs << iter->second << std::endl;
+		for (std::map<std::string, float>::iterator iter = m_mapFloat.begin(); iter != m_mapFloat.end(); ++iter)
+		{
+			ofs << "float" << std::endl;
+			ofs << iter->first << std::endl;
+			ofs << iter->second << std::endl;
 
-		ofs << std::endl;
+			ofs << std::endl;
+		}
 	}
-}
-
-template <>
-void SaveManager::writeData<bool>(std::ofstream& ofs)
-{
-	for (std::map<std::string, bool>::iterator iter = m_mapBool.begin(); iter != m_mapBool.end(); ++iter)
+	else if (type == DataType::Bool)
 	{
-		ofs << "bool"		<< std::endl;
-		ofs << iter->first	<< std::endl;
-		ofs << iter->second << std::endl;
+		for (std::map<std::string, bool>::iterator iter = m_mapBool.begin(); iter != m_mapBool.end(); ++iter)
+		{
+			ofs << "bool" << std::endl;
+			ofs << iter->first << std::endl;
+			ofs << iter->second << std::endl;
 
-		ofs << std::endl;
+			ofs << std::endl;
+		}
 	}
-}
-
-template <>
-void SaveManager::writeData<char>(std::ofstream& ofs)
-{
-	for (std::map<std::string, char>::iterator iter = m_mapChar.begin(); iter != m_mapChar.end(); ++iter)
+	else if (type == DataType::Char)
 	{
-		ofs << "char"		<< std::endl;
-		ofs << iter->first	<< std::endl;
-		ofs << iter->second << std::endl;
+		for (std::map<std::string, char>::iterator iter = m_mapChar.begin(); iter != m_mapChar.end(); ++iter)
+		{
+			ofs << "char" << std::endl;
+			ofs << iter->first << std::endl;
+			ofs << iter->second << std::endl;
 
-		ofs << std::endl;
+			ofs << std::endl;
+		}
 	}
 }

@@ -70,8 +70,10 @@ public:
                    cbmath::vec3   emitDirection  = cbmath::vec3(0.0f,1.0f,0.0f),
                    int            numberToEmit   = 100);
 
-    inline Particle::Data         getParticleData() { return m_particleData; }
-    inline std::vector<Particle*> getParticles()    { return m_particles;    }
+	void setParticleData(Particle::Data data);
+
+    inline Particle::Data         getParticleData()						{ return m_particleData; }
+    inline std::vector<Particle*> getParticles()						{ return m_particles;    }
     
     void update(const float dt);
     
