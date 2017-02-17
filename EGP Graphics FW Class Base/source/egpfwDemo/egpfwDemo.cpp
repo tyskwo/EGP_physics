@@ -55,11 +55,13 @@
     #include "gphysics/Mover.h"
     #include "particledomain\ParticleSystem.h"
 	#include "utils\SaveManager.h"
+	#include "utils\InputManager.h"
 #else
     #include <string>
     #include "Mover.h"
     #include "ParticleSystem.h"
 	#include "SaveManager.h"
+	#include "InputManager.h"
 #endif
 
 
@@ -190,6 +192,9 @@ egpIndexBufferObjectDescriptor  ibo[iboCount] = { 0 };
 std::vector<std::string> wh_displayVect;
 int wh_displaySelection = 0;
 bool wh_shouldDisplay = false;
+wh::ParameterOptions wh_paramOption = wh::ParameterOptions::COLOR;
+wh::ParameterSuboptions wh_paramSubobtion = wh::ParameterSuboptions::NONE;
+wh::ParameterType wh_paramType = wh::ParameterType::VALUE;
 
 // SaveManager
 SaveManager *wh_saveManager;
@@ -199,13 +204,24 @@ ParticleSystem *wh_particleSystem;
 Particle *wh_modelParticle;
 Model *wh_model;
 
+float scaleClamp(float value, float min, float max, float min2, float max2)
+{
+	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
+	if (max2 > min2)
+	{
+		value = value < max2 ? value : max2;
+		return value > min2 ? value : min2;
+	}
+	value = value < min2 ? value : min2;
+	return value > max2 ? value : max2;
+}
+
 void initDisplay()
 {
-	wh_displayVect.push_back("one");
-	wh_displayVect.push_back("two");
-	wh_displayVect.push_back("three");
-	wh_displayVect.push_back("four");
-	wh_displayVect.push_back("five");
+	wh_displayVect.push_back("color");
+	wh_displayVect.push_back("velocity");
+	wh_displayVect.push_back("lifespan");
+	wh_displayVect.push_back("mass");
 
 	wh_displaySelection = 0;
 }
@@ -672,6 +688,11 @@ void displayControls()
 
 	printf("\n y = reset physics");
 
+	printf("\n\n c, v, l, m = edit color, velocity, lifespan, or mass");
+	printf("\n 1, 2, 3, 4 = choose xyzw or rgba when applicable");
+	printf("\n z = toggle between editing parameter delta or value");
+	printf("\n click and drag RMB = adjust selected parameter");
+
 	printf("\n-------------------------------------------------------\n");
 }
 
@@ -687,10 +708,53 @@ void updateDisplay()
 	//printf(displayVect[displaySelection].c_str());
 }
 
-void setDisplaySelection(int selection)
+void setDisplaySelection(int selection, wh::ParameterOptions option)
 {
 	wh_displaySelection = selection;
 	wh_shouldDisplay = true;
+
+	wh_paramOption = option;
+	switch (wh_paramOption)
+	{
+	case wh::ParameterOptions::COLOR:
+	case wh::ParameterOptions::VELOCITY:
+		wh_paramSubobtion = wh::ParameterSuboptions::X;
+		break;
+	case wh::ParameterOptions::LIFESPAN:
+	case wh::ParameterOptions::MASS:
+		wh_paramSubobtion = wh::ParameterSuboptions::NONE;
+		break;
+	default:
+		break;
+	}
+}
+
+void setSuboption(wh::ParameterSuboptions suboption)
+{
+	bool isValidVec3 = (suboption == wh::ParameterSuboptions::X || suboption == wh::ParameterSuboptions::Y || suboption == wh::ParameterSuboptions::Z);
+	bool isValidVec4 = (isValidVec3 || suboption == wh::ParameterSuboptions::W);
+
+	switch (wh_paramOption)
+	{
+	case wh::ParameterOptions::COLOR:
+		if (isValidVec4)
+		{
+			wh_paramSubobtion = suboption;
+			wh_shouldDisplay = true;
+		}
+	case wh::ParameterOptions::VELOCITY:
+		if (isValidVec3)
+		{
+			wh_paramSubobtion = suboption;
+			wh_shouldDisplay = true;
+		}
+		break;
+	case wh::ParameterOptions::LIFESPAN:
+	case wh::ParameterOptions::MASS:
+		break;
+	default:
+		break;
+	}
 }
 
 
@@ -718,45 +782,169 @@ void handleInputState()
 
 
 
-	//TODO: add a SaveManager of sorts that keeps track of ParticleData. Allow saving when P + 1,2,3,etc. are pressed. Load with L + 1,2,3,etc.
+
+	//-----------------------------------------------------------------------------
+	// adjustable parameters
+
+	// select parameter to adjust
+	if (egpKeyboardIsKeyPressed(keybd, 'c'))
+	{
+		setDisplaySelection(0, wh::ParameterOptions::COLOR);
+	}
+	else if (egpKeyboardIsKeyPressed(keybd, 'v'))
+	{
+		setDisplaySelection(1, wh::ParameterOptions::VELOCITY);
+	}
+	else if (egpKeyboardIsKeyPressed(keybd, 'l'))
+	{
+		setDisplaySelection(2, wh::ParameterOptions::LIFESPAN);
+	}
+	else if (egpKeyboardIsKeyPressed(keybd, 'm'))
+	{
+		setDisplaySelection(3, wh::ParameterOptions::MASS);
+	}
+
+	// select parameter suboption
 	if (egpKeyboardIsKeyPressed(keybd, '1'))
 	{
-		//TODO: switch active particle value with number keys
-		setDisplaySelection(0);
+		setSuboption(wh::ParameterSuboptions::X);
 	}
 	else if (egpKeyboardIsKeyPressed(keybd, '2'))
 	{
-		setDisplaySelection(1);
+		setSuboption(wh::ParameterSuboptions::Y);
 	}
 	else if (egpKeyboardIsKeyPressed(keybd, '3'))
 	{
-		setDisplaySelection(2);
+		setSuboption(wh::ParameterSuboptions::Z);
 	}
 	else if (egpKeyboardIsKeyPressed(keybd, '4'))
 	{
-		setDisplaySelection(3);
-	}
-	else if (egpKeyboardIsKeyPressed(keybd, '5'))
-	{
-		setDisplaySelection(4);
+		setSuboption(wh::ParameterSuboptions::W);
 	}
 
+	// select delta
+	if (egpKeyboardIsKeyPressed(keybd, 'z'))
+	{
+		if (wh_paramType == wh::ParameterType::VALUE)
+		{
+			wh_paramType = wh::ParameterType::DELTA;
+		}
+		else
+		{
+			wh_paramType = wh::ParameterType::VALUE;
+		}
+
+		wh_shouldDisplay = true;
+	}
+
+	// display to console if need
 	if (wh_shouldDisplay)
 	{
 		wh_shouldDisplay = false;
-		std::cout << wh_displayVect[wh_displaySelection] << ": " << cbmath::clamp(egpMouseDeltaX(mouse), -10, 10) << std::endl;
+		std::cout << std::endl << wh_displayVect[wh_displaySelection] << ((wh_paramType == wh::ParameterType::VALUE) ? " value " : " delta ") << ", ";
+
+		switch (wh_paramSubobtion)
+		{
+		case wh::ParameterSuboptions::NONE:
+			break;
+		case wh::ParameterSuboptions::X:
+			wh_paramOption == wh::ParameterOptions::VELOCITY ? std::cout << "x" : std::cout << "r";
+			break;
+		case wh::ParameterSuboptions::Y:
+			wh_paramOption == wh::ParameterOptions::VELOCITY ? std::cout << "y" : std::cout << "g";
+			break;
+		case wh::ParameterSuboptions::Z:
+			wh_paramOption == wh::ParameterOptions::VELOCITY ? std::cout << "z" : std::cout << "b";
+			break;
+		case wh::ParameterSuboptions::W:
+			wh_paramOption == wh::ParameterOptions::VELOCITY ? std::cout << "w" : std::cout << "a";
+			break;
+		default:
+			break;
+		}
+
+		std::cout << " ";
 	}
 
+	// handle adjustment of parameters
 	if (egpMouseIsButtonDown(mouse, 2))
 	{
-		//TODO: use mouseDeltaX to modify selected particle value
-		std::cout << cbmath::clamp(egpMouseDeltaX(mouse), 0, 9) << "\b";
-		if (wh_displaySelection == 1)
+		if (wh_displaySelection == 0)
 		{
-			wh_saveManager->setData<float>("lifespanValue", cbmath::clamp(egpMouseDeltaX(mouse), 0, 10));
-			printf("\b");
+			// color
+			float clampedDeltaX01 = scaleClamp(egpMouseX(mouse), 0.0f, win_w, 0.0f, 1.0f);
+			std::cout << clampedDeltaX01 << std::endl;
+
+			std::string colorVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "colorStart" : "colorEnd");
+			cbmath::vec4 color = wh_saveManager->getData<cbmath::vec4>(colorVarName);
+
+			switch (wh_paramSubobtion)
+			{
+			case wh::ParameterSuboptions::NONE:
+				break;
+			case wh::ParameterSuboptions::X:
+				wh_saveManager->setData<cbmath::vec4>(colorVarName, cbmath::v4x * clampedDeltaX01 + cbmath::v4y * color.y + cbmath::v4z * color.z + cbmath::v4w * color.w);
+				break;
+			case wh::ParameterSuboptions::Y:
+				wh_saveManager->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * clampedDeltaX01 + cbmath::v4z * color.z + cbmath::v4w * color.w);
+				break;
+			case wh::ParameterSuboptions::Z:
+				wh_saveManager->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * color.y + cbmath::v4z * clampedDeltaX01 + cbmath::v4w * color.w);
+				break;
+			case wh::ParameterSuboptions::W:
+				wh_saveManager->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * color.y + cbmath::v4z * color.z + cbmath::v4w * clampedDeltaX01);
+				break;
+			default:
+				break;
+			}
+		}
+		else if (wh_displaySelection == 1)
+		{
+			// velocity
+			float clampedDeltaXVel = scaleClamp(egpMouseX(mouse), 0.0f, win_w, -10.0f, 10.0f);
+			std::cout << clampedDeltaXVel << std::endl;
+
+			std::string velocityVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "velocityValue" : "velocityDelta");
+			cbmath::vec3 vel = wh_saveManager->getData<cbmath::vec3>(velocityVarName);
+
+			switch (wh_paramSubobtion)
+			{
+			case wh::ParameterSuboptions::NONE:
+				break;
+			case wh::ParameterSuboptions::X:
+				wh_saveManager->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * clampedDeltaXVel + cbmath::v3y * vel.y + cbmath::v3z * vel.z);
+				break;
+			case wh::ParameterSuboptions::Y:
+				wh_saveManager->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * vel.x + cbmath::v3y * clampedDeltaXVel + cbmath::v3z * vel.z);
+				break;
+			case wh::ParameterSuboptions::Z:
+				wh_saveManager->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * vel.x + cbmath::v3y * vel.y + cbmath::v3z * clampedDeltaXVel);
+				break;
+			default:
+				break;
+			}
+		}
+		else if (wh_displaySelection == 2)
+		{
+			// lifespan
+			float clampedDeltaXLife = scaleClamp(egpMouseX(mouse), 0.0f, win_w, 0.0f, 10.0f);
+			std::cout << clampedDeltaXLife << std::endl;
+
+			std::string lifespanVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "lifespanValue" : "lifespanDelta");
+			wh_saveManager->setData<float>(lifespanVarName, clampedDeltaXLife);
+		}
+		else if (wh_displaySelection == 3)
+		{
+			// mass
+			float clampedDeltaXMass = scaleClamp(egpMouseX(mouse), 0.0f, win_w, 0.0f, 100.0f);
+			std::cout << clampedDeltaXMass << std::endl;
+
+			std::string massVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "massValue" : "massDelta");
+			wh_saveManager->setData<float>(massVarName, clampedDeltaXMass);
 		}
 	}
+
+
 
 
 
@@ -899,6 +1087,3 @@ void onPositionWindow(int x, int y)
 	win_x = x;
 	win_y = y;
 }
-
-
-
