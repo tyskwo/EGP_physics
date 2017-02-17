@@ -343,6 +343,7 @@
     <ClInclude Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\Shader.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\Utils.h" />
+    <ClInclude Include="..\..\..\source\egpfwDemo\utils\InputManager.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\utils\SaveManager.h" />
     <ClInclude Include="egpfwDemoFreeglut\resource.h" />
   </ItemGroup>
