@@ -20,7 +20,7 @@ lifespanDelta
 
 float
 lifespanValue
-2.5
+10
 
 float
 massDelta

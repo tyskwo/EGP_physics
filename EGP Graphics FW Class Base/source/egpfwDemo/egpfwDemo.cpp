@@ -676,6 +676,11 @@ void updateDisplay()
 	//printf(displayVect[displaySelection].c_str());
 }
 
+void setDisplaySelection(int selection)
+{
+	displaySelection = selection;
+	shouldDisplay = true;
+}
 
 
 
@@ -706,28 +711,23 @@ void handleInputState()
 	if (egpKeyboardIsKeyPressed(keybd, '1'))
 	{
 		//TODO: switch active particle value with number keys
-		displaySelection = 0;
-		shouldDisplay = true;
+		setDisplaySelection(0);
 	}
 	else if (egpKeyboardIsKeyPressed(keybd, '2'))
 	{
-		displaySelection = 1;
-		shouldDisplay = true;
+		setDisplaySelection(1);
 	}
 	else if (egpKeyboardIsKeyPressed(keybd, '3'))
 	{
-		displaySelection = 2;
-		shouldDisplay = true;
+		setDisplaySelection(2);
 	}
 	else if (egpKeyboardIsKeyPressed(keybd, '4'))
 	{
-		displaySelection = 3;
-		shouldDisplay = true;
+		setDisplaySelection(3);
 	}
 	else if (egpKeyboardIsKeyPressed(keybd, '5'))
 	{
-		displaySelection = 4;
-		shouldDisplay = true;
+		setDisplaySelection(4);
 	}
 
 	if (shouldDisplay)
@@ -740,6 +740,10 @@ void handleInputState()
 	{
 		//TODO: use mouseDeltaX to modify selected particle value
 		std::cout << cbmath::clamp(egpMouseDeltaX(mouse), -10, 10) << std::endl;
+		if (displaySelection == 1)
+		{
+			saveManager->setData<float>("lifespanValue", cbmath::clamp(egpMouseDeltaX(mouse), 0, 10));
+		}
 	}
 
 
