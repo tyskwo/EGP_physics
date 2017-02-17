@@ -492,11 +492,15 @@ void setupShaders()
 	std::string vertShaderPath = "";
 	std::string fragShaderPath = "";
 
-	vertShaderPath = "../../../../resource/glsl/4x/vs/passColor_vs4x.glsl";
-	fragShaderPath = "../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl";
-    
-    //vertShaderPath = "../../../../resource/glsl/4x/vs/phong_vs4x.glsl";
-    //fragShaderPath = "../../../../resource/glsl/4x/fs/phong_fs4x.glsl";
+
+#ifdef _WIN32
+    vertShaderPath = "../../../../resource/glsl/4x/vs/passColor_vs4x.glsl";
+    fragShaderPath = "../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl";
+#else
+    vertShaderPath = "../../../../../../../../resource/glsl/4x/vs/passColor_vs4x.glsl";
+    fragShaderPath = "../../../../../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl";
+#endif
+
 
 	Shader* shader = new Shader(vertShaderPath.c_str(), fragShaderPath.c_str());
 
