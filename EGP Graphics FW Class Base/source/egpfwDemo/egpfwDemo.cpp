@@ -187,34 +187,41 @@ egpIndexBufferObjectDescriptor  ibo[iboCount] = { 0 };
 // our game objects
 
 // display
-std::vector<std::string> displayVect;
-int displaySelection = 0;
-bool shouldDisplay = false;
+std::vector<std::string> wh_displayVect;
+int wh_displaySelection = 0;
+bool wh_shouldDisplay = false;
 
 // SaveManager
-SaveManager *saveManager;
+SaveManager *wh_saveManager;
 
 // movables
-ParticleSystem *particleSystem;
-Particle *modelParticle;
-Model *model;
+ParticleSystem *wh_particleSystem;
+Particle *wh_modelParticle;
+Model *wh_model;
 
 void initDisplay()
 {
-	displayVect.push_back("one");
-	displayVect.push_back("two");
-	displayVect.push_back("three");
-	displayVect.push_back("four");
-	displayVect.push_back("five");
+	wh_displayVect.push_back("one");
+	wh_displayVect.push_back("two");
+	wh_displayVect.push_back("three");
+	wh_displayVect.push_back("four");
+	wh_displayVect.push_back("five");
 
-	displaySelection = 0;
+	wh_displaySelection = 0;
 }
 
 void initParticleData()
 {
-    Particle::Data particle = saveManager->prepareData();
+    Particle::Data particle = wh_saveManager->prepareData();
 	
-	particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 5);
+	if (wh_particleSystem == nullptr)
+	{
+		wh_particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 5);
+	}
+	else
+	{
+		wh_particleSystem->setParticleData(particle);
+	}
 }
 
 void initParticleSystem()
@@ -265,19 +272,20 @@ void initParticleSystem()
     
     
     
-	particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 500);
+	wh_particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 500);
 }
 
 // quickly reset physics
 void resetPhysics()
 {
-	particleSystem->emit(model);
+	initParticleData();
+	wh_particleSystem->emit(wh_model);
 }
 
 // update physics only
 void updatePhysics(float dt)
 {
-	particleSystem->update(dt);
+	wh_particleSystem->update(dt);
 }
 
 
@@ -494,13 +502,13 @@ void setupShaders()
 
 		
     
-    model = new Model(shader, vao+isocahedronVAO);
+	wh_model = new Model(shader, vao+isocahedronVAO);
 }
 
 void deleteShaders()
 {
-    delete model;
-    model = NULL;
+    delete wh_model;
+	wh_model = NULL;
 }
 
 
@@ -605,15 +613,14 @@ int initGame()
 
 	// physics
 #ifdef _WIN32
-    saveManager = new SaveManager("..\\..\\..\\..\\source\\egpfwDemo\\utils\\data.txt");
+	wh_saveManager = new SaveManager("..\\..\\..\\..\\source\\egpfwDemo\\utils\\data.txt");
 #else
-    saveManager = new SaveManager("../../../../../../../../source/egpfwDemo/utils/data.txt");
+	wh_saveManager = new SaveManager("../../../../../../../../source/egpfwDemo/utils/data.txt");
 #endif
     
 
-	saveManager->loadData();
-	initParticleData();
-
+	wh_saveManager->loadData();
+	//initParticleData();
 	//initParticleSystem();
 	resetPhysics();
 
@@ -633,7 +640,7 @@ int initGame()
 int termGame()
 {
 	// TODO: CLEANUP PARTICLE STUFF ****
-	saveManager->saveData();
+	wh_saveManager->saveData();
 
 	// good practice to do this in reverse order of creation
 	//	in case something is referencing something else
@@ -678,8 +685,8 @@ void updateDisplay()
 
 void setDisplaySelection(int selection)
 {
-	displaySelection = selection;
-	shouldDisplay = true;
+	wh_displaySelection = selection;
+	wh_shouldDisplay = true;
 }
 
 
@@ -730,19 +737,20 @@ void handleInputState()
 		setDisplaySelection(4);
 	}
 
-	if (shouldDisplay)
+	if (wh_shouldDisplay)
 	{
-		shouldDisplay = false;
-		std::cout << displayVect[displaySelection] << ": " << cbmath::clamp(egpMouseDeltaX(mouse), -10, 10) << std::endl;
+		wh_shouldDisplay = false;
+		std::cout << wh_displayVect[wh_displaySelection] << ": " << cbmath::clamp(egpMouseDeltaX(mouse), -10, 10) << std::endl;
 	}
 
 	if (egpMouseIsButtonDown(mouse, 2))
 	{
 		//TODO: use mouseDeltaX to modify selected particle value
-		std::cout << cbmath::clamp(egpMouseDeltaX(mouse), -10, 10) << std::endl;
-		if (displaySelection == 1)
+		std::cout << cbmath::clamp(egpMouseDeltaX(mouse), 0, 9) << "\b";
+		if (wh_displaySelection == 1)
 		{
-			saveManager->setData<float>("lifespanValue", cbmath::clamp(egpMouseDeltaX(mouse), 0, 10));
+			wh_saveManager->setData<float>("lifespanValue", cbmath::clamp(egpMouseDeltaX(mouse), 0, 10));
+			printf("\b");
 		}
 	}
 
@@ -797,7 +805,7 @@ void renderGameState()
 
 
 
-    particleSystem->render(viewProjMat, cameraPosWorld);
+	wh_particleSystem->render(viewProjMat, cameraPosWorld);
 
 
 
@@ -887,3 +895,6 @@ void onPositionWindow(int x, int y)
 	win_x = x;
 	win_y = y;
 }
+
+
+

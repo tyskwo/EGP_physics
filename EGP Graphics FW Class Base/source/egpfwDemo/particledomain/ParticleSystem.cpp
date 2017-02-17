@@ -36,6 +36,12 @@ ParticleSystem::ParticleSystem(Particle::Data particleData,
     this->m_emitter.m_numberToEmit  = numberToEmit;
 }
 
+void ParticleSystem::setParticleData(Particle::Data data)
+{
+	data.position = m_mover->position;
+	m_particleData = data;
+}
+
 
 
 void ParticleSystem::update(const float dt)
@@ -61,8 +67,6 @@ void ParticleSystem::emit(Model* model)
     for(int i = 0; i < m_emitter.m_numberToEmit; i++)
     {
         m_particles.push_back(new Particle(m_particleData));
-		
-		m_particles[i]->getMover()->setSpringAnchor(cbmath::v3y);
 
         m_particles.back()->SetModel(model);
     }

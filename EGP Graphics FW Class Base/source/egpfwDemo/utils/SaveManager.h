@@ -56,20 +56,8 @@ public:
 	template <typename T>
 	void setData(std::string name, T data);
 
-	// printData functions
-	template <typename T>
-	void writeData(std::ofstream& outf);
-
-	template <>
-	void writeData<cbmath::vec3>(std::ofstream& ofs);
-	template <>
-	void writeData<cbmath::vec4>(std::ofstream& ofs);
-	template <>
-	void writeData<float>(std::ofstream& ofs);
-	template <>
-	void writeData<bool>(std::ofstream& ofs);
-	template <>
-	void writeData<char>(std::ofstream& ofs);
+	// writeData function
+	void writeData(std::ofstream& outf, DataType type);
 };
 
 
