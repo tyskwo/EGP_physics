@@ -5,6 +5,7 @@
 #ifndef __SPRING_H
 #define __SPRING_H
 
+#include <math.h>
 #include "cbmath/cbtkMatrix.h"
 
 class Spring

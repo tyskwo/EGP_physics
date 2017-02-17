@@ -12,7 +12,6 @@
 
 #include "Spring.h"
 
-#include <math.h>
 
 Spring::Spring(cbmath::vec3 _anchor)
 :anchor(_anchor)
