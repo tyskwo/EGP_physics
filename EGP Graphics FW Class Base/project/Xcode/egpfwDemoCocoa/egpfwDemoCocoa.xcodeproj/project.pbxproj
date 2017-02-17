@@ -115,6 +115,7 @@
 		20BB239B1E56822000B97833 /* dataBackup.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dataBackup.txt; path = ../../../source/egpfwDemo/utils/dataBackup.txt; sourceTree = "<group>"; };
 		20BB239D1E56822D00B97833 /* Spring.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Spring.cpp; path = ../../../source/egpfwDemo/gphysics/Spring.cpp; sourceTree = "<group>"; };
 		20BB239E1E56822D00B97833 /* Spring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Spring.h; path = ../../../source/egpfwDemo/gphysics/Spring.h; sourceTree = "<group>"; };
+		20BB23A01E573F2000B97833 /* InputManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InputManager.h; path = ../../../source/egpfwDemo/utils/InputManager.h; sourceTree = "<group>"; };
 		BBF58ED81E3D35B800AD1858 /* egpfwDemoCocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = egpfwDemoCocoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF58EDB1E3D35B800AD1858 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BBF58EDC1E3D35B800AD1858 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -380,6 +381,7 @@
 		BBF58EF31E3D53C000AD1858 /* egpfwDemo */ = {
 			isa = PBXGroup;
 			children = (
+				20BB23A01E573F2000B97833 /* InputManager.h */,
 				20BB239B1E56822000B97833 /* dataBackup.txt */,
 				200400D71E4C171F002D1E12 /* data.txt */,
 				200400D81E4C171F002D1E12 /* SaveManager.cpp */,
