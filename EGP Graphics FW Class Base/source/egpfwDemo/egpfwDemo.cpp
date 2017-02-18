@@ -519,12 +519,14 @@ void setupShaders()
 		
     
 	wh_model = new Model(shader, vao+isocahedronVAO);
+
+	egpActivateVAO(0);
 }
 
 void deleteShaders()
 {
     delete wh_model;
-	wh_model = NULL;
+	wh_model = nullptr;
 }
 
 
@@ -992,13 +994,16 @@ void renderGameState()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-
+	// render particles
 	wh_particleSystem->render(viewProjMat, cameraPosWorld);
 
 
 
     // force draw in front of everything
     glDisable(GL_DEPTH_TEST);
+
+	// disable program (to draw the world axes)
+	egpActivateProgram(0);
 
     // center of world (this is useful to see where the origin is and how big one unit is)
     egpfwDrawAxesImmediate(viewProjMat.m, 0);
