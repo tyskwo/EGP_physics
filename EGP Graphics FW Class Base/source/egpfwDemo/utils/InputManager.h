@@ -1,5 +1,5 @@
-//  David Hartman 0923439
-//  Ty Wood       0901793
+//  Wednesday-David Hartman 0923439
+//  Ty Wood					0901793
 //
 //  EGP 425.01
 //  Simple Particle Engine
@@ -21,36 +21,67 @@
 
 
 // a namespace for handling keyboard input parameter changes
-// written by: David
+// written by: Wednesday-David
 namespace wh
 {
     // holds what particle properties are editable
 	enum ParameterOptions
 	{
-		COLOR,
+		COLOR = 0,
 		VELOCITY,
 		LIFESPAN,
 		MASS
 	};
 
     
-    
-    
     // holds what particle subproperties are editable
 	enum ParameterSuboptions
 	{
-		NONE,
+		NONE = 0,
 		X, Y, Z, W
 	};
 
     
-    
-    
     // holds if a particle property has a delta or not
 	enum ParameterType
 	{
-		VALUE,
+		VALUE = 0,
 		DELTA
+	};
+
+
+
+	struct AdjustableParameter
+	{
+		ParameterOptions m_parameterOption;
+		ParameterSuboptions m_parameterSuboption;
+		ParameterType m_parameterType;
+	};
+
+	class InputManager
+	{
+	private:
+		void prepareForSave(int dataFileSelection);
+		void prepareForLoad(int dataFileSelection);
+		
+		AdjustableParameter m_currentParameterSettings;
+
+		bool m_saveFlag;
+		bool m_loadFlag;
+
+		int m_dataFileSelection;
+
+	public:
+		InputManager();
+		~InputManager();
+
+		inline void cleanSaveFlag() { m_saveFlag = false; };
+		inline void cleanLoadFlag() { m_loadFlag = false; };
+
+		inline int getSaveFileSelection() const { return m_saveFileSelection; };
+
+
+		void update(egpKeyboard *keybd);
 	};
 }
 

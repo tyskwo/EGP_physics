@@ -725,17 +725,6 @@ void displayControls()
 }
 
 
-void updateDisplay()
-{
-//#ifdef _WIN32
-//	system("cls");
-//#else
-//	system("clear");
-//#endif
-
-	//printf(displayVect[displaySelection].c_str());
-}
-
 void setDisplaySelection(int selection, wh::ParameterOptions option)
 {
 	wh_displaySelection = selection;
@@ -813,7 +802,7 @@ void handleInputState()
 
 	//-----------------------------------------------------------------------------
 	// adjustable parameters
-
+	
 	if (egpKeyboardIsKeyDown(keybd, 'z'))
 	{
 		// save
@@ -1007,8 +996,6 @@ void updateGameState(float dt)
 	// update camera
 	updateCameraControlled(dt, mouse);
 	//	updateCameraOrbit(dt);
-	
-	updateDisplay();
 
 	// update view matrix
 	// 'c3' in a 4x4 matrix is the translation part
