@@ -30,14 +30,17 @@ private:
 	void parseVec3(std::string name, std::string data);
 	void parseVec4(std::string name, std::string data);
 	
+	// maps containing the save data
 	std::map<std::string, cbmath::vec3> m_mapVec3;
 	std::map<std::string, cbmath::vec4> m_mapVec4;
 	std::map<std::string, float> m_mapFloat;
 	std::map<std::string, bool> m_mapBool;
 	std::map<std::string, char> m_mapChar;
 
+	// path to the folder containing the data files
 	std::string m_dataFilePath;
 
+	// index of the data file selected (1 - 4)
 	int m_dataFileSelected;
 
 public:
@@ -46,7 +49,9 @@ public:
 	SaveManager(std::string dataFilePath);
 	~SaveManager();
 
+	// reads in the data from the specified file
 	void loadData(int dataFileSelected);
+	// saves data to the specified file
 	void saveData(int dataFileSelected);
     
     Particle::Data prepareData(int dataFileSelected);
