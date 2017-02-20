@@ -211,9 +211,12 @@ namespace TimingFunctions
 
 
 
-// namespace for just 
+
+// namespace for lerping data
+// written by: Ty
 namespace Eases
 {
+    // function that returns a value between start and end at the given percent of time, using the passed in easetype (function pointer)
     template <typename T>
     T lerp(T start, T end, float percent, float (*f)(float))
     {

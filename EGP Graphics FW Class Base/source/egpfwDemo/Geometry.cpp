@@ -12,11 +12,16 @@
 
 
 
+
+
 #include "Geometry.h"
 
 
 
-// octahedron
+
+
+// functions to return data of octahedron
+// written by: Ty
 const float        *Octahedron::getPositions()   { return Octahedron::Positions;  }
 const float        *Octahedron::getColors()      { return Octahedron::Colors;     }
 const unsigned int *Octahedron::getIndeces()     { return Octahedron::IndexOrder; }
@@ -25,7 +30,10 @@ const unsigned int *Octahedron::getIndeces()     { return Octahedron::IndexOrder
 
 
 
-// isocahedron
+
+
+// functions to return data of isocahedron
+// written by: Ty
 const float        *Isocahedron::getPositions()   { return Isocahedron::Positions;  }
 const float        *Isocahedron::getColors()      { return Isocahedron::Colors;     }
 const float        *Isocahedron::getNormals()     { return Isocahedron::Normals;    }
