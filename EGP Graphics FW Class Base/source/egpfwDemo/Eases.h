@@ -10,8 +10,16 @@
 //  and/or communicate a copy of this project to a plagiarism-checking service,
 //  which may retain a copy of the project on its database.
 
+
+
+
+
 #ifndef Eases_h
 #define Eases_h
+
+
+
+
 
 #include <stdio.h>
 #include "cbmath/cbtkMatrix.h"
@@ -20,6 +28,10 @@
 
 
 
+
+// a namespace for different types of eases
+// ported from Ty's personal Swift library
+// http://easings.net
 namespace TimingFunctions
 {
     inline float Linear(float t)
@@ -199,7 +211,7 @@ namespace TimingFunctions
 
 
 
-
+// namespace for just 
 namespace Eases
 {
     template <typename T>

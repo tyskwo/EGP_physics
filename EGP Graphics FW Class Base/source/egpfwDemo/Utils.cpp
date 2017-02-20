@@ -10,10 +10,18 @@
 //  and/or communicate a copy of this project to a plagiarism-checking service,
 //  which may retain a copy of the project on its database.
 
-#include <stdio.h>
 
+
+
+
+#include <stdio.h>
 #include "Utils.h"
 
+
+
+
+// returns a random cbmath::vec3 with values from -a (exclusive) to a (exclusive)
+// written by: Ty
 template <>
 cbmath::vec3 Utils::randomDeltaPosNeg<cbmath::vec3>(cbmath::vec3 a)
 {

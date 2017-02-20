@@ -1,10 +1,18 @@
+//  David Hartman 0923439
+//  Ty Wood       0901793
 //
-//  SaveManager.cpp
-//  egpfwDemo
+//  EGP 425.01
+//  Simple Particle Engine
+//  17.02.05
 //
-//  Created by Wednesday-David Hartman on 2/8/17.
-//  Copyright � 2017 Dan Buckstein. All rights reserved.
-//
+//  We certify that this work is entirely our own.
+//  The assessor of this project may reproduce this project and provide copies to other academic staff,
+//  and/or communicate a copy of this project to a plagiarism-checking service,
+//  which may retain a copy of the project on its database.
+
+
+
+
 
 #include "SaveManager.h"
 
@@ -12,14 +20,20 @@
 #include <fstream>
 #include <sstream>
 
+
+
+
+
 SaveManager::SaveManager(std::string dataFilePath)
 :m_dataFilePath(dataFilePath)
-{
-}
+{}
+
+
+
+
 
 SaveManager::~SaveManager()
-{
-}
+{}
 
 
 
@@ -83,6 +97,10 @@ void SaveManager::loadData()
 	ifs.close();
 }
 
+
+
+
+
 void SaveManager::parseVec3(std::string name, std::string data)
 {	
 	float vec3values[3] = { 0, 0, 0 };
@@ -111,6 +129,10 @@ void SaveManager::parseVec3(std::string name, std::string data)
 	m_mapVec3.insert(std::pair<std::string, cbmath::vec3>(name, vec));
 }
 
+
+
+
+
 void SaveManager::parseVec4(std::string name, std::string data)
 {
 	float vec4values[4] = { 0, 0, 0, 0 };
@@ -138,6 +160,8 @@ void SaveManager::parseVec4(std::string name, std::string data)
 	cbmath::vec4 vec = cbmath::vec4(vec4values[0], vec4values[1], vec4values[2], vec4values[3]);
 	m_mapVec4.insert(std::pair<std::string, cbmath::vec4>(name, vec));
 }
+
+
 
 
 
@@ -174,8 +198,7 @@ Particle::Data SaveManager::prepareData()
 
 
 
-//-----------------------------------------------------------------------------
-// saving data
+
 
 void SaveManager::saveData()
 {
@@ -196,8 +219,6 @@ void SaveManager::saveData()
 
 
 
-//-----------------------------------------------------------------------------
-// getData template functions
 
 template <typename T>
 T SaveManager::getData(std::string name)
@@ -239,13 +260,9 @@ char SaveManager::getData<char>(std::string name)
 
 
 
-//-----------------------------------------------------------------------------
-// setData template functions
 
 template <typename T>
-void SaveManager::setData(std::string name, T data)
-{
-}
+void SaveManager::setData(std::string name, T data) {}
 
 template <>
 void SaveManager::setData<cbmath::vec3>(std::string name, cbmath::vec3 data)
@@ -280,8 +297,6 @@ void SaveManager::setData<char>(std::string name, char data)
 
 
 
-//-----------------------------------------------------------------------------
-// writeData function
 
 void SaveManager::writeData(std::ofstream& ofs, DataType type)
 {
