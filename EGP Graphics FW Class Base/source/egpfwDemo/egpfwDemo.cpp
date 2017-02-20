@@ -206,7 +206,6 @@ SaveManager *wh_saveManager;
 
 // movables
 ParticleSystem *wh_particleSystem;
-Particle *wh_modelParticle;
 Model *wh_model;
 
 float scaleClamp(float value, float min, float max, float min2, float max2)
@@ -681,7 +680,12 @@ int initGame()
 int termGame()
 {
 	// TODO: CLEANUP PARTICLE STUFF ****
+	delete wh_particleSystem;
+	wh_particleSystem = nullptr;
+
 	wh_saveManager->saveData(wh_saveFileSelection);
+	delete wh_saveManager;
+	wh_saveManager = nullptr;
 
 	// good practice to do this in reverse order of creation
 	//	in case something is referencing something else
@@ -877,7 +881,10 @@ void handleInputState()
 	if (wh_shouldDisplay)
 	{
 		wh_shouldDisplay = false;
-		std::cout << std::endl << wh_displayVect[wh_displaySelection] << ((wh_paramType == wh::ParameterType::VALUE) ? " value " : " delta ") << ", ";
+		std::cout << std::endl << wh_displayVect[wh_displaySelection] << 
+			(wh_paramOption == wh::ParameterOptions::COLOR ? 
+			(wh_paramType == wh::ParameterType::VALUE ? " start " : " end ") : 
+			(wh_paramType == wh::ParameterType::VALUE ? " value " : " delta ")) << ", ";
 
 		switch (wh_paramSubobtion)
 		{
