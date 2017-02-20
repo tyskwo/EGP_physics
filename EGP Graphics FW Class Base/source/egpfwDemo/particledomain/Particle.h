@@ -12,8 +12,12 @@
 
 
 
+
+
 #ifndef Particle_h
 #define Particle_h
+
+
 
 
 
@@ -35,18 +39,29 @@
 
 
 
+
+
+// class that defines a particle, its data, and everything else about it
+// written by: Ty
 class Particle
 {
+    
 public:
     
+    // a struct that defines a property that is a delta type
     template <typename T>
     struct DeltaType
     {
+        // the base value and the total delta
         T value, delta;
+        
+        //whether or not the value is a midpoint
         bool isDeltaMidpoint;
         
+        // initializer
         T init()
         {
+            // return the appropriate value
             if(isDeltaMidpoint)
             {
                 return value + Utils::randomDeltaPosNeg(delta);
@@ -58,21 +73,32 @@ public:
         }
     };
     
+    
+    
+    // a struct that defines a property that is an over-lifetime type
     template <typename T>
     struct LifetimeType
     {
+        // typedef for timing function
         typedef float (*TimingFunction)(float);
         
+        // the start value and the end value
         T start, end;
+        
+        // the timing function to lerp with
         TimingFunction ease;
+        
+        // the current value
         T current;
         
+        // lerp to the given percent give all of our current values
         T lerp(float percent)
         {
             return Eases::lerp(start, end, percent, ease);
         }
     };
     
+    // a struct holding all of the data that defines this particle
     struct Data
     {
         cbmath::vec3 position;
@@ -92,6 +118,7 @@ private:
     // reference to the mover struct of this particle for physics simulation
     Mover *m_mover;
     
+    // how long this particle lives for
     float m_lifespan;
     
     // how long this particle has been alive
@@ -102,11 +129,11 @@ private:
     
 	bool  m_springInitialized;
 
+    // the model that this particle uses to render
     Model* m_model;
     
+    // the current color of this particle
     LifetimeType<cbmath::vec4> m_color;
-    
-    
     
     
     
@@ -115,15 +142,29 @@ public:
     Particle();
     Particle(Data data);
     
+    
+    
+    // getters for the mover attached to this particle and whether or not this particle is alive
     inline Mover* getMover() { return m_mover;    }
     inline bool   isAlive()  { return m_isActive; }
     
+    
+    
+    // called every frame
     void update(const float dt);
     
+    
+    
+    // called when we want to render this particle
     void render(cbmath::mat4 viewProjMatrix, cbmath::vec4 cameraPos);
     
-    inline void SetModel(Model* model) { m_model = model; }
+    
+    
+    // sets the particle's model
+    inline void setModel(Model* model) { m_model = model; }
 };
+
+
 
 
 

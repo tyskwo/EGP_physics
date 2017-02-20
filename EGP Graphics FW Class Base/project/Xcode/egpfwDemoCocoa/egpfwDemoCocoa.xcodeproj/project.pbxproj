@@ -381,20 +381,20 @@
 		BBF58EF31E3D53C000AD1858 /* egpfwDemo */ = {
 			isa = PBXGroup;
 			children = (
-				20BB23A01E573F2000B97833 /* InputManager.h */,
-				20BB239B1E56822000B97833 /* dataBackup.txt */,
 				200400D71E4C171F002D1E12 /* data.txt */,
-				200400D81E4C171F002D1E12 /* SaveManager.cpp */,
-				200400D91E4C171F002D1E12 /* SaveManager.h */,
+				20BB239B1E56822000B97833 /* dataBackup.txt */,
+				200400C81E4BCDE9002D1E12 /* Eases.h */,
 				200400CA1E4BCE1D002D1E12 /* Utils.h */,
 				200400CB1E4BEBD3002D1E12 /* Utils.cpp */,
+				20BB23A01E573F2000B97833 /* InputManager.h */,
+				200400D91E4C171F002D1E12 /* SaveManager.h */,
+				200400D81E4C171F002D1E12 /* SaveManager.cpp */,
 				20A007971E48EA7700B80C3C /* resource */,
 				20A47EE81E4929F8005DB927 /* GraphicsDomain */,
 				20256B361E478F1200B3DC6C /* ParticleDomain */,
 				20BFF2DD1E44D19A0078886D /* PhysicsDomain */,
 				BBF58EF51E3D53D100AD1858 /* egpfwDemo.h */,
 				BBF58EF41E3D53D100AD1858 /* egpfwDemo.cpp */,
-				200400C81E4BCDE9002D1E12 /* Eases.h */,
 			);
 			name = egpfwDemo;
 			sourceTree = "<group>";

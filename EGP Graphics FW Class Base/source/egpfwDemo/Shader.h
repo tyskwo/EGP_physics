@@ -12,8 +12,12 @@
 
 
 
+
+
 #ifndef Shader_h
 #define Shader_h
+
+
 
 
 
@@ -22,10 +26,16 @@
 
 
 
+
+
+// a class that abstracts the logic of preparing, applying, and executing a shader program
+// written by: Ty
 class Shader
 {
     
 private:
+    
+    // an enum that hold common uniforms' locations
     enum GLSLCommonUniformIndex
     {
         unif_mvp,
@@ -38,25 +48,41 @@ private:
         
         unif_color,
         
-        //-----------------------------
+        
         GLSLCommonUniformCount
     };
     int glslCommonUniforms[GLSLCommonUniformCount] = { -1 };
     
+    
+    
+    // the shader program
     egpProgram m_program;
     
     
     
 public:
     
+    // constructor given a file path to a vertex and fragment shader
     Shader(const char* vertexPath, const char* fragmentPath);
+    
+    
+    
+    // release the shader upon destruction
+    // written by: Ty
     ~Shader() { egpReleaseProgram(&m_program); }
     
+    
+    
+    // return program
+    // written by: Ty
     inline egpProgram getProgram()         { return m_program; }
-    inline int        getMVPUniform()      { return glslCommonUniforms[unif_mvp];      }
-    inline int        getColorUniform()    { return glslCommonUniforms[unif_color];    }
-    inline int        getLightPosUniform() { return glslCommonUniforms[unif_lightPos]; }
-    inline int        getEyePosUniform()   { return glslCommonUniforms[unif_eyePos];   }
+    
+    // getters for common uniforms' locations
+    // written by: Ty
+    inline int getMVPUniform()      { return glslCommonUniforms[unif_mvp];      }
+    inline int getColorUniform()    { return glslCommonUniforms[unif_color];    }
+    inline int getLightPosUniform() { return glslCommonUniforms[unif_lightPos]; }
+    inline int getEyePosUniform()   { return glslCommonUniforms[unif_eyePos];   }
 };
 
 

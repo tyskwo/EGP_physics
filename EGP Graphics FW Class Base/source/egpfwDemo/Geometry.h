@@ -12,11 +12,17 @@
 
 
 
+
+
 #ifndef _GEOMETRY_H
 #define _GEOMETRY_H
 
 
 
+
+
+// namespace describing the geometry of an octahedron
+// written by: Ty
 namespace Octahedron
 {
     const int Vertices = 6;
@@ -71,7 +77,8 @@ namespace Octahedron
 
 
 
-
+// namespace describing the geometry of an isocahedron
+// written by: Ty
 namespace Isocahedron
 {
     const int Vertices = 36;
@@ -157,6 +164,9 @@ namespace Isocahedron
     unsigned int  getVertexCount();
     unsigned int  getIndexCount();
 }
+
+
+
 
 
 #endif	// _GEOMETRY_H

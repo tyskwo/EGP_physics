@@ -12,12 +12,19 @@
 
 
 
+
+
 #include "Shader.h"
 
 
 
+
+
+// constructor given a file path to a vertex and fragment shader
+// written by: Ty
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
+    // declare file and shaders
     egpFileInfo files[2];
     egpShader   shaders[2];
     

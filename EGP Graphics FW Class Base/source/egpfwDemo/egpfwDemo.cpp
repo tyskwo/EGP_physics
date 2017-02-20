@@ -11,7 +11,11 @@
 
 
 
-
+//things left to do:
+//   path controlled vs static vs player movable particle system
+//   add drag to particles
+//   edit emission type
+//   edit ease of lifetime types
 
 
 
@@ -247,7 +251,7 @@ void initParticleData()
 	
 	if (wh_particleSystem == nullptr)
 	{
-		wh_particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 5);
+		wh_particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Continuous, cbmath::v3y * 2.0f, cbmath::v3y, 5);
 	}
 	else
 	{
@@ -310,7 +314,7 @@ void initParticleSystem()
 void resetPhysics()
 {
 	initParticleData();
-	wh_particleSystem->emit(wh_model);
+	if(!wh_particleSystem->isContinuous()) wh_particleSystem->emit(wh_model);
 }
 
 // update physics only
@@ -1013,6 +1017,8 @@ void updateGameState(float dt)
 	// ****update objects here
 	{
 		updatePhysics(dt);
+        
+        if(wh_particleSystem->isContinuous()) wh_particleSystem->emit(wh_model);
 	}
 }
 
