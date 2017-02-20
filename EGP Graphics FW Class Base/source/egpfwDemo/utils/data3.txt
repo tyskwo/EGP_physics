@@ -24,9 +24,9 @@ lifespanValue
 
 float
 massDelta
-0.859375
+0.21875
 
 float
 massValue
-0.625
+0
 

@@ -21,8 +21,8 @@
 #include <vector>
 #include <string>
 
-class egpKeyboard;
-class egpMouse;
+struct egpKeyboard;
+struct egpMouse;
 
 // a namespace for handling keyboard input parameter changes
 // written by: Wednesday-David
@@ -65,8 +65,8 @@ namespace wh
 	class InputManager
 	{
 	private:
-		void prepareForSave(int dataFileSelection);
-		void prepareForLoad(int dataFileSelection);
+		void initiateSave(int dataFileSelection);
+		void initiateLoad(int dataFileSelection);
 
 		void setParameterOption(ParameterOptions option);
 		void setParameterSuboption(ParameterSuboptions suboption);
@@ -84,8 +84,6 @@ namespace wh
 
 		AdjustableParameter m_currentParameterSettings;
 
-		bool m_saveFlag;
-		bool m_loadFlag;
 		bool m_displayFlag;
 
 		int m_dataFileSelection;
@@ -93,9 +91,6 @@ namespace wh
 	public:
 		InputManager();
 		~InputManager();
-
-		inline void cleanSaveFlag() { m_saveFlag = false; };
-		inline void cleanLoadFlag() { m_loadFlag = false; };
 
 		inline int getSaveFileSelection() const { return m_dataFileSelection; };
 

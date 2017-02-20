@@ -25,16 +25,18 @@ wh::InputManager::~InputManager()
 
 
 
-void wh::InputManager::prepareForSave(int dataFileSelection)
+void wh::InputManager::initiateSave(int dataFileSelection)
 {
-	m_saveFlag = true;
 	m_dataFileSelection = dataFileSelection;
+	Locator::getSaveManager()->saveData(m_dataFileSelection);
+	std::cout << "saved current data to file " << m_dataFileSelection << std::endl;
 }
 
-void wh::InputManager::prepareForLoad(int dataFileSelection)
+void wh::InputManager::initiateLoad(int dataFileSelection)
 {
-	m_loadFlag = true;
 	m_dataFileSelection = dataFileSelection;
+	Locator::getSaveManager()->loadData(m_dataFileSelection);
+	std::cout << "loaded data from file " << m_dataFileSelection << std::endl;
 }
 
 
@@ -108,25 +110,25 @@ void wh::InputManager::handleKeyboardInput(egpKeyboard *keybd)
 	{
 		// save
 		if (egpKeyboardIsKeyPressed(keybd, '1'))
-			prepareForSave(1);
+			initiateSave(1);
 		else if (egpKeyboardIsKeyPressed(keybd, '2'))
-			prepareForSave(2);
+			initiateSave(2);
 		else if (egpKeyboardIsKeyPressed(keybd, '3'))
-			prepareForSave(3);
+			initiateSave(3);
 		else if (egpKeyboardIsKeyPressed(keybd, '4'))
-			prepareForSave(4);
+			initiateSave(4);
 	}
 	else if (egpKeyboardIsKeyDown(keybd, 'x'))
 	{
 		// load
 		if (egpKeyboardIsKeyPressed(keybd, '1'))
-			prepareForLoad(1);
+			initiateLoad(1);
 		else if (egpKeyboardIsKeyPressed(keybd, '2'))
-			prepareForLoad(2);
+			initiateLoad(2);
 		else if (egpKeyboardIsKeyPressed(keybd, '3'))
-			prepareForLoad(3);
+			initiateLoad(3);
 		else if (egpKeyboardIsKeyPressed(keybd, '4'))
-			prepareForLoad(4);
+			initiateLoad(4);
 	}
 	else
 	{
@@ -194,7 +196,7 @@ void wh::InputManager::handleMouseInput(egpMouse *mouse, int windowWidth)
 			break;
 		}
 
-		float clampedDeltaX = scaleClamp(egpMouseX(mouse), 0.0f, windowWidth, clampMin, clampMax);
+		float clampedDeltaX = scaleClamp((float)egpMouseX(mouse), 0.0f, (float)windowWidth, clampMin, clampMax);
 		std::cout << clampedDeltaX;
 
 

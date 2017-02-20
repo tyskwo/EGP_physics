@@ -68,7 +68,7 @@ void SaveManager::loadData(int dataFileSelected)
 			}
 			else if (type == "float")
 			{
-				m_mapFloat[name] = atof(data.c_str());
+				m_mapFloat[name] = std::stof(data.c_str());
 				//m_mapFloat.insert(std::pair<std::string, float>(name, static_cast<float>(atof(data.c_str()))));
 			}
 			else if (type == "bool")

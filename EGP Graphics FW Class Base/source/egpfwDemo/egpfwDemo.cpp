@@ -198,64 +198,22 @@ egpIndexBufferObjectDescriptor  ibo[iboCount] = { 0 };
 //-----------------------------------------------------------------------------
 // our game objects
 
-// display
-std::vector<std::string> wh_displayVect;
-int wh_displaySelection = 0;
-bool wh_shouldDisplay = false;
-wh::ParameterOptions wh_paramOption = wh::ParameterOptions::COLOR;
-wh::ParameterSuboptions wh_paramSubobtion = wh::ParameterSuboptions::NONE;
-wh::ParameterType wh_paramType = wh::ParameterType::VALUE;
-int wh_saveFileSelection = 1;
-
-// SaveManager
+// InputManager
 wh::InputManager *wh_inputManager;
-// SaveManager *wh_saveManager;
 
 // movables
 ParticleSystem *wh_particleSystem;
 Model *wh_model;
 
-float scaleClamp(float value, float min, float max, float min2, float max2)
+void loadParticleData()
 {
-	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
-	if (max2 > min2)
-	{
-		value = value < max2 ? value : max2;
-		return value > min2 ? value : min2;
-	}
-	value = value < min2 ? value : min2;
-	return value > max2 ? value : max2;
-}
-
-void initDisplay()
-{
-	wh_displayVect.push_back("color");
-	wh_displayVect.push_back("velocity");
-	wh_displayVect.push_back("lifespan");
-	wh_displayVect.push_back("mass");
-
-	wh_displaySelection = 0;
-}
-
-void saveParticleData(int dataFileSelection)
-{
-	wh_saveFileSelection = dataFileSelection;
-	Locator::getSaveManager()->saveData(wh_saveFileSelection);
-	//wh_saveManager->saveData(wh_saveFileSelection);
-	std::cout << "saved current data to file " << wh_saveFileSelection << std::endl;
-}
-
-void loadParticleData(int dataFileSelection)
-{
-	wh_saveFileSelection = dataFileSelection;
-	Locator::getSaveManager()->loadData(wh_saveFileSelection);
-	//wh_saveManager->loadData(wh_saveFileSelection);
-	std::cout << "loaded data from file " << wh_saveFileSelection << std::endl;
+	Locator::getSaveManager()->loadData(wh_inputManager->getSaveFileSelection());
+	std::cout << "loaded data from file " << wh_inputManager->getSaveFileSelection() << std::endl;
 }
 
 void initParticleData()
 {
-    Particle::Data particle = Locator::getSaveManager()->prepareData(wh_saveFileSelection);//wh_saveManager->prepareData(wh_saveFileSelection);
+    Particle::Data particle = Locator::getSaveManager()->prepareData(wh_inputManager->getSaveFileSelection());//wh_saveManager->prepareData(wh_saveFileSelection);
 	
 	if (wh_particleSystem == nullptr)
 	{
@@ -669,13 +627,11 @@ int initGame()
 	Locator::provide(saveManager);
 #endif
     
+	wh_inputManager = new wh::InputManager();
 
-	loadParticleData(wh_saveFileSelection);
-	//initParticleData();
+	loadParticleData();
 	//initParticleSystem();
 	resetPhysics();
-
-	initDisplay();
 
 
 	// other
@@ -694,10 +650,11 @@ int termGame()
 	delete wh_particleSystem;
 	wh_particleSystem = nullptr;
 
-	Locator::getSaveManager()->saveData(wh_saveFileSelection);
-	//wh_saveManager->saveData(wh_saveFileSelection);
-	//delete wh_saveManager;
-	//wh_saveManager = nullptr;
+	Locator::getSaveManager()->saveData(wh_inputManager->getSaveFileSelection());
+	Locator::cleanup();
+
+	delete wh_inputManager;
+	wh_inputManager = nullptr;
 
 	// good practice to do this in reverse order of creation
 	//	in case something is referencing something else
@@ -737,56 +694,6 @@ void displayControls()
 }
 
 
-void setDisplaySelection(int selection, wh::ParameterOptions option)
-{
-	wh_displaySelection = selection;
-	wh_shouldDisplay = true;
-
-	wh_paramOption = option;
-	switch (wh_paramOption)
-	{
-	case wh::ParameterOptions::COLOR:
-	case wh::ParameterOptions::VELOCITY:
-		wh_paramSubobtion = wh::ParameterSuboptions::X;
-		break;
-	case wh::ParameterOptions::LIFESPAN:
-	case wh::ParameterOptions::MASS:
-		wh_paramSubobtion = wh::ParameterSuboptions::NONE;
-		break;
-	default:
-		break;
-	}
-}
-
-void setSuboption(wh::ParameterSuboptions suboption)
-{
-	bool isValidVec3 = (suboption == wh::ParameterSuboptions::X || suboption == wh::ParameterSuboptions::Y || suboption == wh::ParameterSuboptions::Z);
-	bool isValidVec4 = (isValidVec3 || suboption == wh::ParameterSuboptions::W);
-
-	switch (wh_paramOption)
-	{
-	case wh::ParameterOptions::COLOR:
-		if (isValidVec4)
-		{
-			wh_paramSubobtion = suboption;
-			wh_shouldDisplay = true;
-		}
-	case wh::ParameterOptions::VELOCITY:
-		if (isValidVec3)
-		{
-			wh_paramSubobtion = suboption;
-			wh_shouldDisplay = true;
-		}
-		break;
-	case wh::ParameterOptions::LIFESPAN:
-	case wh::ParameterOptions::MASS:
-		break;
-	default:
-		break;
-	}
-}
-
-
 
 // process input each frame
 void handleInputState()
@@ -815,178 +722,7 @@ void handleInputState()
 	//-----------------------------------------------------------------------------
 	// adjustable parameters
 	
-	if (egpKeyboardIsKeyDown(keybd, 'z'))
-	{
-		// save
-		if (egpKeyboardIsKeyPressed(keybd, '1'))
-			saveParticleData(1);
-		else if (egpKeyboardIsKeyPressed(keybd, '2'))
-			saveParticleData(2);
-		else if (egpKeyboardIsKeyPressed(keybd, '3'))
-			saveParticleData(3);
-		else if (egpKeyboardIsKeyPressed(keybd, '4'))
-			saveParticleData(4);
-	}
-	else if (egpKeyboardIsKeyDown(keybd, 'x'))
-	{
-		// load
-		if (egpKeyboardIsKeyPressed(keybd, '1'))
-			loadParticleData(1);
-		else if (egpKeyboardIsKeyPressed(keybd, '2'))
-			loadParticleData(2);
-		else if (egpKeyboardIsKeyPressed(keybd, '3'))
-			loadParticleData(3);
-		else if (egpKeyboardIsKeyPressed(keybd, '4'))
-			loadParticleData(4);
-	}
-	else
-	{
-		// select parameter to adjust
-		if (egpKeyboardIsKeyPressed(keybd, 'c'))
-			setDisplaySelection(0, wh::ParameterOptions::COLOR);
-		else if (egpKeyboardIsKeyPressed(keybd, 'v'))
-			setDisplaySelection(1, wh::ParameterOptions::VELOCITY);
-		else if (egpKeyboardIsKeyPressed(keybd, 'l'))
-			setDisplaySelection(2, wh::ParameterOptions::LIFESPAN);
-		else if (egpKeyboardIsKeyPressed(keybd, 'm'))
-			setDisplaySelection(3, wh::ParameterOptions::MASS);
-
-		// select parameter suboption
-		if (egpKeyboardIsKeyPressed(keybd, '1'))
-			setSuboption(wh::ParameterSuboptions::X);
-		else if (egpKeyboardIsKeyPressed(keybd, '2'))
-			setSuboption(wh::ParameterSuboptions::Y);
-		else if (egpKeyboardIsKeyPressed(keybd, '3'))
-			setSuboption(wh::ParameterSuboptions::Z);
-		else if (egpKeyboardIsKeyPressed(keybd, '4'))
-			setSuboption(wh::ParameterSuboptions::W);
-
-		// select delta
-		if (egpKeyboardIsKeyPressed(keybd, 'g'))
-		{
-			if (wh_paramType == wh::ParameterType::VALUE)
-			{
-				wh_paramType = wh::ParameterType::DELTA;
-			}
-			else
-			{
-				wh_paramType = wh::ParameterType::VALUE;
-			}
-
-			wh_shouldDisplay = true;
-		}
-	}
-
-
-	// display to console if need
-	if (wh_shouldDisplay)
-	{
-		wh_shouldDisplay = false;
-		std::cout << std::endl << wh_displayVect[wh_displaySelection] << 
-			(wh_paramOption == wh::ParameterOptions::COLOR ? 
-			(wh_paramType == wh::ParameterType::VALUE ? " start " : " end ") : 
-			(wh_paramType == wh::ParameterType::VALUE ? " value " : " delta ")) << ", ";
-
-		switch (wh_paramSubobtion)
-		{
-		case wh::ParameterSuboptions::NONE:
-			break;
-		case wh::ParameterSuboptions::X:
-			wh_paramOption == wh::ParameterOptions::VELOCITY ? std::cout << "x" : std::cout << "r";
-			break;
-		case wh::ParameterSuboptions::Y:
-			wh_paramOption == wh::ParameterOptions::VELOCITY ? std::cout << "y" : std::cout << "g";
-			break;
-		case wh::ParameterSuboptions::Z:
-			wh_paramOption == wh::ParameterOptions::VELOCITY ? std::cout << "z" : std::cout << "b";
-			break;
-		case wh::ParameterSuboptions::W:
-			wh_paramOption == wh::ParameterOptions::VELOCITY ? std::cout << "w" : std::cout << "a";
-			break;
-		default:
-			break;
-		}
-
-		std::cout << " ";
-	}
-
-	// handle adjustment of parameters
-	if (egpMouseIsButtonDown(mouse, 2))
-	{
-		if (wh_displaySelection == 0)
-		{
-			// color
-			float clampedDeltaX01 = scaleClamp(egpMouseX(mouse), 0.0f, win_w, 0.0f, 1.0f);
-			std::cout << clampedDeltaX01 << std::endl;
-
-			std::string colorVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "colorStart" : "colorEnd");
-			cbmath::vec4 color = Locator::getSaveManager()->getData<cbmath::vec4>(colorVarName);//wh_saveManager->getData<cbmath::vec4>(colorVarName);
-
-			switch (wh_paramSubobtion)
-			{
-			case wh::ParameterSuboptions::NONE:
-				break;
-			case wh::ParameterSuboptions::X:
-				Locator::getSaveManager()->setData<cbmath::vec4>(colorVarName, cbmath::v4x * clampedDeltaX01 + cbmath::v4y * color.y + cbmath::v4z * color.z + cbmath::v4w * color.w);
-				break;
-			case wh::ParameterSuboptions::Y:
-				Locator::getSaveManager()->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * clampedDeltaX01 + cbmath::v4z * color.z + cbmath::v4w * color.w);
-				break;
-			case wh::ParameterSuboptions::Z:
-				Locator::getSaveManager()->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * color.y + cbmath::v4z * clampedDeltaX01 + cbmath::v4w * color.w);
-				break;
-			case wh::ParameterSuboptions::W:
-				Locator::getSaveManager()->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * color.y + cbmath::v4z * color.z + cbmath::v4w * clampedDeltaX01);
-				break;
-			default:
-				break;
-			}
-		}
-		else if (wh_displaySelection == 1)
-		{
-			// velocity
-			float clampedDeltaXVel = scaleClamp(egpMouseX(mouse), 0.0f, win_w, -10.0f, 10.0f);
-			std::cout << clampedDeltaXVel << std::endl;
-
-			std::string velocityVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "velocityValue" : "velocityDelta");
-			cbmath::vec3 vel = Locator::getSaveManager()->getData<cbmath::vec3>(velocityVarName);
-
-			switch (wh_paramSubobtion)
-			{
-			case wh::ParameterSuboptions::NONE:
-				break;
-			case wh::ParameterSuboptions::X:
-				Locator::getSaveManager()->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * clampedDeltaXVel + cbmath::v3y * vel.y + cbmath::v3z * vel.z);
-				break;
-			case wh::ParameterSuboptions::Y:
-				Locator::getSaveManager()->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * vel.x + cbmath::v3y * clampedDeltaXVel + cbmath::v3z * vel.z);
-				break;
-			case wh::ParameterSuboptions::Z:
-				Locator::getSaveManager()->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * vel.x + cbmath::v3y * vel.y + cbmath::v3z * clampedDeltaXVel);
-				break;
-			default:
-				break;
-			}
-		}
-		else if (wh_displaySelection == 2)
-		{
-			// lifespan
-			float clampedDeltaXLife = scaleClamp(egpMouseX(mouse), 0.0f, win_w, 0.0f, 10.0f);
-			std::cout << clampedDeltaXLife << std::endl;
-
-			std::string lifespanVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "lifespanValue" : "lifespanDelta");
-			Locator::getSaveManager()->setData<float>(lifespanVarName, clampedDeltaXLife);
-		}
-		else if (wh_displaySelection == 3)
-		{
-			// mass
-			float clampedDeltaXMass = scaleClamp(egpMouseX(mouse), 0.0f, win_w, 0.0f, 100.0f);
-			std::cout << clampedDeltaXMass << std::endl;
-
-			std::string massVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "massValue" : "massDelta");
-			Locator::getSaveManager()->setData<float>(massVarName, clampedDeltaXMass);
-		}
-	}
+	wh_inputManager->update(keybd, mouse, win_w);
 
 
 

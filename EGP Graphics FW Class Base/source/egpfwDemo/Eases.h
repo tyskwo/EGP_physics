@@ -46,19 +46,19 @@ namespace TimingFunctions
     
     inline float QuadraticEaseOut(float t)
     {
-        return t * (2.0 - t);
+        return t * (2.0f - t);
     }
     
     inline float QuadraticEaseInOut(float t)
     {
-        if (t < 0.5)
+        if (t < 0.5f)
         {
-            return 2.0 * t * t;
+            return 2.0f * t * t;
         }
         else
         {
-            float f = t - 1.0;
-            return 1.0 - 2.0 * f * f;
+            float f = t - 1.0f;
+            return 1.0f - 2.0f * f * f;
         }
     }
     
@@ -69,20 +69,20 @@ namespace TimingFunctions
     
     inline float CubicEaseOut(float t)
     {
-        float f = t - 1.0;
-        return 1.0 + f * f * f;
+        float f = t - 1.0f;
+        return 1.0f + f * f * f;
     }
     
     inline float CubicEaseInOut(float t)
     {
-        if (t < 0.5)
+        if (t < 0.5f)
         {
-            return 4.0 * t * t * t;
+            return 4.0f * t * t * t;
         }
         else
         {
-            float f = t - 1.0;
-            return 1.0 + 4.0 * f * f * f;
+            float f = t - 1.0f;
+            return 1.0f + 4.0f * f * f * f;
         }
     }
     
@@ -93,20 +93,20 @@ namespace TimingFunctions
     
     inline float QuarticEaseOut(float t)
     {
-        float f = t - 1.0;
-        return 1.0 - f * f * f * f;
+        float f = t - 1.0f;
+        return 1.0f - f * f * f * f;
     }
     
     inline float QuarticEaseInOut(float t)
     {
-        if (t < 0.5)
+        if (t < 0.5f)
         {
-            return 8.0 * t * t * t * t;
+            return 8.0f * t * t * t * t;
         }
         else
         {
-            float f = t - 1.0;
-            return 1.0 - 8.0 * f * f * f * f;
+            float f = t - 1.0f;
+            return 1.0f - 8.0f * f * f * f * f;
         }
     }
     
@@ -117,94 +117,94 @@ namespace TimingFunctions
     
     inline float QuinticEaseOut(float t)
     {
-        float f = t - 1.0;
-        return 1.0 + f * f * f * f * f;
+        float f = t - 1.0f;
+        return 1.0f + f * f * f * f * f;
     }
     
     inline float QuinticEaseInOut(float t)
     {
-        if (t < 0.5)
+        if (t < 0.5f)
         {
-            return 16.0 * t * t * t * t * t;
+            return 16.0f * t * t * t * t * t;
         }
         else
         {
-            float f = t - 1.0;
-            return 1.0 + 16.0 * f * f * f * f * f;
+            float f = t - 1.0f;
+            return 1.0f + 16.0f * f * f * f * f * f;
         }
     }
     
     inline float SineEaseIn(float t)
     {
-        return sin((t - 1.0) * Pi()/2) + 1.0;
+        return sin((t - 1.0f) * Pi()/2.0f) + 1.0f;
     }
     
     inline float SineEaseOut(float t)
     {
-        return sin(t * Pi()/2);
+        return sin(t * Pi()/2.0f);
     }
     
     inline float SineEaseInOut(float t)
     {
-        return 0.5 * (1.0 - cos(t * Pi()));
+        return 0.5f * (1.0f - cos(t * Pi()));
     }
     
     inline float CircularEaseIn(float t)
     {
-        return 1.0 - sqrt(1.0 - t * t);
+        return 1.0f - sqrt(1.0f - t * t);
     }
     
     inline float CircularEaseOut(float t)
     {
-        return sqrt((2.0 - t) * t);
+        return sqrt((2.0f - t) * t);
     }
     
     inline float CircularEaseInOut(float t)
     {
-        if (t < 0.5)
+        if (t < 0.5f)
         {
-            return 0.5 * (1.0 - sqrt(1.0 - 4.0 * t * t));
+            return 0.5f * (1.0f - sqrt(1.0f - 4.0f * t * t));
         }
         else
         {
-            return 0.5 * sqrt(-4.0 * t * t + 8.0 * t - 3.0) + 0.5;
+            return 0.5f * sqrt(-4.0f * t * t + 8.0f * t - 3.0f) + 0.5f;
         }
     }
     
     inline float ExponentialEaseIn(float t)
     {
-        return (t == 0.0) ? t : pow(2.0, 10.0 * (t - 1.0));
+        return (t == 0.0f) ? t : pow(2.0f, 10.0f * (t - 1.0f));
     }
     
     inline float ExponentialEaseOut(float t)
     {
-        return (t == 1.0) ? t : 1.0 - pow(2.0, -10.0 * t);
+        return (t == 1.0f) ? t : 1.0f - pow(2.0f, -10.0f * t);
     }
     
     inline float ExponentialEaseInOut(float t)
     {
-        if (t == 0.0 || t == 1.0)
+        if (t == 0.0f || t == 1.0f)
         {
             return t;
         }
-        else if (t < 0.5)
+        else if (t < 0.5f)
         {
-            return 0.5 * pow(2.0, 20.0 * t - 10.0);
+            return 0.5f * pow(2.0f, 20.0f * t - 10.0f);
         }
         else
         {
-            return 1.0 - 0.5 * pow(2.0, -20.0 * t + 10.0);
+            return 1.0f - 0.5f * pow(2.0f, -20.0f * t + 10.0f);
         }
     }
     
     inline float Smoothstep(float t)
     {
-        return t * t * (3 - 2 * t);
+        return t * t * (3.0f - 2.0f * t);
     }
     
     inline float Smootherstep(float t)
     {
-        return 6 * pow(t, 5) - 15 * pow(t, 4) + 10 * pow(t, 3);
+        return 6.0f * pow(t, 5.0f) - 15.0f * pow(t, 4.0f) + 10.0f * pow(t, 3.0f);
     }
 }
 
