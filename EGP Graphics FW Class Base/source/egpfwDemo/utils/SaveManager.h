@@ -3,7 +3,7 @@
 //  egpfwDemo
 //
 //  Created by Wednesday-David Hartman on 2/8/17.
-//  Copyright � 2017 Dan Buckstein. All rights reserved.
+//  Copyright 2017 Dan Buckstein. All rights reserved.
 //
 
 #ifndef SAVEMANAGER_H

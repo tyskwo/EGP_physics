@@ -1,5 +1,5 @@
-//  David Hartman 0923439
-//  Ty Wood       0901793
+//  Wednesday-David Hartman 0923439
+//  Ty Wood					0901793
 //
 //  EGP 425.01
 //  Simple Particle Engine
