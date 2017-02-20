@@ -11,7 +11,11 @@
 
 
 
-
+//things left to do:
+//   path controlled vs static vs player movable particle system
+//   add drag to particles
+//   edit emission type
+//   edit ease of lifetime types
 
 
 
