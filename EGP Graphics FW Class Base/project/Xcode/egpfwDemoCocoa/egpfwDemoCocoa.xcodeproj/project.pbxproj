@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		200400CC1E4BEBD3002D1E12 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 200400CB1E4BEBD3002D1E12 /* Utils.cpp */; };
-		200400DA1E4C171F002D1E12 /* data.txt in Resources */ = {isa = PBXBuildFile; fileRef = 200400D71E4C171F002D1E12 /* data.txt */; };
 		200400DB1E4C171F002D1E12 /* SaveManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 200400D81E4C171F002D1E12 /* SaveManager.cpp */; };
 		20256B391E478F7000B3DC6C /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20256B371E478F7000B3DC6C /* Particle.cpp */; };
 		20256B3C1E478F8F00B3DC6C /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20256B3A1E478F8F00B3DC6C /* ParticleSystem.cpp */; };
@@ -71,7 +70,6 @@
 		200400C81E4BCDE9002D1E12 /* Eases.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Eases.h; path = ../../../source/egpfwDemo/Eases.h; sourceTree = "<group>"; };
 		200400CA1E4BCE1D002D1E12 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = ../../../source/egpfwDemo/Utils.h; sourceTree = "<group>"; };
 		200400CB1E4BEBD3002D1E12 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Utils.cpp; path = ../../../source/egpfwDemo/Utils.cpp; sourceTree = "<group>"; };
-		200400D71E4C171F002D1E12 /* data.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = data.txt; path = ../../../source/egpfwDemo/utils/data.txt; sourceTree = "<group>"; };
 		200400D81E4C171F002D1E12 /* SaveManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SaveManager.cpp; path = ../../../source/egpfwDemo/utils/SaveManager.cpp; sourceTree = "<group>"; };
 		200400D91E4C171F002D1E12 /* SaveManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SaveManager.h; path = ../../../source/egpfwDemo/utils/SaveManager.h; sourceTree = "<group>"; };
 		20256B371E478F7000B3DC6C /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Particle.cpp; path = ../../../source/egpfwDemo/particledomain/Particle.cpp; sourceTree = "<group>"; };
@@ -381,7 +379,6 @@
 		BBF58EF31E3D53C000AD1858 /* egpfwDemo */ = {
 			isa = PBXGroup;
 			children = (
-				200400D71E4C171F002D1E12 /* data.txt */,
 				20BB239B1E56822000B97833 /* dataBackup.txt */,
 				200400C81E4BCDE9002D1E12 /* Eases.h */,
 				200400CA1E4BCE1D002D1E12 /* Utils.h */,
@@ -473,7 +470,6 @@
 				20A007D81E48EA7700B80C3C /* stone_hm.png in Resources */,
 				20A007C71E48EA7700B80C3C /* sphere32x24.obj in Resources */,
 				20A007CB1E48EA7700B80C3C /* sky_clouds.png in Resources */,
-				200400DA1E4C171F002D1E12 /* data.txt in Resources */,
 				20A007D61E48EA7700B80C3C /* moon_nm_2k.png in Resources */,
 				20A007C81E48EA7700B80C3C /* sphere8x6.obj in Resources */,
 				20A007D41E48EA7700B80C3C /* mars_nm_2k.png in Resources */,
