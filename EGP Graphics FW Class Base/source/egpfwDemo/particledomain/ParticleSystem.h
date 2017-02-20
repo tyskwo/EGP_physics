@@ -97,6 +97,9 @@ public:
     inline Particle::Data         getParticleData()	{ return m_particleData; }
     inline std::vector<Particle*> getParticles()	{ return m_particles;    }
     
+    // getter for what type of emitter we are using
+    inline bool isContinuous()    { return m_emitter.m_mode == Emitter::Continuous; }
+    
     
     
     // called every frame
