@@ -9,6 +9,8 @@
 #ifndef SAVEMANAGER_H
 #define SAVEMANAGER_H
 
+#define NUM_SAVE_FILES 4
+
 #include <string>
 #include <map>
 #include <stdlib.h>
@@ -36,16 +38,18 @@ private:
 
 	std::string m_dataFilePath;
 
+	int m_dataFileSelected;
+
 public:
 	enum DataType { Invalid = -1, Vec3, Vec4, Float, Bool, Char };
 
 	SaveManager(std::string dataFilePath);
 	~SaveManager();
 
-	void loadData();
-	void saveData();
+	void loadData(int dataFileSelected);
+	void saveData(int dataFileSelected);
     
-    Particle::Data prepareData();
+    Particle::Data prepareData(int dataFileSelected);
 
 
 	// getData functions

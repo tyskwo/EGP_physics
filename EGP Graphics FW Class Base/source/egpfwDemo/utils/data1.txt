@@ -1,0 +1,32 @@
+vec3
+velocityDelta
+-5.48438 0 2.14063
+
+vec3
+velocityValue
+-1.76563 -10 2.14063
+
+vec4
+colorEnd
+1 0 0.454688 0.1
+
+vec4
+colorStart
+0.5 1 0 1
+
+float
+lifespanDelta
+0.078125
+
+float
+lifespanValue
+1.57031
+
+float
+massDelta
+0.859375
+
+float
+massValue
+0.625
+

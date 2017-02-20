@@ -195,6 +195,7 @@ bool wh_shouldDisplay = false;
 wh::ParameterOptions wh_paramOption = wh::ParameterOptions::COLOR;
 wh::ParameterSuboptions wh_paramSubobtion = wh::ParameterSuboptions::NONE;
 wh::ParameterType wh_paramType = wh::ParameterType::VALUE;
+int wh_saveFileSelection = 1;
 
 // SaveManager
 SaveManager *wh_saveManager;
@@ -226,9 +227,23 @@ void initDisplay()
 	wh_displaySelection = 0;
 }
 
+void saveParticleData(int dataFileSelection)
+{
+	wh_saveFileSelection = dataFileSelection;
+	wh_saveManager->saveData(wh_saveFileSelection);
+	std::cout << "saved current data to file " << wh_saveFileSelection << std::endl;
+}
+
+void loadParticleData(int dataFileSelection)
+{
+	wh_saveFileSelection = dataFileSelection;
+	wh_saveManager->loadData(wh_saveFileSelection);
+	std::cout << "loaded data from file " << wh_saveFileSelection << std::endl;
+}
+
 void initParticleData()
 {
-    Particle::Data particle = wh_saveManager->prepareData();
+    Particle::Data particle = wh_saveManager->prepareData(wh_saveFileSelection);
 	
 	if (wh_particleSystem == nullptr)
 	{
@@ -635,13 +650,13 @@ int initGame()
 
 	// physics
 #ifdef _WIN32
-	wh_saveManager = new SaveManager("..\\..\\..\\..\\source\\egpfwDemo\\utils\\data.txt");
+	wh_saveManager = new SaveManager("..\\..\\..\\..\\source\\egpfwDemo\\utils\\");
 #else
-	wh_saveManager = new SaveManager("../../../../../../../../source/egpfwDemo/utils/data.txt");
+	wh_saveManager = new SaveManager("../../../../../../../../source/egpfwDemo/utils/");
 #endif
     
 
-	wh_saveManager->loadData();
+	loadParticleData(wh_saveFileSelection);
 	//initParticleData();
 	//initParticleSystem();
 	resetPhysics();
@@ -662,7 +677,7 @@ int initGame()
 int termGame()
 {
 	// TODO: CLEANUP PARTICLE STUFF ****
-	wh_saveManager->saveData();
+	wh_saveManager->saveData(wh_saveFileSelection);
 
 	// good practice to do this in reverse order of creation
 	//	in case something is referencing something else
@@ -690,9 +705,12 @@ void displayControls()
 
 	printf("\n y = reset physics");
 
+	printf("\n\n hold z + 1, 2, 3, 4 = save data to one of the data files");
+	printf("\n hold x + 1, 2, 3, 4 = load data to one of the data files");
+
 	printf("\n\n c, v, l, m = edit color, velocity, lifespan, or mass");
 	printf("\n 1, 2, 3, 4 = choose xyzw or rgba when applicable");
-	printf("\n z = toggle between editing parameter delta or value");
+	printf("\n g = toggle between editing parameter delta or value");
 	printf("\n click and drag RMB = adjust selected parameter");
 
 	printf("\n-------------------------------------------------------\n");
@@ -788,56 +806,68 @@ void handleInputState()
 	//-----------------------------------------------------------------------------
 	// adjustable parameters
 
-	// select parameter to adjust
-	if (egpKeyboardIsKeyPressed(keybd, 'c'))
+	if (egpKeyboardIsKeyDown(keybd, 'z'))
 	{
-		setDisplaySelection(0, wh::ParameterOptions::COLOR);
+		// save
+		if (egpKeyboardIsKeyPressed(keybd, '1'))
+			saveParticleData(1);
+		else if (egpKeyboardIsKeyPressed(keybd, '2'))
+			saveParticleData(2);
+		else if (egpKeyboardIsKeyPressed(keybd, '3'))
+			saveParticleData(3);
+		else if (egpKeyboardIsKeyPressed(keybd, '4'))
+			saveParticleData(4);
 	}
-	else if (egpKeyboardIsKeyPressed(keybd, 'v'))
+	else if (egpKeyboardIsKeyDown(keybd, 'x'))
 	{
-		setDisplaySelection(1, wh::ParameterOptions::VELOCITY);
+		// load
+		if (egpKeyboardIsKeyPressed(keybd, '1'))
+			loadParticleData(1);
+		else if (egpKeyboardIsKeyPressed(keybd, '2'))
+			loadParticleData(2);
+		else if (egpKeyboardIsKeyPressed(keybd, '3'))
+			loadParticleData(3);
+		else if (egpKeyboardIsKeyPressed(keybd, '4'))
+			loadParticleData(4);
 	}
-	else if (egpKeyboardIsKeyPressed(keybd, 'l'))
+	else
 	{
-		setDisplaySelection(2, wh::ParameterOptions::LIFESPAN);
-	}
-	else if (egpKeyboardIsKeyPressed(keybd, 'm'))
-	{
-		setDisplaySelection(3, wh::ParameterOptions::MASS);
-	}
+		// select parameter to adjust
+		if (egpKeyboardIsKeyPressed(keybd, 'c'))
+			setDisplaySelection(0, wh::ParameterOptions::COLOR);
+		else if (egpKeyboardIsKeyPressed(keybd, 'v'))
+			setDisplaySelection(1, wh::ParameterOptions::VELOCITY);
+		else if (egpKeyboardIsKeyPressed(keybd, 'l'))
+			setDisplaySelection(2, wh::ParameterOptions::LIFESPAN);
+		else if (egpKeyboardIsKeyPressed(keybd, 'm'))
+			setDisplaySelection(3, wh::ParameterOptions::MASS);
 
-	// select parameter suboption
-	if (egpKeyboardIsKeyPressed(keybd, '1'))
-	{
-		setSuboption(wh::ParameterSuboptions::X);
-	}
-	else if (egpKeyboardIsKeyPressed(keybd, '2'))
-	{
-		setSuboption(wh::ParameterSuboptions::Y);
-	}
-	else if (egpKeyboardIsKeyPressed(keybd, '3'))
-	{
-		setSuboption(wh::ParameterSuboptions::Z);
-	}
-	else if (egpKeyboardIsKeyPressed(keybd, '4'))
-	{
-		setSuboption(wh::ParameterSuboptions::W);
-	}
+		// select parameter suboption
+		if (egpKeyboardIsKeyPressed(keybd, '1'))
+			setSuboption(wh::ParameterSuboptions::X);
+		else if (egpKeyboardIsKeyPressed(keybd, '2'))
+			setSuboption(wh::ParameterSuboptions::Y);
+		else if (egpKeyboardIsKeyPressed(keybd, '3'))
+			setSuboption(wh::ParameterSuboptions::Z);
+		else if (egpKeyboardIsKeyPressed(keybd, '4'))
+			setSuboption(wh::ParameterSuboptions::W);
 
-	// select delta
-	if (egpKeyboardIsKeyPressed(keybd, 'z'))
-	{
-		if (wh_paramType == wh::ParameterType::VALUE)
+		// select delta
+		if (egpKeyboardIsKeyPressed(keybd, 'g'))
 		{
-			wh_paramType = wh::ParameterType::DELTA;
-		}
-		else
-		{
-			wh_paramType = wh::ParameterType::VALUE;
-		}
+			if (wh_paramType == wh::ParameterType::VALUE)
+			{
+				wh_paramType = wh::ParameterType::DELTA;
+			}
+			else
+			{
+				wh_paramType = wh::ParameterType::VALUE;
+			}
 
-		wh_shouldDisplay = true;
+			wh_shouldDisplay = true;
+		}
 	}
+
 
 	// display to console if need
 	if (wh_shouldDisplay)

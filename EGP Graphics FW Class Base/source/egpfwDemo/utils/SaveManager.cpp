@@ -13,7 +13,7 @@
 #include <sstream>
 
 SaveManager::SaveManager(std::string dataFilePath)
-:m_dataFilePath(dataFilePath)
+:m_dataFilePath(dataFilePath), m_dataFileSelected(1)
 {
 }
 
@@ -27,15 +27,19 @@ SaveManager::~SaveManager()
 //-----------------------------------------------------------------------------
 // data loading and parsing
 
-void SaveManager::loadData()
+void SaveManager::loadData(int dataFileSelected)
 {
 	// read data type
 	// read in variable values based on type
 	// assign values to a Particle::Data struct
+	m_dataFileSelected = dataFileSelected;
 
 	std::ifstream ifs;
 
-	ifs.open(m_dataFilePath);
+	std::stringstream filePath;
+	filePath << m_dataFilePath << "data" << m_dataFileSelected << ".txt";
+
+	ifs.open(filePath.str());
 	if (ifs.is_open())
 	{
 		std::string line;
@@ -64,15 +68,18 @@ void SaveManager::loadData()
 			}
 			else if (type == "float")
 			{
-				m_mapFloat.insert(std::pair<std::string, float>(name, static_cast<float>(atof(data.c_str()))));
+				m_mapFloat[name] = atof(data.c_str());
+				//m_mapFloat.insert(std::pair<std::string, float>(name, static_cast<float>(atof(data.c_str()))));
 			}
 			else if (type == "bool")
 			{
-				m_mapBool.insert(std::pair<std::string, bool>(name, data == "0" ? false : true));
+				m_mapBool[name] = data == "0" ? false : true;
+				//m_mapBool.insert(std::pair<std::string, bool>(name, data == "0" ? false : true));
 			}
 			else if (type == "char")
 			{
-				m_mapChar.insert(std::pair<std::string, char>(name, data[0]));
+				m_mapChar[name] = data[0];
+				//m_mapChar.insert(std::pair<std::string, char>(name, data[0]));
 			}
 		}
 	}
@@ -108,7 +115,8 @@ void SaveManager::parseVec3(std::string name, std::string data)
 
 	// assign the data values to an actual vec3
 	cbmath::vec3 vec = cbmath::vec3(vec3values[0], vec3values[1], vec3values[2]);
-	m_mapVec3.insert(std::pair<std::string, cbmath::vec3>(name, vec));
+	m_mapVec3[name] = vec;
+	//m_mapVec3.insert(std::pair<std::string, cbmath::vec3>(name, vec));
 }
 
 void SaveManager::parseVec4(std::string name, std::string data)
@@ -136,13 +144,19 @@ void SaveManager::parseVec4(std::string name, std::string data)
 
 	// assign the data values to an actual vec4
 	cbmath::vec4 vec = cbmath::vec4(vec4values[0], vec4values[1], vec4values[2], vec4values[3]);
-	m_mapVec4.insert(std::pair<std::string, cbmath::vec4>(name, vec));
+	m_mapVec4[name] = vec;
+	//m_mapVec4.insert(std::pair<std::string, cbmath::vec4>(name, vec));
 }
 
 
 
-Particle::Data SaveManager::prepareData()
+Particle::Data SaveManager::prepareData(int dataFileSelected)
 {
+	if (m_dataFileSelected != dataFileSelected)
+	{
+		loadData(dataFileSelected);
+	}
+
     float lifespanValue, lifespanDelta;
     float massValue, massDelta;
     cbmath::vec3 velocityValue, velocityDelta;
@@ -177,11 +191,22 @@ Particle::Data SaveManager::prepareData()
 //-----------------------------------------------------------------------------
 // saving data
 
-void SaveManager::saveData()
+void SaveManager::saveData(int dataFileSelected)
 {
+	m_dataFileSelected = dataFileSelected;
+
 	std::ofstream ofs;
 
-	ofs.open(m_dataFilePath);
+	if (dataFileSelected > NUM_SAVE_FILES)
+	{
+		return;
+	}
+
+
+	std::stringstream filePath;
+	filePath << m_dataFilePath << "data" << m_dataFileSelected << ".txt";
+
+	ofs.open(filePath.str());
 	if (ofs.is_open())
 	{
 		writeData(ofs, DataType::Vec3);
