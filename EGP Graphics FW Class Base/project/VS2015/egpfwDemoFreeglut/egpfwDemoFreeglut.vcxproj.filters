@@ -107,6 +107,12 @@
     <ClCompile Include="..\..\..\source\egpfwDemo\gphysics\Spring.cpp">
       <Filter>Source Files\egpfwDemo\gphysics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\egpfwDemo\utils\InputManager.cpp">
+      <Filter>Source Files\egpfwDemo\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\egpfwDemo\utils\Locator.cpp">
+      <Filter>Source Files\egpfwDemo\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\egpfwDemo\egpfwDemo.h">
@@ -146,6 +152,9 @@
       <Filter>Source Files\egpfwDemo\gphysics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\source\egpfwDemo\utils\InputManager.h">
+      <Filter>Source Files\egpfwDemo\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\egpfwDemo\utils\Locator.h">
       <Filter>Source Files\egpfwDemo\utils</Filter>
     </ClInclude>
   </ItemGroup>

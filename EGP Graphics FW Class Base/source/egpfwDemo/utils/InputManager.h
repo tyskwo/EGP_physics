@@ -18,7 +18,11 @@
 #define __INPUTMANAGER_H
 
 
+#include <vector>
+#include <string>
 
+class egpKeyboard;
+class egpMouse;
 
 // a namespace for handling keyboard input parameter changes
 // written by: Wednesday-David
@@ -63,11 +67,26 @@ namespace wh
 	private:
 		void prepareForSave(int dataFileSelection);
 		void prepareForLoad(int dataFileSelection);
+
+		void setParameterOption(ParameterOptions option);
+		void setParameterSuboption(ParameterSuboptions suboption);
 		
+		void handleKeyboardInput(egpKeyboard *keybd);
+		void handleMouseInput(egpMouse *mouse, int windowWidth);
+
+		void display();
+
+		float scaleClamp(float value, float min, float max, float min2, float max2);
+
+
+		std::vector<std::string> m_displayOptions;
+		int m_currentDisplayIndex;
+
 		AdjustableParameter m_currentParameterSettings;
 
 		bool m_saveFlag;
 		bool m_loadFlag;
+		bool m_displayFlag;
 
 		int m_dataFileSelection;
 
@@ -78,10 +97,10 @@ namespace wh
 		inline void cleanSaveFlag() { m_saveFlag = false; };
 		inline void cleanLoadFlag() { m_loadFlag = false; };
 
-		inline int getSaveFileSelection() const { return m_saveFileSelection; };
+		inline int getSaveFileSelection() const { return m_dataFileSelection; };
 
 
-		void update(egpKeyboard *keybd);
+		void update(egpKeyboard *keybd, egpMouse *mouse, int windowWidth);
 	};
 }
 

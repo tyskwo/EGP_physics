@@ -64,12 +64,14 @@
     #include "particledomain\ParticleSystem.h"
 	#include "utils\SaveManager.h"
 	#include "utils\InputManager.h"
+	#include "utils\Locator.h"
 #else
     #include <string>
     #include "Mover.h"
     #include "ParticleSystem.h"
 	#include "SaveManager.h"
 	#include "InputManager.h"
+	#include "Locator.h"
 #endif
 
 
@@ -206,7 +208,8 @@ wh::ParameterType wh_paramType = wh::ParameterType::VALUE;
 int wh_saveFileSelection = 1;
 
 // SaveManager
-SaveManager *wh_saveManager;
+wh::InputManager *wh_inputManager;
+// SaveManager *wh_saveManager;
 
 // movables
 ParticleSystem *wh_particleSystem;
@@ -237,20 +240,22 @@ void initDisplay()
 void saveParticleData(int dataFileSelection)
 {
 	wh_saveFileSelection = dataFileSelection;
-	wh_saveManager->saveData(wh_saveFileSelection);
+	Locator::getSaveManager()->saveData(wh_saveFileSelection);
+	//wh_saveManager->saveData(wh_saveFileSelection);
 	std::cout << "saved current data to file " << wh_saveFileSelection << std::endl;
 }
 
 void loadParticleData(int dataFileSelection)
 {
 	wh_saveFileSelection = dataFileSelection;
-	wh_saveManager->loadData(wh_saveFileSelection);
+	Locator::getSaveManager()->loadData(wh_saveFileSelection);
+	//wh_saveManager->loadData(wh_saveFileSelection);
 	std::cout << "loaded data from file " << wh_saveFileSelection << std::endl;
 }
 
 void initParticleData()
 {
-    Particle::Data particle = wh_saveManager->prepareData(wh_saveFileSelection);
+    Particle::Data particle = Locator::getSaveManager()->prepareData(wh_saveFileSelection);//wh_saveManager->prepareData(wh_saveFileSelection);
 	
 	if (wh_particleSystem == nullptr)
 	{
@@ -657,9 +662,11 @@ int initGame()
 
 	// physics
 #ifdef _WIN32
-	wh_saveManager = new SaveManager("..\\..\\..\\..\\source\\egpfwDemo\\utils\\");
+	SaveManager *saveManager = new SaveManager("..\\..\\..\\..\\source\\egpfwDemo\\utils\\");
+	Locator::provide(saveManager);
 #else
-	wh_saveManager = new SaveManager("../../../../../../../../source/egpfwDemo/utils/");
+	SaveManager *saveManager = new SaveManager("../../../../../../../../source/egpfwDemo/utils/");
+	Locator::provide(saveManager);
 #endif
     
 
@@ -687,9 +694,10 @@ int termGame()
 	delete wh_particleSystem;
 	wh_particleSystem = nullptr;
 
-	wh_saveManager->saveData(wh_saveFileSelection);
-	delete wh_saveManager;
-	wh_saveManager = nullptr;
+	Locator::getSaveManager()->saveData(wh_saveFileSelection);
+	//wh_saveManager->saveData(wh_saveFileSelection);
+	//delete wh_saveManager;
+	//wh_saveManager = nullptr;
 
 	// good practice to do this in reverse order of creation
 	//	in case something is referencing something else
@@ -912,23 +920,23 @@ void handleInputState()
 			std::cout << clampedDeltaX01 << std::endl;
 
 			std::string colorVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "colorStart" : "colorEnd");
-			cbmath::vec4 color = wh_saveManager->getData<cbmath::vec4>(colorVarName);
+			cbmath::vec4 color = Locator::getSaveManager()->getData<cbmath::vec4>(colorVarName);//wh_saveManager->getData<cbmath::vec4>(colorVarName);
 
 			switch (wh_paramSubobtion)
 			{
 			case wh::ParameterSuboptions::NONE:
 				break;
 			case wh::ParameterSuboptions::X:
-				wh_saveManager->setData<cbmath::vec4>(colorVarName, cbmath::v4x * clampedDeltaX01 + cbmath::v4y * color.y + cbmath::v4z * color.z + cbmath::v4w * color.w);
+				Locator::getSaveManager()->setData<cbmath::vec4>(colorVarName, cbmath::v4x * clampedDeltaX01 + cbmath::v4y * color.y + cbmath::v4z * color.z + cbmath::v4w * color.w);
 				break;
 			case wh::ParameterSuboptions::Y:
-				wh_saveManager->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * clampedDeltaX01 + cbmath::v4z * color.z + cbmath::v4w * color.w);
+				Locator::getSaveManager()->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * clampedDeltaX01 + cbmath::v4z * color.z + cbmath::v4w * color.w);
 				break;
 			case wh::ParameterSuboptions::Z:
-				wh_saveManager->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * color.y + cbmath::v4z * clampedDeltaX01 + cbmath::v4w * color.w);
+				Locator::getSaveManager()->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * color.y + cbmath::v4z * clampedDeltaX01 + cbmath::v4w * color.w);
 				break;
 			case wh::ParameterSuboptions::W:
-				wh_saveManager->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * color.y + cbmath::v4z * color.z + cbmath::v4w * clampedDeltaX01);
+				Locator::getSaveManager()->setData<cbmath::vec4>(colorVarName, cbmath::v4x * color.x + cbmath::v4y * color.y + cbmath::v4z * color.z + cbmath::v4w * clampedDeltaX01);
 				break;
 			default:
 				break;
@@ -941,20 +949,20 @@ void handleInputState()
 			std::cout << clampedDeltaXVel << std::endl;
 
 			std::string velocityVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "velocityValue" : "velocityDelta");
-			cbmath::vec3 vel = wh_saveManager->getData<cbmath::vec3>(velocityVarName);
+			cbmath::vec3 vel = Locator::getSaveManager()->getData<cbmath::vec3>(velocityVarName);
 
 			switch (wh_paramSubobtion)
 			{
 			case wh::ParameterSuboptions::NONE:
 				break;
 			case wh::ParameterSuboptions::X:
-				wh_saveManager->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * clampedDeltaXVel + cbmath::v3y * vel.y + cbmath::v3z * vel.z);
+				Locator::getSaveManager()->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * clampedDeltaXVel + cbmath::v3y * vel.y + cbmath::v3z * vel.z);
 				break;
 			case wh::ParameterSuboptions::Y:
-				wh_saveManager->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * vel.x + cbmath::v3y * clampedDeltaXVel + cbmath::v3z * vel.z);
+				Locator::getSaveManager()->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * vel.x + cbmath::v3y * clampedDeltaXVel + cbmath::v3z * vel.z);
 				break;
 			case wh::ParameterSuboptions::Z:
-				wh_saveManager->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * vel.x + cbmath::v3y * vel.y + cbmath::v3z * clampedDeltaXVel);
+				Locator::getSaveManager()->setData<cbmath::vec3>(velocityVarName, cbmath::v3x * vel.x + cbmath::v3y * vel.y + cbmath::v3z * clampedDeltaXVel);
 				break;
 			default:
 				break;
@@ -967,7 +975,7 @@ void handleInputState()
 			std::cout << clampedDeltaXLife << std::endl;
 
 			std::string lifespanVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "lifespanValue" : "lifespanDelta");
-			wh_saveManager->setData<float>(lifespanVarName, clampedDeltaXLife);
+			Locator::getSaveManager()->setData<float>(lifespanVarName, clampedDeltaXLife);
 		}
 		else if (wh_displaySelection == 3)
 		{
@@ -976,7 +984,7 @@ void handleInputState()
 			std::cout << clampedDeltaXMass << std::endl;
 
 			std::string massVarName = ((wh_paramType == wh::ParameterType::VALUE) ? "massValue" : "massDelta");
-			wh_saveManager->setData<float>(massVarName, clampedDeltaXMass);
+			Locator::getSaveManager()->setData<float>(massVarName, clampedDeltaXMass);
 		}
 	}
 

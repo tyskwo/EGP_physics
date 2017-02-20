@@ -329,6 +329,8 @@
     <ClCompile Include="..\..\..\source\egpfwDemo\particledomain\ParticleSystem.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\Shader.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\Utils.cpp" />
+    <ClCompile Include="..\..\..\source\egpfwDemo\utils\InputManager.cpp" />
+    <ClCompile Include="..\..\..\source\egpfwDemo\utils\Locator.cpp" />
     <ClCompile Include="..\..\..\source\egpfwDemo\utils\SaveManager.cpp" />
     <ClCompile Include="egpfwDemoFreeglut\egpDemoFreeglutMain.cpp" />
   </ItemGroup>
@@ -344,6 +346,7 @@
     <ClInclude Include="..\..\..\source\egpfwDemo\Shader.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\Utils.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\utils\InputManager.h" />
+    <ClInclude Include="..\..\..\source\egpfwDemo\utils\Locator.h" />
     <ClInclude Include="..\..\..\source\egpfwDemo\utils\SaveManager.h" />
     <ClInclude Include="egpfwDemoFreeglut\resource.h" />
   </ItemGroup>

@@ -1,10 +1,10 @@
 vec3
 velocityDelta
--10 10 10
+0.0625 0.0625 0.0625
 
 vec3
 velocityValue
--10 0.4375 -10
+-1.04688 0.0625 0.0625
 
 vec4
 colorEnd
@@ -12,7 +12,7 @@ colorEnd
 
 vec4
 colorStart
-0.5 0 0 1
+0 1 0 1
 
 float
 lifespanDelta
