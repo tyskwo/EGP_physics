@@ -12,6 +12,8 @@
 
 
 
+
+
 #include "Particle.h"
 #include <stdlib.h>
 
@@ -28,42 +30,48 @@
 
 
 
+
 Particle::Particle() {}
 
 
 
+
+// initialize given a data to model
+// written by: Ty
 Particle::Particle(Data data)
 {
+    // instantiate a mover
 	m_mover = new Mover();
 
     // set the physics values
     m_mover->position = data.position;
-    
     m_mover->velocity = data.velocity.init();
-
 	m_mover->setMass(data.mass.init());
     
-    
+    // set the color
     this->m_color = data.color;
     
-    
     // set the lifespan values
-    this->m_lifespan = data.lifespan.init();
+    this->m_lifespan    = data.lifespan.init();
     this->m_currentLife = 0.0f;
     
     // this particle is now alive
     this->m_isActive = true;
+    
     
 	m_springInitialized = false;
 }
 
 
 
-
+// called ever frame
+// written by: Ty
 void Particle::update(const float dt)
 {
+    // if this particle is alive...
     if(m_isActive)
     {
+        // update our position
         this->m_mover->updateMoverDisplacement(dt);
 		
 		//if (this->m_mover->m_spring != nullptr)
@@ -86,27 +94,45 @@ void Particle::update(const float dt)
 		//	}
 		//}
 		
+        
+        
+        // perform basic collision with a given restitution
 		this->m_mover->clampMoverToGround(0.0f, 0.8f);
         
+        
+        
+        // add to our age
         m_currentLife += dt;
         
+        
+        // if we're alive longer than our lifespan
         if(m_currentLife > m_lifespan)
         {
+            // kill us
             m_isActive = false;
             return;
         }
     
+        //lerp our color
         m_color.current = m_color.lerp(m_currentLife / m_lifespan);
     }
 }
 
 
 
+
+
+// called when the game wants us to render
+// written by: Ty
 void Particle::render(cbmath::mat4 viewProjMatrix, cbmath::vec4 cameraPos)
 {
+    // if this particle is alive...
     if(m_isActive)
     {
+        // update our graphics position
 		this->m_mover->updateMoverGraphics();
+        
+        // and render the model
         this->m_model->renderAt(viewProjMatrix * this->m_mover->modelMatrix, cameraPos, m_color.current);
     }
 }

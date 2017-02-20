@@ -12,8 +12,12 @@
 
 
 
+
+
 #ifndef ParticleSystem_h
 #define ParticleSystem_h
+
+
 
 
 
@@ -30,9 +34,15 @@
 
 
 
+
+
+// a class that holds the logic of spawning and destroying a system of particles
+// written by: Ty
 class ParticleSystem
 {
+    
 public:
+    
 	// struct to hold emission data
 	struct Emitter
 	{
@@ -47,6 +57,7 @@ public:
 		cbmath::vec3 m_emitDirection;
 	};
     
+    
 private:
     
     // the particle this system will be emitting
@@ -58,11 +69,16 @@ private:
     // the mover this particle system uses
     Mover *m_mover;
     
+    // the emitter this particle system uses
     Emitter m_emitter;
+    
+    
+    
     
  
 public:
     
+    // initializers
     ParticleSystem();
     ParticleSystem(Particle::Data particleData,
                    Emitter::Mode  mode           = Emitter::Mode::Burst,
@@ -70,18 +86,34 @@ public:
                    cbmath::vec3   emitDirection  = cbmath::vec3(0.0f,1.0f,0.0f),
                    int            numberToEmit   = 100);
 
+    
+    
+    // function that sets the particle data
 	void setParticleData(Particle::Data data);
 
-    inline Particle::Data         getParticleData()						{ return m_particleData; }
-    inline std::vector<Particle*> getParticles()						{ return m_particles;    }
     
+    
+    // getters for the particle data and the particles we are responsible for
+    inline Particle::Data         getParticleData()	{ return m_particleData; }
+    inline std::vector<Particle*> getParticles()	{ return m_particles;    }
+    
+    
+    
+    // called every frame
     void update(const float dt);
     
+    
+    
+    // called when we're suppose to create new particles
     void emit(Model* model);
     
-    void render(cbmath::mat4 viewProjMatrix, cbmath::vec4 cameraPos);
     
+    
+    // called when the game wants us on screen
+    void render(cbmath::mat4 viewProjMatrix, cbmath::vec4 cameraPos);
 };
+
+
 
 
 
