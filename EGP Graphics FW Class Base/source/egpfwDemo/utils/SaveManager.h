@@ -47,6 +47,7 @@ private:
 public:
 	enum DataType { Invalid = -1, Vec3, Vec4, Float, Int, Bool, Char };
 
+	// constructor and destructor
 	SaveManager(std::string dataFilePath);
 	~SaveManager();
 
@@ -55,6 +56,7 @@ public:
 	// saves data to the specified file
 	void saveData(int dataFileSelected);
     
+	// format the data from the current data file into a Particle::Data structure
     Particle::Data prepareData(int dataFileSelected);
 
 

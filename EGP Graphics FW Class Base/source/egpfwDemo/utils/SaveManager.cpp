@@ -12,11 +12,15 @@
 #include <fstream>
 #include <sstream>
 
+// initialize SaveManager
+// written by: Wednesday-David
 SaveManager::SaveManager(std::string dataFilePath)
 :m_dataFilePath(dataFilePath), m_dataFileSelected(1)
 {
 }
 
+// make sure every file is up-to-date during cleanup
+// written by: Wednesday-David
 SaveManager::~SaveManager()
 {
 	for (int i = 0; i < NUM_SAVE_FILES; i++)
@@ -30,13 +34,12 @@ SaveManager::~SaveManager()
 
 
 //-----------------------------------------------------------------------------
-// data loading and parsing
+// loading data
 
+// load data from the specified data file into the data maps
+// written by: Wednesday-David
 void SaveManager::loadData(int dataFileSelected)
 {
-	// read data type
-	// read in variable values based on type
-	// assign values to a Particle::Data struct
 	m_dataFileSelected = dataFileSelected;
 
 	std::ifstream ifs;
@@ -54,6 +57,7 @@ void SaveManager::loadData(int dataFileSelected)
 		std::string data;
 		std::string empty;
 
+		// while the endoffile has not been reached
 		while (getline(ifs, line))
 		{
 			// read in type, name, and data as strings
@@ -64,32 +68,17 @@ void SaveManager::loadData(int dataFileSelected)
 			
 			// parse data based on type
 			if (type == "vec3")
-			{
 				parseVec3(name, data);
-			}
 			else if (type == "vec4")
-			{
 				parseVec4(name, data);
-			}
 			else if (type == "float")
-			{
 				m_mapFloat[name] = std::stof(data.c_str());
-				//m_mapFloat.insert(std::pair<std::string, float>(name, static_cast<float>(atof(data.c_str()))));
-			}
 			else if (type == "int")
-			{
 				m_mapInt[name] = atoi(data.c_str());
-			}
 			else if (type == "bool")
-			{
 				m_mapBool[name] = data == "0" ? false : true;
-				//m_mapBool.insert(std::pair<std::string, bool>(name, data == "0" ? false : true));
-			}
 			else if (type == "char")
-			{
 				m_mapChar[name] = data[0];
-				//m_mapChar.insert(std::pair<std::string, char>(name, data[0]));
-			}
 		}
 	}
 	else
@@ -99,16 +88,20 @@ void SaveManager::loadData(int dataFileSelected)
 	ifs.close();
 }
 
+// parse a string into a vec3
+// written by: Wednesday-David
 void SaveManager::parseVec3(std::string name, std::string data)
 {	
 	float vec3values[3] = { 0, 0, 0 };
 	int j = 0;
 	std::stringstream sstream;
+
 	// iterate through the data string to get the actual values
 	for (unsigned int i = 0; i < data.size(); i++)
 	{
 		if (data[i] != ' ')
 		{
+			// if current char isn't a space, add it to the stringstream
 			sstream << data[i];
 		}
 
@@ -118,6 +111,7 @@ void SaveManager::parseVec3(std::string name, std::string data)
 			vec3values[j] = static_cast<float>(atof(sstream.str().c_str()));
 			j++;
 
+			// clear the stringstream
 			sstream.str("");
 		}
 	}
@@ -125,19 +119,22 @@ void SaveManager::parseVec3(std::string name, std::string data)
 	// assign the data values to an actual vec3
 	cbmath::vec3 vec = cbmath::vec3(vec3values[0], vec3values[1], vec3values[2]);
 	m_mapVec3[name] = vec;
-	//m_mapVec3.insert(std::pair<std::string, cbmath::vec3>(name, vec));
 }
 
+// parse a string into a vec4
+// written by: Wednesday-David
 void SaveManager::parseVec4(std::string name, std::string data)
 {
 	float vec4values[4] = { 0, 0, 0, 0 };
 	int j = 0;
 	std::stringstream sstream;
+
 	// iterate through the data string to get the actual values
 	for (unsigned int i = 0; i < data.size(); i++)
 	{
 		if (data[i] != ' ')
 		{
+			// if current char isn't a space, add it to the stringstream
 			sstream << data[i];
 		}
 
@@ -147,6 +144,7 @@ void SaveManager::parseVec4(std::string name, std::string data)
 			vec4values[j] = static_cast<float>(atof(sstream.str().c_str()));
 			j++;
 
+			// clear the stringstream
 			sstream.str("");
 		}
 	}
@@ -154,11 +152,13 @@ void SaveManager::parseVec4(std::string name, std::string data)
 	// assign the data values to an actual vec4
 	cbmath::vec4 vec = cbmath::vec4(vec4values[0], vec4values[1], vec4values[2], vec4values[3]);
 	m_mapVec4[name] = vec;
-	//m_mapVec4.insert(std::pair<std::string, cbmath::vec4>(name, vec));
 }
 
 
 
+
+// format the data from the current data file into a Particle::Data struct
+// written by: Ty and Wednesday-David
 Particle::Data SaveManager::prepareData(int dataFileSelected)
 {
 	if (m_dataFileSelected != dataFileSelected)
@@ -200,17 +200,19 @@ Particle::Data SaveManager::prepareData(int dataFileSelected)
 //-----------------------------------------------------------------------------
 // saving data
 
+// write the data from the maps to the specified data file
+// written by: Ty and Wednesday-David
 void SaveManager::saveData(int dataFileSelected)
 {
 	m_dataFileSelected = dataFileSelected;
 
 	std::ofstream ofs;
 
+	// make sure the specified file number is valid
 	if (dataFileSelected > NUM_SAVE_FILES)
 	{
 		return;
 	}
-
 
 	std::stringstream filePath;
 	filePath << m_dataFilePath << "data" << m_dataFileSelected << ".txt";
@@ -234,6 +236,8 @@ void SaveManager::saveData(int dataFileSelected)
 //-----------------------------------------------------------------------------
 // getData template functions
 
+// get the value of a variable from the corresponding map
+// written by: Wednesday-David
 template <typename T>
 T SaveManager::getData(std::string name)
 {
@@ -283,6 +287,8 @@ char SaveManager::getData<char>(std::string name)
 //-----------------------------------------------------------------------------
 // setData template functions
 
+// set the value of a variable in the corresponding map
+// written by: Wednesday-David
 template <typename T>
 void SaveManager::setData(std::string name, T data)
 {
@@ -330,6 +336,8 @@ void SaveManager::setData<char>(std::string name, char data)
 //-----------------------------------------------------------------------------
 // writeData function
 
+// write all of the values of a certain map to the current data file
+// written by: Wednesday-David
 void SaveManager::writeData(std::ofstream& ofs, DataType type)
 {
 	if (type == DataType::Vec3)
