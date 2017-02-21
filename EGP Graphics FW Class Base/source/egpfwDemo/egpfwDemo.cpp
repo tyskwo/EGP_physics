@@ -12,9 +12,6 @@
 
 
 //things left to do:
-
-//   add drag to particles
-
 //   edit ease of lifetime types
 
 
