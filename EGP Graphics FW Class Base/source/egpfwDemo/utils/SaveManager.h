@@ -33,9 +33,10 @@ private:
 	// maps containing the save data
 	std::map<std::string, cbmath::vec3> m_mapVec3;
 	std::map<std::string, cbmath::vec4> m_mapVec4;
-	std::map<std::string, float> m_mapFloat;
-	std::map<std::string, bool> m_mapBool;
-	std::map<std::string, char> m_mapChar;
+	std::map<std::string, float>		m_mapFloat;
+	std::map<std::string, int>			m_mapInt;
+	std::map<std::string, bool>			m_mapBool;
+	std::map<std::string, char>			m_mapChar;
 
 	// path to the folder containing the data files
 	std::string m_dataFilePath;
@@ -44,7 +45,7 @@ private:
 	int m_dataFileSelected;
 
 public:
-	enum DataType { Invalid = -1, Vec3, Vec4, Float, Bool, Char };
+	enum DataType { Invalid = -1, Vec3, Vec4, Float, Int, Bool, Char };
 
 	SaveManager(std::string dataFilePath);
 	~SaveManager();

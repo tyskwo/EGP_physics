@@ -168,9 +168,4 @@
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\..\source\egpfwDemo\utils\data.txt">
-      <Filter>Source Files\egpfwDemo\utils</Filter>
-    </Text>
-  </ItemGroup>
 </Project>

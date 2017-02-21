@@ -23,6 +23,8 @@
 
 //	 fix warnings in geometry.h
 
+//	 comment InputManager, SaveManager, and Locator
+
 
 
 
