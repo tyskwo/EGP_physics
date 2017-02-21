@@ -85,6 +85,7 @@ namespace wh
 		AdjustableParameter m_currentParameterSettings;
 
 		bool m_displayFlag;
+        bool m_isPathControlled = false;
 
 		int m_dataFileSelection;
 
@@ -93,7 +94,7 @@ namespace wh
 		~InputManager();
 
 		inline int getSaveFileSelection() const { return m_dataFileSelection; };
-
+        inline bool isPathControlled() const { return m_isPathControlled; };
 
 		void update(egpKeyboard *keybd, egpMouse *mouse, int windowWidth);
 	};

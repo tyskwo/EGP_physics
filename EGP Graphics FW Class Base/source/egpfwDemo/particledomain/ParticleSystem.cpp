@@ -87,7 +87,7 @@ void ParticleSystem::setParticleData(Particle::Data data)
 
 
 
-// called to change the position of the emitter
+// called to change the position of the emitter, relative
 // written by: Ty
 void ParticleSystem::updatePositionDelta(cbmath::vec3 delta)
 {
@@ -95,6 +95,18 @@ void ParticleSystem::updatePositionDelta(cbmath::vec3 delta)
     m_mover->updateMoverGraphics();
     
     m_particleData.position += delta;
+}
+
+
+
+// called to change the position of the emitter, absolute
+// written by: Ty
+void ParticleSystem::updatePositionAbsolute(cbmath::vec3 position)
+{
+    m_mover->position = position;
+    m_mover->updateMoverGraphics();
+    
+    m_particleData.position = position;
 }
 
 
