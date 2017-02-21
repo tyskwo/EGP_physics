@@ -61,6 +61,18 @@ void ParticleSystem::setParticleData(Particle::Data data)
 
 
 
+// called to change the position of the emitter
+// written by: Ty
+void ParticleSystem::updatePositionDelta(cbmath::vec3 delta)
+{
+    m_mover->position += delta;
+    m_mover->updateMoverGraphics();
+    
+    m_particleData.position += delta;
+}
+
+
+
 // called every frame
 // written by: Ty
 void ParticleSystem::update(const float dt)
