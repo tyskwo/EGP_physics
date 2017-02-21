@@ -115,6 +115,23 @@ void wh::InputManager::handleKeyboardInput(egpKeyboard *keybd)
     {
         m_isPathControlled = !m_isPathControlled;
     }
+
+	if (egpKeyboardIsKeyPressed(keybd, '['))
+	{
+		SaveManager* sm = Locator::getSaveManager();
+		int numToEmit = sm->getData<int>("numberToEmit");
+		int newNum = cbmath::clamp(numToEmit - 1, 0, 600);
+		sm->setData<int>("numberToEmit", newNum);
+		std::cout << std::endl << "number to emit: " << newNum << std::endl;
+	}
+	else if (egpKeyboardIsKeyPressed(keybd, ']'))
+	{
+		SaveManager* sm = Locator::getSaveManager();
+		int numToEmit = sm->getData<int>("numberToEmit");
+		int newNum = cbmath::clamp(numToEmit + 1, 0, 600);
+		sm->setData<int>("numberToEmit", newNum);
+		std::cout << std::endl << "number to emit: " << newNum << std::endl;
+	}
     
     
 	if (egpKeyboardIsKeyDown(keybd, 'z'))

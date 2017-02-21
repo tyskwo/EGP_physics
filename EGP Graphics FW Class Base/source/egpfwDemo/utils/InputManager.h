@@ -98,7 +98,7 @@ namespace wh
 
 		void update(egpKeyboard *keybd, egpMouse *mouse, int windowWidth);
 	};
-}
+};
 
 
 

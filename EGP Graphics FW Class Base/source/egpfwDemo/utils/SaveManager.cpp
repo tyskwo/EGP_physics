@@ -21,6 +21,7 @@ SaveManager::~SaveManager()
 {
 	for (int i = 0; i < NUM_SAVE_FILES; i++)
 	{
+		loadData(i + 1);
 		saveData(i + 1);
 	}
 }
