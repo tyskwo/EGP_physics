@@ -13,17 +13,13 @@
 
 //things left to do:
 
-//   path controlled
-
 //   add drag to particles
 
 //   edit emission type
 //   edit number to emit
 //   edit ease of lifetime types
 
-//	 fix warnings in geometry.h
-
-//	 comment InputManager, SaveManager, and Locator
+//	 comment InputManager, SaveManager
 
 
 
