@@ -1,3 +1,20 @@
+//  Wednesday-David Hartman 0923439
+//  Ty Wood					0901793
+//
+//  EGP 425.01
+//  Simple Particle Engine
+//  17.02.05
+//
+//  We certify that this work is entirely our own.
+//  The assessor of this project may reproduce this project and provide copies to other academic staff,
+//  and/or communicate a copy of this project to a plagiarism-checking service,
+//  which may retain a copy of the project on its database.
+
+// written by: Wednesday-David
+
+
+
+
 #include "InputManager.h"
 
 #include <iostream>
@@ -19,45 +36,75 @@
 
 
 
-
+// constructor
+// written by: Wednesday-David
 wh::InputManager::InputManager()
-:m_dataFileSelection(1), m_currentDisplayOption(wh::ParameterOptions::COLOR)
+:m_dataFileSelection(1),
+ m_currentDisplayOption(wh::ParameterOptions::COLOR)
 {
-	m_displayOptions[wh::ParameterOptions::COLOR] = "color";
+    // initialize display strings
+	m_displayOptions[wh::ParameterOptions::COLOR]    = "color";
 	m_displayOptions[wh::ParameterOptions::VELOCITY] = "velocity";
 	m_displayOptions[wh::ParameterOptions::LIFESPAN] = "lifespan";
-	m_displayOptions[wh::ParameterOptions::MASS] = "mass";
+	m_displayOptions[wh::ParameterOptions::MASS]     = "mass";
 
+    // set current editable parameter
 	m_currentParameterSettings = { wh::ParameterOptions::COLOR, wh::ParameterSuboptions::X, wh::ParameterType::VALUE };
 }
 
-wh::InputManager::~InputManager()
-{
-}
+wh::InputManager::~InputManager() {}
 
 
 
+
+
+// called to save current data to file
+// written by: Wednesday-David
 void wh::InputManager::initiateSave(int dataFileSelection)
 {
+    // get the current file name
 	m_dataFileSelection = dataFileSelection;
+    
+    // save data
 	Locator::getSaveManager()->saveData(m_dataFileSelection);
+    
+    // output to console
 	std::cout << "saved current data to file " << m_dataFileSelection << std::endl;
 }
 
+
+
+
+
+// called to load data from a given file
+// written by: Wednesday-David
 void wh::InputManager::initiateLoad(int dataFileSelection)
 {
+    // get the file name
 	m_dataFileSelection = dataFileSelection;
+    
+    // load data
 	Locator::getSaveManager()->loadData(m_dataFileSelection);
+    
+    // output to console
 	std::cout << "loaded data from file " << m_dataFileSelection << std::endl;
 }
 
 
 
+
+
+// set what parameter we are currently editing
+// written by: Wednesday-David
 void wh::InputManager::setParameterOption(wh::ParameterOptions option)
 {
+    // set the option
 	m_currentDisplayOption = option;
+    
+    // we should update the console since we're switching parameters
 	m_displayFlag = true;
 
+    // switch the display string to the right string
 	m_currentParameterSettings.m_parameterOption = option;
 	switch (m_currentParameterSettings.m_parameterOption)
 	{
@@ -74,30 +121,45 @@ void wh::InputManager::setParameterOption(wh::ParameterOptions option)
 	}
 }
 
+
+
+
+
+// set what parameter suboption we are currently editing
+// written by: Wednesday-David
 void wh::InputManager::setParameterSuboption(wh::ParameterSuboptions suboption)
 {
+    // flags for if we're editing a vector
 	bool isValidVec3 = (suboption == wh::ParameterSuboptions::X || suboption == wh::ParameterSuboptions::Y || suboption == wh::ParameterSuboptions::Z);
 	bool isValidVec4 = (isValidVec3 || suboption == wh::ParameterSuboptions::W);
 
+    // switch through the available suboptions
 	switch (m_currentParameterSettings.m_parameterOption)
 	{
+            
 	case wh::ParameterOptions::COLOR:
+            
 		if (isValidVec4)
 		{
 			m_currentParameterSettings.m_parameterSuboption = suboption;
 			m_displayFlag = true;
 		}
 		break;
+            
 	case wh::ParameterOptions::VELOCITY:
+            
 		if (isValidVec3)
 		{
 			m_currentParameterSettings.m_parameterSuboption = suboption;
 			m_displayFlag = true;
 		}
 		break;
+            
+    // lifetime and mass values don't have any suboptions
 	case wh::ParameterOptions::LIFESPAN:
 	case wh::ParameterOptions::MASS:
 		break;
+            
 	default:
 		break;
 	}
@@ -105,11 +167,17 @@ void wh::InputManager::setParameterSuboption(wh::ParameterSuboptions suboption)
 
 
 
+
+
+// update with given keyboard and mouse
+// written by: Wednesday-David
 void wh::InputManager::update(egpKeyboard *keybd, egpMouse *mouse, int windowWidth)
 {
+    // handle input
 	handleKeyboardInput(keybd);
 	handleMouseInput(mouse, windowWidth);
 
+    // if we should update the display...
 	if (m_displayFlag)
 	{
 		m_displayFlag = false;
@@ -117,6 +185,12 @@ void wh::InputManager::update(egpKeyboard *keybd, egpMouse *mouse, int windowWid
 	}
 }
 
+
+
+
+
+// self explanatory
+// written by: Wednesday-David
 void wh::InputManager::handleKeyboardInput(egpKeyboard *keybd)
 {
 	// adjust if path-controlled or not
@@ -216,6 +290,12 @@ void wh::InputManager::handleKeyboardInput(egpKeyboard *keybd)
 	}
 }
 
+
+
+
+
+// self-explanatory
+// written by: Wednesday-David
 void wh::InputManager::handleMouseInput(egpMouse *mouse, int windowWidth)
 {
 	// handle adjustment of parameters
@@ -318,6 +398,10 @@ void wh::InputManager::handleMouseInput(egpMouse *mouse, int windowWidth)
 
 
 
+
+
+// display to the console
+// written by: Wednesday-David
 void wh::InputManager::display()
 {
 	std::cout << std::endl << m_displayOptions[m_currentDisplayOption] <<
@@ -350,6 +434,10 @@ void wh::InputManager::display()
 
 
 
+
+
+// clamp values
+// written by: Wednesday-David
 float wh::InputManager::scaleClamp(float value, float min, float max, float min2, float max2)
 {
 	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
@@ -362,6 +450,12 @@ float wh::InputManager::scaleClamp(float value, float min, float max, float min2
 	return value > max2 ? value : max2;
 }
 
+
+
+
+
+// clamp values
+// written by: Wednesday-David
 int wh::InputManager::scaleClamp(int value, int min, int max, int min2, int max2)
 {
 	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
