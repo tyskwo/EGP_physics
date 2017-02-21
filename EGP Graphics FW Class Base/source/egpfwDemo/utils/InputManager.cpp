@@ -47,6 +47,7 @@ wh::InputManager::InputManager()
 	m_displayOptions[wh::ParameterOptions::VELOCITY] = "velocity";
 	m_displayOptions[wh::ParameterOptions::LIFESPAN] = "lifespan";
 	m_displayOptions[wh::ParameterOptions::MASS]     = "mass";
+    m_displayOptions[wh::ParameterOptions::EASE]     = "ease";
 
     // set current editable parameter
 	m_currentParameterSettings = { wh::ParameterOptions::COLOR, wh::ParameterSuboptions::X, wh::ParameterType::VALUE };
@@ -224,7 +225,7 @@ void wh::InputManager::handleKeyboardInput(egpKeyboard *keybd)
 	{
 		SaveManager* sm = Locator::getSaveManager();
 		int numToEmit = sm->getData<int>("numberToEmit") + (shouldIncreaseNumberToEmit ? 1 : -1);
-		int numToEmitClamped = cbmath::clamp(numToEmit, 0, 100);
+		int numToEmitClamped = cbmath::clamp(numToEmit, 1, 500);
 		sm->setData<int>("numberToEmit", numToEmitClamped);
 		std::cout << std::endl << "number to emit: " << numToEmitClamped << std::endl;
 	}
@@ -266,7 +267,9 @@ void wh::InputManager::handleKeyboardInput(egpKeyboard *keybd)
 			setParameterOption(wh::ParameterOptions::LIFESPAN);
 		else if (egpKeyboardIsKeyPressed(keybd, 'm'))
 			setParameterOption(wh::ParameterOptions::MASS);
-
+        else if (egpKeyboardIsKeyPressed(keybd, 'k'))
+            setParameterOption(wh::ParameterOptions::EASE);
+        
 		// select parameter suboption
 		if (egpKeyboardIsKeyPressed(keybd, '1'))
 			setParameterSuboption(wh::ParameterSuboptions::X);
@@ -326,9 +329,24 @@ void wh::InputManager::handleMouseInput(egpMouse *mouse, int windowWidth)
 		default:
 			break;
 		}
-
-		float clampedDeltaX = Utils::scaleClamp((float)egpMouseX(mouse), 0.0f, (float)windowWidth, clampMin, clampMax);
-		std::cout << clampedDeltaX;
+        
+        
+        int   clampedDeltaXInt = 0;
+        float clampedDeltaX    = 0.0f;
+        
+        if (m_currentParameterSettings.m_parameterOption == wh::ParameterOptions::EASE)
+        {
+            clampMin = 1;
+            clampMax = 25;
+            
+            clampedDeltaXInt = Utils::scaleClamp((float)egpMouseX(mouse), 0.0f, (float)windowWidth, clampMin, clampMax);
+            std::cout << clampedDeltaXInt << "\n";
+        }
+        else
+        {
+            clampedDeltaX = Utils::scaleClamp((float)egpMouseX(mouse), 0.0f, (float)windowWidth, clampMin, clampMax);
+            std::cout << clampedDeltaX << "\n";
+        }
 
 
 		// adjusted the selected parameter
@@ -393,6 +411,12 @@ void wh::InputManager::handleMouseInput(egpMouse *mouse, int windowWidth)
 			std::string massVarName = ((m_currentParameterSettings.m_parameterType == wh::ParameterType::VALUE) ? "massValue" : "massDelta");
 			Locator::getSaveManager()->setData<float>(massVarName, clampedDeltaX);
 		}
+        else if (m_currentDisplayOption == wh::ParameterOptions::EASE)
+        {
+            // ease
+            std::string easeVarName = "easeValue";
+            Locator::getSaveManager()->setData<int>(easeVarName, clampedDeltaXInt);
+        }
 	}
 }
 

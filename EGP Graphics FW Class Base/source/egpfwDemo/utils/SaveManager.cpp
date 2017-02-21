@@ -170,6 +170,7 @@ Particle::Data SaveManager::prepareData(int dataFileSelected)
     float massValue, massDelta;
     cbmath::vec3 velocityValue, velocityDelta;
     cbmath::vec4 colorStart, colorEnd;
+    int easeType;
     
     lifespanValue = m_mapFloat["lifespanValue"];
     lifespanDelta = m_mapFloat["lifespanDelta"];
@@ -179,6 +180,7 @@ Particle::Data SaveManager::prepareData(int dataFileSelected)
     velocityDelta = m_mapVec3["velocityDelta"];
     colorStart    = m_mapVec4["colorStart"];
     colorEnd      = m_mapVec4["colorEnd"];
+    easeType      = m_mapInt["easeValue"];
     
     
     Particle::Data particle;
@@ -188,7 +190,7 @@ Particle::Data SaveManager::prepareData(int dataFileSelected)
     
     particle.velocity = Particle::DeltaType<cbmath::vec3>{ velocityValue, velocityDelta, true };
     
-    particle.color = Particle::LifetimeType<cbmath::vec4>{ colorStart, colorEnd, TimingFunctions::CircularEaseOut };
+    particle.color = Particle::LifetimeType<cbmath::vec4>{ colorStart, colorEnd, TimingFunctions::getEase(easeType) };
     
     
     return particle;

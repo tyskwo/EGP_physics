@@ -49,7 +49,8 @@ namespace wh
 		COLOR = 0,
 		VELOCITY,
 		LIFESPAN,
-		MASS
+		MASS,
+        EASE
 	};
 
     

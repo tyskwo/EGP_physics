@@ -206,6 +206,47 @@ namespace TimingFunctions
     {
         return 6.0f * pow(t, 5.0f) - 15.0f * pow(t, 4.0f) + 10.0f * pow(t, 3.0f);
     }
+    
+    
+    // returns an easetype given an int
+    // written by: Ty
+    typedef float (*TimingFunc)(float);
+    inline TimingFunc getEase(int enumInt)
+    {
+        TimingFunc returnValue = Linear;
+        
+        switch(enumInt)
+        {
+            case  1: returnValue = Linear;               break;
+            case  2: returnValue = QuadraticEaseIn;      break;
+            case  3: returnValue = QuadraticEaseOut;     break;
+            case  4: returnValue = QuadraticEaseInOut;   break;
+            case  5: returnValue = CubicEaseIn;          break;
+            case  6: returnValue = CubicEaseOut;         break;
+            case  7: returnValue = CubicEaseInOut;       break;
+            case  8: returnValue = QuarticEaseIn;        break;
+            case  9: returnValue = QuarticEaseOut;       break;
+            case 10: returnValue = QuarticEaseInOut;     break;
+            case 11: returnValue = QuinticEaseIn;        break;
+            case 12: returnValue = QuinticEaseOut;       break;
+            case 13: returnValue = QuinticEaseInOut;     break;
+            case 14: returnValue = SineEaseIn;           break;
+            case 15: returnValue = SineEaseOut;          break;
+            case 16: returnValue = SineEaseInOut;        break;
+            case 17: returnValue = CircularEaseIn;       break;
+            case 18: returnValue = CircularEaseOut;      break;
+            case 19: returnValue = CircularEaseInOut;    break;
+            case 20: returnValue = ExponentialEaseIn;    break;
+            case 21: returnValue = ExponentialEaseOut;   break;
+            case 22: returnValue = ExponentialEaseInOut; break;
+            case 23: returnValue = Smoothstep;           break;
+            case 24: returnValue = Smootherstep;         break;
+        }
+        
+        printf("%i\n", enumInt);
+        
+        return returnValue;
+    }
 }
 
 
