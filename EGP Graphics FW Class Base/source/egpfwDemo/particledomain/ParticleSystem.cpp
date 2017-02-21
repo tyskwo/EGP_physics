@@ -48,7 +48,7 @@ ParticleSystem::ParticleSystem(Particle::Data particleData,
     // set up our emitter
     this->m_emitter.m_mode          = mode;
     this->m_emitter.m_emitDirection = emitDirection;
-    this->m_emitter.m_numberToEmit  = numberToEmit;
+    this->m_emitter.m_numberToEmit	= Locator::getSaveManager()->getData<int>("numberToEmit");
 }
 
 
@@ -75,7 +75,7 @@ ParticleSystem::~ParticleSystem()
 
 
 // set the particle data to a new Particle::Data
-// written by: Ty
+// written by: Ty and Wednesday-David
 void ParticleSystem::setParticleData(Particle::Data data)
 {
 	m_emitter.m_mode = static_cast<Emitter::Mode>(Locator::getSaveManager()->getData<int>("emissionMode"));

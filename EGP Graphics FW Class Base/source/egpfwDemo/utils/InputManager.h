@@ -18,6 +18,7 @@
 #define __INPUTMANAGER_H
 
 
+#include <map>
 #include <vector>
 #include <string>
 
@@ -77,10 +78,12 @@ namespace wh
 		void display();
 
 		float scaleClamp(float value, float min, float max, float min2, float max2);
+		int scaleClamp(int value, int min, int max, int min2, int max2);
 
 
-		std::vector<std::string> m_displayOptions;
-		int m_currentDisplayIndex;
+		std::map<ParameterOptions, std::string> m_displayOptions;
+		//std::vector<std::string> m_displayOptions;
+		ParameterOptions m_currentDisplayOption;
 
 		AdjustableParameter m_currentParameterSettings;
 

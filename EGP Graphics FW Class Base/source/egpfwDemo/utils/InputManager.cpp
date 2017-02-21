@@ -12,14 +12,15 @@
 
 #include "Locator.h"
 #include "SaveManager.h"
+#include "..\particledomain\ParticleSystem.h"
 
 wh::InputManager::InputManager()
-:m_dataFileSelection(1), m_currentDisplayIndex(0)
+:m_dataFileSelection(1), m_currentDisplayOption(wh::ParameterOptions::COLOR)
 {
-	m_displayOptions.push_back("color");
-	m_displayOptions.push_back("velocity");
-	m_displayOptions.push_back("lifespan");
-	m_displayOptions.push_back("mass");
+	m_displayOptions[wh::ParameterOptions::COLOR] = "color";
+	m_displayOptions[wh::ParameterOptions::VELOCITY] = "velocity";
+	m_displayOptions[wh::ParameterOptions::LIFESPAN] = "lifespan";
+	m_displayOptions[wh::ParameterOptions::MASS] = "mass";
 
 	m_currentParameterSettings = { wh::ParameterOptions::COLOR, wh::ParameterSuboptions::X, wh::ParameterType::VALUE };
 }
@@ -48,7 +49,7 @@ void wh::InputManager::initiateLoad(int dataFileSelection)
 
 void wh::InputManager::setParameterOption(wh::ParameterOptions option)
 {
-	m_currentDisplayIndex = (int)option;
+	m_currentDisplayOption = option;
 	m_displayFlag = true;
 
 	m_currentParameterSettings.m_parameterOption = option;
@@ -80,6 +81,7 @@ void wh::InputManager::setParameterSuboption(wh::ParameterSuboptions suboption)
 			m_currentParameterSettings.m_parameterSuboption = suboption;
 			m_displayFlag = true;
 		}
+		break;
 	case wh::ParameterOptions::VELOCITY:
 		if (isValidVec3)
 		{
@@ -111,29 +113,44 @@ void wh::InputManager::update(egpKeyboard *keybd, egpMouse *mouse, int windowWid
 
 void wh::InputManager::handleKeyboardInput(egpKeyboard *keybd)
 {
-    if (egpKeyboardIsKeyReleased(keybd, '='))
+	// adjust if path-controlled or not
+    if (egpKeyboardIsKeyPressed(keybd, 'j'))
     {
         m_isPathControlled = !m_isPathControlled;
+		std::cout << std::endl << "EMITTER MOVEMENT: " << (m_isPathControlled ? "PATH-CONTROLLED" : "USER CONTROLLED") << std::endl;
     }
+	
 
-	if (egpKeyboardIsKeyPressed(keybd, '['))
+	// adjust emission mode
+	if (egpKeyboardIsKeyPressed(keybd, 'h'))
 	{
-		SaveManager* sm = Locator::getSaveManager();
-		int numToEmit = sm->getData<int>("numberToEmit");
-		int newNum = cbmath::clamp(numToEmit - 1, 0, 600);
-		sm->setData<int>("numberToEmit", newNum);
-		std::cout << std::endl << "number to emit: " << newNum << std::endl;
+		if (static_cast<ParticleSystem::Emitter::Mode>(Locator::getSaveManager()->getData<int>("emissionMode")) == ParticleSystem::Emitter::Burst)
+		{
+			Locator::getSaveManager()->setData<int>("emissionMode", ParticleSystem::Emitter::Continuous);
+			std::cout << std::endl << "EMITTER MODE: CONTINUOUS" << std::endl;
+		}
+		else
+		{
+			Locator::getSaveManager()->setData<int>("emissionMode", ParticleSystem::Emitter::Burst);
+			std::cout << std::endl << "EMITTER MODE: BURST" << std::endl;
+		}
 	}
-	else if (egpKeyboardIsKeyPressed(keybd, ']'))
+
+
+	// adjust number to emit
+	bool shouldDecreaseNumberToEmit = egpKeyboardIsKeyDown(keybd, '[');
+	bool shouldIncreaseNumberToEmit = egpKeyboardIsKeyDown(keybd, ']');
+	if (shouldDecreaseNumberToEmit || shouldIncreaseNumberToEmit)
 	{
 		SaveManager* sm = Locator::getSaveManager();
-		int numToEmit = sm->getData<int>("numberToEmit");
-		int newNum = cbmath::clamp(numToEmit + 1, 0, 600);
-		sm->setData<int>("numberToEmit", newNum);
-		std::cout << std::endl << "number to emit: " << newNum << std::endl;
+		int numToEmit = sm->getData<int>("numberToEmit") + (shouldIncreaseNumberToEmit ? 1 : -1);
+		int numToEmitClamped = cbmath::clamp(numToEmit, 0, 100);
+		sm->setData<int>("numberToEmit", numToEmitClamped);
+		std::cout << std::endl << "number to emit: " << numToEmitClamped << std::endl;
 	}
     
     
+	// adjust parameters
 	if (egpKeyboardIsKeyDown(keybd, 'z'))
 	{
 		// save
@@ -229,7 +246,7 @@ void wh::InputManager::handleMouseInput(egpMouse *mouse, int windowWidth)
 
 
 		// adjusted the selected parameter
-		if (m_currentDisplayIndex == 0)
+		if (m_currentDisplayOption == wh::ParameterOptions::COLOR)
 		{
 			// color
 			std::string colorVarName = ((m_currentParameterSettings.m_parameterType == wh::ParameterType::VALUE) ? "colorStart" : "colorEnd");
@@ -255,7 +272,7 @@ void wh::InputManager::handleMouseInput(egpMouse *mouse, int windowWidth)
 				break;
 			}
 		}
-		else if (m_currentDisplayIndex == 1)
+		else if (m_currentDisplayOption == wh::ParameterOptions::VELOCITY)
 		{
 			// velocity
 			std::string velocityVarName = ((m_currentParameterSettings.m_parameterType == wh::ParameterType::VALUE) ? "velocityValue" : "velocityDelta");
@@ -278,13 +295,13 @@ void wh::InputManager::handleMouseInput(egpMouse *mouse, int windowWidth)
 				break;
 			}
 		}
-		else if (m_currentDisplayIndex == 2)
+		else if (m_currentDisplayOption == wh::ParameterOptions::LIFESPAN)
 		{
 			// lifespan
 			std::string lifespanVarName = ((m_currentParameterSettings.m_parameterType == wh::ParameterType::VALUE) ? "lifespanValue" : "lifespanDelta");
 			Locator::getSaveManager()->setData<float>(lifespanVarName, clampedDeltaX);
 		}
-		else if (m_currentDisplayIndex == 3)
+		else if (m_currentDisplayOption == wh::ParameterOptions::MASS)
 		{
 			// mass
 			std::string massVarName = ((m_currentParameterSettings.m_parameterType == wh::ParameterType::VALUE) ? "massValue" : "massDelta");
@@ -297,7 +314,7 @@ void wh::InputManager::handleMouseInput(egpMouse *mouse, int windowWidth)
 
 void wh::InputManager::display()
 {
-	std::cout << std::endl << m_displayOptions[m_currentDisplayIndex] <<
+	std::cout << std::endl << m_displayOptions[m_currentDisplayOption] <<
 		(m_currentParameterSettings.m_parameterOption == wh::ParameterOptions::COLOR ?
 		(m_currentParameterSettings.m_parameterType == wh::ParameterType::VALUE ? " start " : " end ") :
 		(m_currentParameterSettings.m_parameterType == wh::ParameterType::VALUE ? " value " : " delta ")) << ", ";
@@ -328,6 +345,18 @@ void wh::InputManager::display()
 
 
 float wh::InputManager::scaleClamp(float value, float min, float max, float min2, float max2)
+{
+	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
+	if (max2 > min2)
+	{
+		value = value < max2 ? value : max2;
+		return value > min2 ? value : min2;
+	}
+	value = value < min2 ? value : min2;
+	return value > max2 ? value : max2;
+}
+
+int wh::InputManager::scaleClamp(int value, int min, int max, int min2, int max2)
 {
 	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
 	if (max2 > min2)

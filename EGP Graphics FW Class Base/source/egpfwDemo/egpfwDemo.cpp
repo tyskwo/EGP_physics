@@ -219,7 +219,7 @@ void initParticleData()
 	
 	if (wh_particleSystem == nullptr)
 	{
-		wh_particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Continuous, cbmath::v3y * 2.0f, cbmath::v3y, 5);
+		wh_particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 5);
 	}
 	else
 	{
@@ -626,7 +626,7 @@ void updateParticleControl(float dt)
         ps_pathCurrentTime += dt;
         wh_particleSystem->updatePositionAbsolute(Eases::lerp(ps_pathStart, ps_pathEnd, ps_pathCurrentTime/ps_pathTime, TimingFunctions::ExponentialEaseInOut));
         
-        printf("%f\n", ps_pathCurrentTime);
+        //printf("%f\n", ps_pathCurrentTime);
         
         if(ps_pathCurrentTime >= ps_pathTime)
         {
@@ -716,6 +716,7 @@ void displayControls()
 	printf("\n-------------------------------------------------------");
 	printf("\n CONTROLS: \n");
 	printf("\n wasdqe = camera movement");
+	printf("\n wasdqe WHILE HOLDING SPACE = user-controlled emitter movement");
 	printf("\n ~` = display controls");
 	printf("\n o = toggle slow-mo playback for all");
 	printf("\n p = toggle play/pause for all");
@@ -729,6 +730,11 @@ void displayControls()
 	printf("\n 1, 2, 3, 4 = choose xyzw or rgba when applicable");
 	printf("\n g = toggle between editing parameter delta or value");
 	printf("\n click and drag RMB = adjust selected parameter");
+
+	printf("\n\n h = toggle between burst and continuous emission modes");
+	printf("\n j = toggle between user-controlled and path-controlled emitter movement");
+
+	printf("\n\n [ or ] = decrease or increase number of particles to emit");
 
 	printf("\n-------------------------------------------------------\n");
 }

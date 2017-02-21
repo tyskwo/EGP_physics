@@ -8,7 +8,7 @@ velocityValue
 
 vec4
 colorEnd
-0 0 1 1
+1 0 0 1
 
 vec4
 colorStart
@@ -32,9 +32,9 @@ massValue
 
 int
 emissionMode
-1
+0
 
 int
 numberToEmit
-5
+7
 
