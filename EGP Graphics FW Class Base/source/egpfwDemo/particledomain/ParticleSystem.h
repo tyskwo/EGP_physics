@@ -90,6 +90,9 @@ public:
     
     // function that sets the particle data
 	void setParticleData(Particle::Data data);
+    
+    // function that updates this system's position
+    void updatePositionDelta(cbmath::vec3 delta);
 
     
     
@@ -99,6 +102,9 @@ public:
     
     // getter for what type of emitter we are using
     inline bool isContinuous()    { return m_emitter.m_mode == Emitter::Continuous; }
+    
+    // getter for the mover
+    inline Mover* getMover() { return m_mover; }
     
     
     

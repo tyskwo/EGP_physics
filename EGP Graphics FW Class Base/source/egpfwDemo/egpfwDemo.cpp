@@ -583,11 +583,14 @@ void updateCameraControlled(float dt, egpMouse *mouse)
 	viewMatrix = cbtk::cbmath::makeRotationEuler4ZYX(cameraElevation, cameraAzimuth, 0.0f);
 
 	// apply current rotation to our movement vector so that "forward" is the direction the camera is facing
-	deltaCamPos.set(
-		(float)egpKeyboardDifference(keybd, 'd', 'a'),
-		(float)egpKeyboardDifference(keybd, 'e', 'q'),
-		(float)egpKeyboardDifference(keybd, 's', 'w'),
-		0.0f);
+    if(!egpKeyboardIsKeyDown(keybd, ' '))
+    {
+        deltaCamPos.set(
+            (float)egpKeyboardDifference(keybd, 'd', 'a'),
+            (float)egpKeyboardDifference(keybd, 'e', 'q'),
+            (float)egpKeyboardDifference(keybd, 's', 'w'),
+            0.0f);
+    }
 	deltaCamPos = viewMatrix * deltaCamPos;
 
 	cameraPosWorld += cbtk::cbmath::normalize(deltaCamPos) * dt * cameraMoveSpeed;
@@ -601,6 +604,26 @@ void updateCameraOrbit(float dt)
 	viewMatrix = cbtk::cbmath::makeRotationEuler4ZYX(-0.1f, cameraAzimuth, 0.0f);
 
 	cameraPosWorld.set(sinf(cameraAzimuth)*cameraDistance, 1.0f, cosf(cameraAzimuth)*cameraDistance, 1.0f);
+}
+
+// this function allows the user to control the movement of the particle system.
+// written by: Ty
+void updateParticleControl(float dt)
+{
+    if(egpKeyboardIsKeyDown(keybd, ' '))
+    {
+        cbmath::vec4 delta;
+        
+        delta.set((float)egpKeyboardDifference(keybd, 'd', 'a'),
+                  (float)egpKeyboardDifference(keybd, 'e', 'q'),
+                  (float)egpKeyboardDifference(keybd, 's', 'w'), 0.0f);
+        
+        delta = viewMatrix * delta;
+        
+        wh_particleSystem->updatePositionDelta(cbmath::normalize(delta.xyz) * dt);
+        printf("%f\n", wh_particleSystem->getMover()->position.x);
+    }
+
 }
 
 
@@ -730,8 +753,6 @@ void handleInputState()
 
 
 
-
-
 	// finish by updating input state
 	egpMouseUpdate(mouse);
 	egpKeyboardUpdate(keybd);
@@ -748,6 +769,8 @@ void updateGameState(float dt)
 	// update camera
 	updateCameraControlled(dt, mouse);
 	//	updateCameraOrbit(dt);
+    
+    updateParticleControl(dt);
 
 	// update view matrix
 	// 'c3' in a 4x4 matrix is the translation part
@@ -840,7 +863,7 @@ void onCloseWindow() { termGame(); }
 
 
 // window resized
-void onResizeWindow(int w, int h)
+void onResizeWindow(int w, int h, int scale)
 {
 	// set new sizes
 	win_w = w;
@@ -848,8 +871,8 @@ void onResizeWindow(int w, int h)
 	win_aspect = ((float)w) / ((float)h);
 
 	// calculate total viewport size
-	viewport_tw = w + viewport_tb;
-	viewport_th = h + viewport_tb;
+	viewport_tw = w*scale + viewport_tb;
+	viewport_th = h*scale + viewport_tb;
 
 	// update projection matrix
 	projectionMatrix = cbtk::cbmath::makePerspective(fovy, win_aspect, znear, zfar);
