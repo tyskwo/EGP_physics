@@ -3,7 +3,7 @@
 //  egpfwDemo
 //
 //  Created by Wednesday-David Hartman on 2/8/17.
-//  Copyright � 2017 Dan Buckstein. All rights reserved.
+//  Copyright 2017 Dan Buckstein. All rights reserved.
 //
 
 #include "SaveManager.h"
@@ -70,6 +70,10 @@ void SaveManager::loadData(int dataFileSelected)
 			{
 				m_mapFloat[name] = std::stof(data.c_str());
 				//m_mapFloat.insert(std::pair<std::string, float>(name, static_cast<float>(atof(data.c_str()))));
+			}
+			else if (type == "int")
+			{
+				m_mapInt[name] = atoi(data.c_str());
 			}
 			else if (type == "bool")
 			{
@@ -212,6 +216,7 @@ void SaveManager::saveData(int dataFileSelected)
 		writeData(ofs, DataType::Vec3);
 		writeData(ofs, DataType::Vec4);
 		writeData(ofs, DataType::Float);
+		writeData(ofs, DataType::Int);
 		writeData(ofs, DataType::Bool);
 		writeData(ofs, DataType::Char);
 	}
@@ -247,6 +252,12 @@ template <>
 float SaveManager::getData<float>(std::string name)
 {
 	return m_mapFloat[name];
+}
+
+template <>
+int SaveManager::getData<int>(std::string name)
+{
+	return m_mapInt[name];
 }
 
 template <>
@@ -288,6 +299,12 @@ template <>
 void SaveManager::setData<float>(std::string name, float data)
 {
 	m_mapFloat[name] = data;
+}
+
+template <>
+void SaveManager::setData<int>(std::string name, int data)
+{
+	m_mapInt[name] = data;
 }
 
 template <>
@@ -344,6 +361,17 @@ void SaveManager::writeData(std::ofstream& ofs, DataType type)
 		for (std::map<std::string, float>::iterator iter = m_mapFloat.begin(); iter != m_mapFloat.end(); ++iter)
 		{
 			ofs << "float" << std::endl;
+			ofs << iter->first << std::endl;
+			ofs << iter->second << std::endl;
+
+			ofs << std::endl;
+		}
+	}
+	else if (type == DataType::Int)
+	{
+		for (std::map<std::string, int>::iterator iter = m_mapInt.begin(); iter != m_mapInt.end(); ++iter)
+		{
+			ofs << "int" << std::endl;
 			ofs << iter->first << std::endl;
 			ofs << iter->second << std::endl;
 
