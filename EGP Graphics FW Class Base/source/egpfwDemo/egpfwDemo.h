@@ -40,7 +40,11 @@ extern "C"
 	void resetTimers();
 
 	void onCloseWindow();
+#ifdef _WIN32
+	void onResizeWindow(int w, int h);
+#else
 	void onResizeWindow(int w, int h, int scale);
+#endif
 	void onPositionWindow(int x, int y);
 
 	int idle();

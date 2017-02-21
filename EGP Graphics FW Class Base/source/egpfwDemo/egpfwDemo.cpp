@@ -13,7 +13,7 @@
 
 //things left to do:
 
-//   path controlled vs static vs player movable particle system
+//   path controlled
 
 //   add drag to particles
 
@@ -621,7 +621,6 @@ void updateParticleControl(float dt)
         delta = viewMatrix * delta;
         
         wh_particleSystem->updatePositionDelta(cbmath::normalize(delta.xyz) * dt);
-        printf("%f\n", wh_particleSystem->getMover()->position.x);
     }
 
 }
@@ -863,7 +862,11 @@ void onCloseWindow() { termGame(); }
 
 
 // window resized
-void onResizeWindow(int w, int h, int scale)
+#ifdef _WIN32
+	void onResizeWindow(int w, int h)
+#else
+	void onResizeWindow(int w, int h, int scale)
+#endif
 {
 	// set new sizes
 	win_w = w;
@@ -871,6 +874,10 @@ void onResizeWindow(int w, int h, int scale)
 	win_aspect = ((float)w) / ((float)h);
 
 	// calculate total viewport size
+#ifdef _WIN32
+	int scale = 1;
+#endif
+	
 	viewport_tw = w*scale + viewport_tb;
 	viewport_th = h*scale + viewport_tb;
 
