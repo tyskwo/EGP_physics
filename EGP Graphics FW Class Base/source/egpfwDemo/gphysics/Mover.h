@@ -54,10 +54,14 @@ public:
     // mass
     float mass, massInverse;
 
+	// drag
+	float dragCoefficient, surfaceArea;
     
     
 private:
     
+	void init();
+
     // internal methods to update our velocity and acceleration
 	void updateVelocity(const float dt);
 	void updateAcceleration();
@@ -68,6 +72,7 @@ public:
     
     // constructor and destructor
 	Mover();
+	Mover(float dragCoeff, float surfArea);
 	~Mover();
 
     // sets the anchor to this object if it is a spring
@@ -81,6 +86,8 @@ public:
     // adds a force to this object
     // written by: Ty
 	void addForce(const cbmath::vec3 force);
+
+	cbmath::vec3 calculateDrag(const float fluidDensity);
 
     // uses displacement to determine the mover's new position given the elapsed time
     // written by: Ty

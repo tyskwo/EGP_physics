@@ -41,7 +41,7 @@ Particle::Particle() {}
 Particle::Particle(Data data)
 {
     // instantiate a mover
-	m_mover = new Mover();
+	m_mover = new Mover(0.5f, 6.3f); // surface area of icosahedron = 5 * (edgeLength)^2 * sqrt(3)
 
     // set the physics values
     m_mover->position = data.position;
@@ -81,6 +81,10 @@ void Particle::update(const float dt)
     // if this particle is alive...
     if(m_isActive)
     {
+		// add drag
+		cbmath::vec3 drag = this->m_mover->calculateDrag(1.293f); //fluid density of atmosphere at 0C is 1.293kg/m^3
+		this->m_mover->addForce(drag);
+
         // update our position
         this->m_mover->updateMoverDisplacement(dt);
 		

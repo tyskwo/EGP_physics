@@ -9,6 +9,10 @@
 //  The assessor of this project may reproduce this project and provide copies to other academic staff,
 //  and/or communicate a copy of this project to a plagiarism-checking service,
 //  which may retain a copy of the project on its database.
+//
+//  Mover structure for integration
+//  By D. Buckstein
+//	This file was modified by Wednesday-David Hartman, Ty Wood with permission from author.
 
 
 
@@ -24,17 +28,28 @@
 // written by: David
 Mover::Mover()
 {
-    // we're not a spring
-	m_spring = nullptr;
-    
-    // we're born anew!
-	modelMatrix = cbmath::m4Identity;
-    
-    // set our gravity
-	accelerationFixed = cbmath::v3y * GRAVITATIONAL_CONSTANT;
+	init();
+}
+
+Mover::Mover(float dragCoeff, float surfArea)
+:dragCoefficient(dragCoeff), surfaceArea(surfArea)
+{
+	init();
 }
 
 Mover::~Mover() {}
+
+void Mover::init()
+{
+	// we're not a spring
+	m_spring = nullptr;
+
+	// we're born anew!
+	modelMatrix = cbmath::m4Identity;
+
+	// set our gravity
+	accelerationFixed = cbmath::v3y * GRAVITATIONAL_CONSTANT;
+}
 
 
 
@@ -62,6 +77,24 @@ void Mover::setMass(float mass)
 void Mover::addForce(const cbmath::vec3 force)
 {
 	this->force += force;
+}
+
+
+
+// calculate drag for this mover
+// written by: Wednesday-David
+cbmath::vec3 Mover::calculateDrag(const float fluidDensity)
+{
+	const float velNormalizedSq = cbmath::lengthSq(velocity);
+	if (velNormalizedSq > 0.0f)
+	{
+		// f = (c*d*a*v^2)/2
+		const float drag = (dragCoefficient * fluidDensity * surfaceArea * velNormalizedSq) * 0.5f;
+		const float newMagnitude = -drag / sqrt(velNormalizedSq);
+		const cbmath::vec3 forceDrag = newMagnitude * velocity;
+		return forceDrag;
+	}
+	return cbmath::v3zero;
 }
 
 
