@@ -223,4 +223,7 @@ namespace Eases
         return (start + (*f)(percent)*(end - start));
     }
 }
+
+
+
 #endif /* Eases_h */

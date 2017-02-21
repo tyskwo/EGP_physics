@@ -4,15 +4,21 @@
 
 #ifdef _WIN32
     #include "egpfw\egpfw\utils\egpfwInputUtils.h"
+    #include "..\particledomain\ParticleSystem.h"
 #else
     #include "egpfw/egpfw/utils/egpfwInputUtils.h"
+    #include "ParticleSystem.h"
 #endif
 
 #include "cbmath/cbtkMatrix.h"
 
 #include "Locator.h"
 #include "SaveManager.h"
-#include "..\particledomain\ParticleSystem.h"
+
+
+
+
+
 
 wh::InputManager::InputManager()
 :m_dataFileSelection(1), m_currentDisplayOption(wh::ParameterOptions::COLOR)

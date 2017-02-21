@@ -15,8 +15,6 @@
 
 //   add drag to particles
 
-//   edit emission type
-//   edit number to emit
 //   edit ease of lifetime types
 
 //	 comment InputManager, SaveManager

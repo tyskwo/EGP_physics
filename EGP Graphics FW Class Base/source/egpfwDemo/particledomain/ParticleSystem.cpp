@@ -18,8 +18,13 @@
 
 #include <stdlib.h>
 
-#include "..\utils\Locator.h"
-#include "..\utils\SaveManager.h"
+#ifdef _WIN32
+    #include "..\utils\Locator.h"
+    #include "..\utils\SaveManager.h"
+#else
+    #include "Locator.h"
+    #include "SaveManager.h"
+#endif
 
 
 
