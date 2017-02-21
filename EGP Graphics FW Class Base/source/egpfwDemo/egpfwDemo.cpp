@@ -17,8 +17,6 @@
 
 //   edit ease of lifetime types
 
-//	 comment InputManager, SaveManager
-
 
 
 
@@ -201,19 +199,29 @@ egpIndexBufferObjectDescriptor  ibo[iboCount] = { 0 };
 // InputManager
 wh::InputManager *wh_inputManager;
 
-// movables
+// particle system
 ParticleSystem *wh_particleSystem;
+
+// the model that our particles inherit
 Model *wh_model;
 
+
+
+// loads the particle data from the save manager
+// written by: Wednesday-David and Ty
 void loadParticleData()
 {
 	Locator::getSaveManager()->loadData(wh_inputManager->getSaveFileSelection());
 	std::cout << "loaded data from file " << wh_inputManager->getSaveFileSelection() << std::endl;
 }
 
+
+
+// initializes the particle data from the save manager
+// written by: Wednesday-David and Ty
 void initParticleData()
 {
-    Particle::Data particle = Locator::getSaveManager()->prepareData(wh_inputManager->getSaveFileSelection());//wh_saveManager->prepareData(wh_saveFileSelection);
+    Particle::Data particle = Locator::getSaveManager()->prepareData(wh_inputManager->getSaveFileSelection());
 	
 	if (wh_particleSystem == nullptr)
 	{
@@ -225,63 +233,18 @@ void initParticleData()
 	}
 }
 
-void initParticleSystem()
-{
-    // coals burning
-    Particle::Data particle;
-                                                   //v, d,   midpoint
-    particle.lifespan = Particle::DeltaType<float> { 5, 5,   false };
-    particle.mass     = Particle::DeltaType<float> { 1, 0.5, false };
-    
-    particle.velocity = Particle::DeltaType<cbmath::vec3> { cbmath::vec3(0.0f, 2.0f, 0.0f), cbmath::vec3(2.0f, 5.0f, 2.0f), true };
 
-    
-    particle.color = Particle::LifetimeType<cbmath::vec4> {  cbmath::vec4(1.0f,0.0f,0.0f,1.0f),     /* start */
-                                                             cbmath::vec4(0.0f,0.0f,1.0f,0.0f),     /* end   */
-                                                             TimingFunctions::CircularEaseOut };    /* ease  */
-    
-    
-//    // smoke
-//    Particle::Data particle;
-//    
-//    particle.lifespan = Particle::DeltaType<float> {  5,   5, false };
-//    particle.mass     = Particle::DeltaType<float> { -1, 0.5, false };
-//    
-//    particle.velocity = Particle::DeltaType<cbmath::vec3> { cbmath::vec3(0.0f, 2.0f, 0.0f), cbmath::vec3(2.0f, 2.5f, 2.0f), true };
-//    
-//    
-//    particle.color = Particle::LifetimeType<cbmath::vec4> {  cbmath::vec4(0.2f,0.2f,0.2f,1.0f),
-//                                                             cbmath::vec4(1.0f,1.0f,1.0f,0.0f),
-//                                                             TimingFunctions::CircularEaseOut };
- 
-    
-//    // bouncy balls
-//    Particle::Data particle;
-//    
-//    particle.lifespan = Particle::DeltaType<float> {  5, 5, false };
-//    particle.mass     = Particle::DeltaType<float> { 10, 5, true  };
-//    
-//    particle.velocity = Particle::DeltaType<cbmath::vec3> { cbmath::vec3(0.0f, -4.0f, 0.0f), cbmath::vec3(5.0f, 2.5f, 5.0f), true };
-//    
-//    
-//    particle.color = Particle::LifetimeType<cbmath::vec4> {  cbmath::vec4(0.33,0.5f,0.8f,1.0f),
-//                                                             cbmath::vec4(0.9f,0.3f,0.5f,1.0f),
-//                                                             TimingFunctions::ExponentialEaseIn };
-
-    
-
-    
-    
-    
-	wh_particleSystem = new ParticleSystem(particle, ParticleSystem::Emitter::Mode::Burst, cbmath::v3y * 2.0f, cbmath::v3y, 500);
-}
 
 // quickly reset physics
 void resetPhysics()
 {
 	initParticleData();
+    
+    // if the particle system isn't continuous, do a burst!
 	if(!wh_particleSystem->isContinuous()) wh_particleSystem->emit(wh_model);
 }
+
+
 
 // update physics only
 void updatePhysics(float dt)
@@ -484,12 +447,14 @@ void deleteGeometry()
 
 
 
-// setup and delete shaders
+// setup shaders
+// written by: Ty
 void setupShaders()
 {
     // activate a VAO for validation (automatically deactivated in shader constructor)
     egpActivateVAO(vao);
 
+    // set the file paths
 	std::string vertShaderPath = "";
 	std::string fragShaderPath = "";
 
@@ -502,16 +467,20 @@ void setupShaders()
     fragShaderPath = "../../../../../../../../resource/glsl/4x/fs/drawColor_fs4x.glsl";
 #endif
 
-
+    // create shader from paths
 	Shader* shader = new Shader(vertShaderPath.c_str(), fragShaderPath.c_str());
 
-	
-    
+    // create model from shader and isocahedron vao
 	wh_model = new Model(shader, vao+isocahedronVAO);
 
+    // release the vao
 	egpActivateVAO(0);
 }
 
+
+
+// delete shaders and model
+// written by: Ty
 void deleteShaders()
 {
     delete wh_model;
@@ -602,10 +571,14 @@ void updateCameraOrbit(float dt)
 	cameraPosWorld.set(sinf(cameraAzimuth)*cameraDistance, 1.0f, cosf(cameraAzimuth)*cameraDistance, 1.0f);
 }
 
+
+
+
 // this function allows the user to control the movement of the particle system.
 // written by: Ty
 void updateParticleControl(float dt)
 {
+    // if the PS is NOT path-controlled, and the user is holding space
     if(egpKeyboardIsKeyDown(keybd, ' ') && !wh_inputManager->isPathControlled())
     {
         cbmath::vec4 delta;
@@ -616,16 +589,18 @@ void updateParticleControl(float dt)
         
         delta = viewMatrix * delta;
         
+        // move the PS around
         wh_particleSystem->updatePositionDelta(cbmath::normalize(delta.xyz) * dt);
     }
 
+    // if the PS IS path-controlled
     if(wh_inputManager->isPathControlled())
     {
+        // lerp
         ps_pathCurrentTime += dt;
         wh_particleSystem->updatePositionAbsolute(Eases::lerp(ps_pathStart, ps_pathEnd, ps_pathCurrentTime/ps_pathTime, TimingFunctions::ExponentialEaseInOut));
         
-        //printf("%f\n", ps_pathCurrentTime);
-        
+        // reset if over time
         if(ps_pathCurrentTime >= ps_pathTime)
         {
             auto temp = ps_pathStart;
@@ -654,9 +629,14 @@ int initGame()
 	// setup geometry
 	setupGeometry();
 
+    
+    
+    // setup shaders
 	setupShaders();
 
-	// physics
+    
+    
+	// initialize save manager
 #ifdef _WIN32
 	SaveManager *saveManager = new SaveManager("..\\..\\..\\..\\source\\egpfwDemo\\utils\\");
 	Locator::provide(saveManager);
@@ -665,10 +645,14 @@ int initGame()
 	Locator::provide(saveManager);
 #endif
     
+    
+    
+    // initialize input manager
 	wh_inputManager = new wh::InputManager();
 
+
+    // load the particle data and start emitting
 	loadParticleData();
-	//initParticleSystem();
 	resetPhysics();
 
 
@@ -682,21 +666,25 @@ int initGame()
 
 
 // destroy game objects (mem)
+// written by: Dan Buckstein, Wednesday-David, Ty
 int termGame()
 {
-	// TODO: CLEANUP PARTICLE STUFF ****
+	// cleanup particles
 	delete wh_particleSystem;
 	wh_particleSystem = nullptr;
 
+    // save the current data and cleanup the save manager
 	Locator::getSaveManager()->saveData(wh_inputManager->getSaveFileSelection());
 	Locator::cleanup();
 
+    // delete the input manager
 	delete wh_inputManager;
 	wh_inputManager = nullptr;
 
 	// good practice to do this in reverse order of creation
 	//	in case something is referencing something else
 
+    // delete shaders and geometry
 	deleteShaders();
 	deleteGeometry();
 
@@ -709,6 +697,7 @@ int termGame()
 
 
 // output controls
+// written by: Dan Buckstein, Wednesday-David
 void displayControls()
 {
 	printf("\n-------------------------------------------------------");
@@ -761,11 +750,8 @@ void handleInputState()
 		resetPhysics();
 
 
-
-
-	//-----------------------------------------------------------------------------
-	// adjustable parameters
-	
+    
+    // update input manager
 	wh_inputManager->update(keybd, mouse, win_w);
 
 
@@ -785,10 +771,13 @@ void updateGameState(float dt)
 {
 	// update camera
 	updateCameraControlled(dt, mouse);
-	//	updateCameraOrbit(dt);
+
     
+    // update particle system position
     updateParticleControl(dt);
 
+    
+    
 	// update view matrix
 	// 'c3' in a 4x4 matrix is the translation part
 	viewMatrix.c3 = cameraPosWorld;
@@ -804,6 +793,7 @@ void updateGameState(float dt)
 	{
 		updatePhysics(dt);
         
+        // if the PS is in continuous mode, well, continuously emit!
         if(wh_particleSystem->isContinuous()) wh_particleSystem->emit(wh_model);
 	}
 }
@@ -880,6 +870,8 @@ void onCloseWindow() { termGame(); }
 
 
 // window resized
+// edited by: Wednesday-David, Ty
+// accounts for retina screens on macOS
 #ifdef _WIN32
 	void onResizeWindow(int w, int h)
 #else

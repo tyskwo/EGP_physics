@@ -102,10 +102,6 @@ namespace wh
         // method for putting text into the console
 		void display();
 
-        // methods for clamping values, used with RMB inputs
-		float scaleClamp(float value, float min, float max, float min2, float max2);
-		int   scaleClamp(int   value, int   min, int   max, int   min2, int   max2);
-
         // a map that holds the current display strings
 		std::map<ParameterOptions, std::string> m_displayOptions;
         

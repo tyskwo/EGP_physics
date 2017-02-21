@@ -59,7 +59,22 @@ namespace Utils
     // written by: Ty
     template <>
     cbmath::vec3 randomDeltaPosNeg<cbmath::vec3>(cbmath::vec3 a);
-}
+    
+    
+    // a method for clamping a value between two values, mapped to two OTHER values
+    // written by: Wednesday-David and Ty
+    template <typename T>
+    T scaleClamp(T value, T min, T max, T min2, T max2)
+    {
+        value = min2 + ((value - min) / (max - min)) * (max2 - min2);
+        if (max2 > min2)
+        {
+            value = value < max2 ? value : max2;
+            return value > min2 ? value : min2;
+        }
+        value = value < min2 ? value : min2;
+        return value > max2 ? value : max2;
+    }}
 
 
 

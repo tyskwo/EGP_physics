@@ -15,7 +15,6 @@
 
 
 
-#include "InputManager.h"
 
 #include <iostream>
 
@@ -31,7 +30,8 @@
 
 #include "Locator.h"
 #include "SaveManager.h"
-
+#include "InputManager.h"
+#include "Utils.h"
 
 
 
@@ -327,7 +327,7 @@ void wh::InputManager::handleMouseInput(egpMouse *mouse, int windowWidth)
 			break;
 		}
 
-		float clampedDeltaX = scaleClamp((float)egpMouseX(mouse), 0.0f, (float)windowWidth, clampMin, clampMax);
+		float clampedDeltaX = Utils::scaleClamp((float)egpMouseX(mouse), 0.0f, (float)windowWidth, clampMin, clampMax);
 		std::cout << clampedDeltaX;
 
 
@@ -430,40 +430,4 @@ void wh::InputManager::display()
 	}
 
 	std::cout << " ";
-}
-
-
-
-
-
-// clamp values
-// written by: Wednesday-David
-float wh::InputManager::scaleClamp(float value, float min, float max, float min2, float max2)
-{
-	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
-	if (max2 > min2)
-	{
-		value = value < max2 ? value : max2;
-		return value > min2 ? value : min2;
-	}
-	value = value < min2 ? value : min2;
-	return value > max2 ? value : max2;
-}
-
-
-
-
-
-// clamp values
-// written by: Wednesday-David
-int wh::InputManager::scaleClamp(int value, int min, int max, int min2, int max2)
-{
-	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
-	if (max2 > min2)
-	{
-		value = value < max2 ? value : max2;
-		return value > min2 ? value : min2;
-	}
-	value = value < min2 ? value : min2;
-	return value > max2 ? value : max2;
 }
