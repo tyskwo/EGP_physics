@@ -157,7 +157,7 @@ void SaveManager::parseVec4(std::string name, std::string data)
 
 
 
-// pack the data from the current data file into a Particle::Data struct
+// format the data from the current data file into a Particle::Data struct
 // written by: Ty and Wednesday-David
 Particle::Data SaveManager::prepareData(int dataFileSelected)
 {

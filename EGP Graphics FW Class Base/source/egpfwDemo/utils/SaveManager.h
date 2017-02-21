@@ -56,7 +56,7 @@ public:
 	// saves data to the specified file
 	void saveData(int dataFileSelected);
     
-	// pack the data from the current data file into a Particle::Data structure
+	// format the data from the current data file into a Particle::Data structure
     Particle::Data prepareData(int dataFileSelected);
 
 
