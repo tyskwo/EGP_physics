@@ -12,7 +12,7 @@ colorEnd
 
 vec4
 colorStart
-0 1 0 1
+0.422656 1 0 1
 
 float
 lifespanDelta
@@ -20,7 +20,7 @@ lifespanDelta
 
 float
 lifespanValue
-1.57031
+6.17188
 
 float
 massDelta
@@ -28,7 +28,7 @@ massDelta
 
 float
 massValue
-0.625
+4.35156
 
 int
 emissionMode
