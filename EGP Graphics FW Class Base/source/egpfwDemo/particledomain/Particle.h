@@ -141,7 +141,7 @@ public:
     
     Particle();
     Particle(Data data);
-    
+	~Particle();
     
     
     // getters for the mover attached to this particle and whether or not this particle is alive

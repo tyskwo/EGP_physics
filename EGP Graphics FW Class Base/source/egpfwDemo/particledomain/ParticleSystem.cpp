@@ -18,6 +18,9 @@
 
 #include <stdlib.h>
 
+#include "..\utils\Locator.h"
+#include "..\utils\SaveManager.h"
+
 
 
 
@@ -50,11 +53,34 @@ ParticleSystem::ParticleSystem(Particle::Data particleData,
 
 
 
+// save emitter data, then delete this system's particles and mover
+// written by: Wednesday-David
+ParticleSystem::~ParticleSystem()
+{
+	Locator::getSaveManager()->setData<int>("emissionMode", (int)m_emitter.m_mode);
+	Locator::getSaveManager()->setData<int>("numberToEmit", m_emitter.m_numberToEmit);
+
+	for (unsigned int i = 0; i < m_particles.size(); i++)
+	{
+		delete m_particles[i];
+		m_particles[i] = nullptr;
+	}
+	m_particles.clear();
+
+	delete m_mover;
+	m_mover = nullptr;
+}
+
+
+
 
 // set the particle data to a new Particle::Data
 // written by: Ty
 void ParticleSystem::setParticleData(Particle::Data data)
 {
+	m_emitter.m_mode = static_cast<Emitter::Mode>(Locator::getSaveManager()->getData<int>("emissionMode"));
+	m_emitter.m_numberToEmit = Locator::getSaveManager()->getData<int>("numberToEmit");
+
 	data.position = m_mover->position;
 	m_particleData = data;
 }

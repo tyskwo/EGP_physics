@@ -19,6 +19,10 @@ SaveManager::SaveManager(std::string dataFilePath)
 
 SaveManager::~SaveManager()
 {
+	for (int i = 0; i < NUM_SAVE_FILES; i++)
+	{
+		saveData(i + 1);
+	}
 }
 
 

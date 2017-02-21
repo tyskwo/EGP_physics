@@ -509,7 +509,7 @@ void setupShaders()
 
 	Shader* shader = new Shader(vertShaderPath.c_str(), fragShaderPath.c_str());
 
-		
+	
     
 	wh_model = new Model(shader, vao+isocahedronVAO);
 

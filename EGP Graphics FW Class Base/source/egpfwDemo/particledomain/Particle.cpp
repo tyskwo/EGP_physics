@@ -64,6 +64,16 @@ Particle::Particle(Data data)
 
 
 
+// delete this particle's mover
+// written by: Wednesday-David
+Particle::~Particle()
+{
+	delete m_mover;
+	m_mover = nullptr;
+}
+
+
+
 // called ever frame
 // written by: Ty
 void Particle::update(const float dt)
