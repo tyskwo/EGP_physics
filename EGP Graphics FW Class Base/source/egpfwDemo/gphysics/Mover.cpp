@@ -12,34 +12,53 @@
 
 
 
+
+
 #include "Mover.h"
 
+
+
+
+
+// initializer for the mover
+// written by: David
 Mover::Mover()
 {
+    // we're not a spring
 	m_spring = nullptr;
+    
+    // we're born anew!
 	modelMatrix = cbmath::m4Identity;
+    
+    // set our gravity
 	accelerationFixed = cbmath::v3y * GRAVITATIONAL_CONSTANT;
 }
 
-Mover::~Mover()
-{
-}
+Mover::~Mover() {}
 
 
 
-
+// set the anchor for our spring so we don't bounce into infinity
+// written by: David
 void Mover::setSpringAnchor(cbmath::vec3 anchor)
 {
 	m_spring = new Spring(anchor);
 }
 
 
+
+// set the mass of this mover
+// written by: Ty
 void Mover::setMass(float mass)
 {
 	if (mass > 0.0f) massInverse = 1.0f / (this->mass = mass);
 	else             massInverse = this->mass = 0.0f;
 }
 
+
+
+// add a force to this mover
+// written by: Ty
 void Mover::addForce(const cbmath::vec3 force)
 {
 	this->force += force;
@@ -49,12 +68,11 @@ void Mover::addForce(const cbmath::vec3 force)
 
 
 // physics (integration) updates
+// written by: Ty
 void Mover::updateVelocity(const float dt)
 {
 	// v = v0 + a*dt
 	velocity += acceleration * dt;
-
-	//velocity *= powf(damping, dt);
 }
 
 
@@ -77,6 +95,9 @@ void Mover::updateMoverDisplacement(const float dt)
 }
 
 
+
+// simple (super simple) collision with the ground plane
+// written by: Ty and Wednesday-David
 void Mover::clampMoverToGround(const float groundHeight, const float restitution)
 {
 	if (position.y < groundHeight)
@@ -95,8 +116,8 @@ void Mover::clampMoverToGround(const float groundHeight, const float restitution
 
 
 
-
 // graphics updates
+// written by: Ty
 void Mover::updateMoverGraphics()
 {
 	modelMatrix.c3.xyz = position;
