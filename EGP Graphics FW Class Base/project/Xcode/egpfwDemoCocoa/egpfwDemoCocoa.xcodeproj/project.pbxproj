@@ -43,6 +43,8 @@
 		20B7AD731E490C9C0020DA19 /* Geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20B7AD711E490C9C0020DA19 /* Geometry.cpp */; };
 		20BB239C1E56822000B97833 /* dataBackup.txt in Resources */ = {isa = PBXBuildFile; fileRef = 20BB239B1E56822000B97833 /* dataBackup.txt */; };
 		20BB239F1E56822D00B97833 /* Spring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20BB239D1E56822D00B97833 /* Spring.cpp */; };
+		20E260031E5BC0FF00798C7F /* InputManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E260001E5BC0FF00798C7F /* InputManager.cpp */; };
+		20E260041E5BC0FF00798C7F /* Locator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E260011E5BC0FF00798C7F /* Locator.cpp */; };
 		BBF58EDD1E3D35B800AD1858 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF58EDC1E3D35B800AD1858 /* AppDelegate.m */; };
 		BBF58EE01E3D35B800AD1858 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF58EDF1E3D35B800AD1858 /* main.m */; };
 		BBF58EE21E3D35B800AD1858 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBF58EE11E3D35B800AD1858 /* Assets.xcassets */; };
@@ -114,6 +116,9 @@
 		20BB239D1E56822D00B97833 /* Spring.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Spring.cpp; path = ../../../source/egpfwDemo/gphysics/Spring.cpp; sourceTree = "<group>"; };
 		20BB239E1E56822D00B97833 /* Spring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Spring.h; path = ../../../source/egpfwDemo/gphysics/Spring.h; sourceTree = "<group>"; };
 		20BB23A01E573F2000B97833 /* InputManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InputManager.h; path = ../../../source/egpfwDemo/utils/InputManager.h; sourceTree = "<group>"; };
+		20E260001E5BC0FF00798C7F /* InputManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InputManager.cpp; path = ../../../source/egpfwDemo/utils/InputManager.cpp; sourceTree = "<group>"; };
+		20E260011E5BC0FF00798C7F /* Locator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Locator.cpp; path = ../../../source/egpfwDemo/utils/Locator.cpp; sourceTree = "<group>"; };
+		20E260021E5BC0FF00798C7F /* Locator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Locator.h; path = ../../../source/egpfwDemo/utils/Locator.h; sourceTree = "<group>"; };
 		BBF58ED81E3D35B800AD1858 /* egpfwDemoCocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = egpfwDemoCocoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF58EDB1E3D35B800AD1858 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BBF58EDC1E3D35B800AD1858 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -379,6 +384,9 @@
 		BBF58EF31E3D53C000AD1858 /* egpfwDemo */ = {
 			isa = PBXGroup;
 			children = (
+				20E260001E5BC0FF00798C7F /* InputManager.cpp */,
+				20E260011E5BC0FF00798C7F /* Locator.cpp */,
+				20E260021E5BC0FF00798C7F /* Locator.h */,
 				20BB239B1E56822000B97833 /* dataBackup.txt */,
 				200400C81E4BCDE9002D1E12 /* Eases.h */,
 				200400CA1E4BCE1D002D1E12 /* Utils.h */,
@@ -506,6 +514,8 @@
 				200400CC1E4BEBD3002D1E12 /* Utils.cpp in Sources */,
 				BBF58EFA1E3D60F900AD1858 /* egpfwGLView.m in Sources */,
 				200400DB1E4C171F002D1E12 /* SaveManager.cpp in Sources */,
+				20E260041E5BC0FF00798C7F /* Locator.cpp in Sources */,
+				20E260031E5BC0FF00798C7F /* InputManager.cpp in Sources */,
 				20256B3F1E47A08F00B3DC6C /* Mover.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

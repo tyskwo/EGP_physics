@@ -838,7 +838,7 @@ void onCloseWindow() { termGame(); }
 
 
 // window resized
-void onResizeWindow(int w, int h)
+void onResizeWindow(int w, int h, int scale)
 {
 	// set new sizes
 	win_w = w;
@@ -846,8 +846,8 @@ void onResizeWindow(int w, int h)
 	win_aspect = ((float)w) / ((float)h);
 
 	// calculate total viewport size
-	viewport_tw = w + viewport_tb;
-	viewport_th = h + viewport_tb;
+	viewport_tw = w*scale + viewport_tb;
+	viewport_th = h*scale + viewport_tb;
 
 	// update projection matrix
 	projectionMatrix = cbtk::cbmath::makePerspective(fovy, win_aspect, znear, zfar);

@@ -205,7 +205,8 @@ static void winClosePressed()
         NSRect bounds = [self bounds];
         [[self openGLContext] makeCurrentContext];
         onPositionWindow((unsigned int)(bounds.origin.x), (unsigned int)(bounds.origin.y));
-        onResizeWindow((unsigned int)(bounds.size.width*2), (unsigned int)(bounds.size.height*2));
+        CGFloat scale = [win_handle backingScaleFactor];
+        onResizeWindow((unsigned int)(bounds.size.width), (unsigned int)(bounds.size.height), (unsigned int)scale);
     }
 }
 

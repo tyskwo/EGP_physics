@@ -2,7 +2,12 @@
 
 #include <iostream>
 
-#include "egpfw\egpfw\utils\egpfwInputUtils.h"
+#ifdef _WIN32
+    #include "egpfw\egpfw\utils\egpfwInputUtils.h"
+#else
+    #include "egpfw/egpfw/utils/egpfwInputUtils.h"
+#endif
+
 #include "cbmath/cbtkMatrix.h"
 
 #include "Locator.h"

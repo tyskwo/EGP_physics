@@ -40,7 +40,7 @@ extern "C"
 	void resetTimers();
 
 	void onCloseWindow();
-	void onResizeWindow(int w, int h);
+	void onResizeWindow(int w, int h, int scale);
 	void onPositionWindow(int x, int y);
 
 	int idle();
