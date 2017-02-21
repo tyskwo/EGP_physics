@@ -126,7 +126,9 @@ float cameraRotateSpeed = 0.1f, cameraMoveSpeed = 1.0f, cameraDistance = 8.0f;
 cbtk::cbmath::vec4 cameraPosWorld(0.0f, 6.0f, cameraDistance, 1.0f), deltaCamPos;
 
 
-
+// particle system path values
+cbmath::vec3 ps_pathStart(-5.0f,0.0f,0.0f), ps_pathEnd(5.0f,0.0f,0.0f);
+float ps_pathTime = 3.0f, ps_pathCurrentTime = 0.0f;
 
 
 
@@ -608,7 +610,7 @@ void updateCameraOrbit(float dt)
 // written by: Ty
 void updateParticleControl(float dt)
 {
-    if(egpKeyboardIsKeyDown(keybd, ' '))
+    if(egpKeyboardIsKeyDown(keybd, ' ') && !wh_inputManager->isPathControlled())
     {
         cbmath::vec4 delta;
         
@@ -619,9 +621,24 @@ void updateParticleControl(float dt)
         delta = viewMatrix * delta;
         
         wh_particleSystem->updatePositionDelta(cbmath::normalize(delta.xyz) * dt);
-        printf("%f\n", wh_particleSystem->getMover()->position.x);
     }
 
+    if(wh_inputManager->isPathControlled())
+    {
+        ps_pathCurrentTime += dt;
+        wh_particleSystem->updatePositionAbsolute(Eases::lerp(ps_pathStart, ps_pathEnd, ps_pathCurrentTime/ps_pathTime, TimingFunctions::ExponentialEaseInOut));
+        
+        printf("%f\n", ps_pathCurrentTime);
+        
+        if(ps_pathCurrentTime >= ps_pathTime)
+        {
+            auto temp = ps_pathStart;
+            ps_pathStart = ps_pathEnd;
+            ps_pathEnd = temp;
+            
+            ps_pathCurrentTime = 0.0f;
+        }
+    }
 }
 
 

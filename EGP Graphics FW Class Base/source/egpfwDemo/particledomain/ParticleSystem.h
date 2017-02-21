@@ -93,6 +93,7 @@ public:
     
     // function that updates this system's position
     void updatePositionDelta(cbmath::vec3 delta);
+    void updatePositionAbsolute(cbmath::vec3 delta);
 
     
     

@@ -111,6 +111,12 @@ void wh::InputManager::update(egpKeyboard *keybd, egpMouse *mouse, int windowWid
 
 void wh::InputManager::handleKeyboardInput(egpKeyboard *keybd)
 {
+    if (egpKeyboardIsKeyReleased(keybd, '='))
+    {
+        m_isPathControlled = !m_isPathControlled;
+    }
+    
+    
 	if (egpKeyboardIsKeyDown(keybd, 'z'))
 	{
 		// save
