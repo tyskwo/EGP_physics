@@ -85,6 +85,7 @@ public:
                    cbmath::vec3   position       = cbmath::vec3(0.0f,0.0f,0.0f),
                    cbmath::vec3   emitDirection  = cbmath::vec3(0.0f,1.0f,0.0f),
                    int            numberToEmit   = 100);
+	~ParticleSystem();
 
     
     

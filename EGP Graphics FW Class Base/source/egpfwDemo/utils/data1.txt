@@ -30,3 +30,11 @@ float
 massValue
 0.625
 
+int
+emissionMode
+1
+
+int
+numberToEmit
+5
+
