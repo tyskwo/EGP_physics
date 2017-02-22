@@ -28,7 +28,7 @@ massDelta
 
 float
 massValue
--1
+-5.9375
 
 float
 restitutionDelta

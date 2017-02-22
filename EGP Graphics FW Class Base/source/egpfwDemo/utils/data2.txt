@@ -1,10 +1,10 @@
 vec3
 velocityDelta
--9.92188 8.67188 0
+9.67188 8.67188 9.67188
 
 vec3
 velocityValue
--9.90625 5.0625 -9.90625
+3.0625 8.8125 -9.90625
 
 vec4
 colorEnd
@@ -28,7 +28,7 @@ massDelta
 
 float
 massValue
-2.65625
+9.40625
 
 float
 restitutionDelta
@@ -40,7 +40,7 @@ restitutionValue
 
 int
 easeValue
-7
+22
 
 int
 emissionMode
@@ -48,5 +48,5 @@ emissionMode
 
 int
 numberToEmit
-151
+100
 
