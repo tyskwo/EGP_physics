@@ -1,14 +1,14 @@
 vec3
 velocityDelta
-0.0625 0.0625 0.0625
+-9.92188 8.67188 0
 
 vec3
 velocityValue
--1.04688 0.0625 0.0625
+-9.90625 5.0625 -9.90625
 
 vec4
 colorEnd
-0 0 1 1
+0 0.753125 1 1
 
 vec4
 colorStart
@@ -16,25 +16,29 @@ colorStart
 
 float
 lifespanDelta
-0.078125
+5.17188
 
 float
 lifespanValue
-1.57031
+6.66406
 
 float
 massDelta
-0.859375
+0.015625
 
 float
 massValue
-0.625
+2.65625
+
+int
+easeValue
+7
 
 int
 emissionMode
-1
+0
 
 int
 numberToEmit
-5
+151
 
