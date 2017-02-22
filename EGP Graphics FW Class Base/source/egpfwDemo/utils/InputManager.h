@@ -50,7 +50,8 @@ namespace wh
 		VELOCITY,
 		LIFESPAN,
 		MASS,
-        EASE
+        EASE,
+		RESTITUTION
 	};
 
     

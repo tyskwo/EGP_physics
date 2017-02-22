@@ -21,9 +21,11 @@
 #ifdef _WIN32
     #include "egpfw\egpfw\utils\egpfwInputUtils.h"
     #include "..\particledomain\ParticleSystem.h"
+	#include "..\Utils.h"
 #else
     #include "egpfw/egpfw/utils/egpfwInputUtils.h"
     #include "ParticleSystem.h"
+	#include "Utils.h"
 #endif
 
 #include "cbmath/cbtkMatrix.h"
@@ -31,7 +33,6 @@
 #include "Locator.h"
 #include "SaveManager.h"
 #include "InputManager.h"
-#include "Utils.h"
 
 
 
@@ -43,11 +44,12 @@ wh::InputManager::InputManager()
  m_currentDisplayOption(wh::ParameterOptions::COLOR)
 {
     // initialize display strings
-	m_displayOptions[wh::ParameterOptions::COLOR]    = "color";
-	m_displayOptions[wh::ParameterOptions::VELOCITY] = "velocity";
-	m_displayOptions[wh::ParameterOptions::LIFESPAN] = "lifespan";
-	m_displayOptions[wh::ParameterOptions::MASS]     = "mass";
-    m_displayOptions[wh::ParameterOptions::EASE]     = "ease";
+	m_displayOptions[wh::ParameterOptions::COLOR]		= "color";
+	m_displayOptions[wh::ParameterOptions::VELOCITY]	= "velocity";
+	m_displayOptions[wh::ParameterOptions::LIFESPAN]	= "lifespan";
+	m_displayOptions[wh::ParameterOptions::MASS]		= "mass";
+    m_displayOptions[wh::ParameterOptions::EASE]		= "ease";
+	m_displayOptions[wh::ParameterOptions::RESTITUTION] = "restitution";
 
     // set current editable parameter
 	m_currentParameterSettings = { wh::ParameterOptions::COLOR, wh::ParameterSuboptions::X, wh::ParameterType::VALUE };
@@ -115,6 +117,8 @@ void wh::InputManager::setParameterOption(wh::ParameterOptions option)
 		break;
 	case wh::ParameterOptions::LIFESPAN:
 	case wh::ParameterOptions::MASS:
+	case wh::ParameterOptions::EASE:
+	case wh::ParameterOptions::RESTITUTION:
 		m_currentParameterSettings.m_parameterSuboption = wh::ParameterSuboptions::NONE;
 		break;
 	default:
@@ -159,6 +163,8 @@ void wh::InputManager::setParameterSuboption(wh::ParameterSuboptions suboption)
     // lifetime and mass values don't have any suboptions
 	case wh::ParameterOptions::LIFESPAN:
 	case wh::ParameterOptions::MASS:
+	case wh::ParameterOptions::EASE:
+	case wh::ParameterOptions::RESTITUTION:
 		break;
             
 	default:
@@ -269,6 +275,8 @@ void wh::InputManager::handleKeyboardInput(egpKeyboard *keybd)
 			setParameterOption(wh::ParameterOptions::MASS);
         else if (egpKeyboardIsKeyPressed(keybd, 'k'))
             setParameterOption(wh::ParameterOptions::EASE);
+		else if (egpKeyboardIsKeyPressed(keybd, 'b'))
+			setParameterOption(wh::ParameterOptions::RESTITUTION);
         
 		// select parameter suboption
 		if (egpKeyboardIsKeyPressed(keybd, '1'))
@@ -323,8 +331,12 @@ void wh::InputManager::handleMouseInput(egpMouse *mouse, int windowWidth)
 			clampMax = 10.0f;
 			break;
 		case wh::ParameterOptions::MASS:
-			clampMin = 0.0f;
+			clampMin = -10.0f;
 			clampMax = 10.0f;
+			break;
+		case wh::ParameterOptions::RESTITUTION:
+			clampMin = 0.01f;
+			clampMax = 0.99f;
 			break;
 		default:
 			break;
@@ -417,6 +429,11 @@ void wh::InputManager::handleMouseInput(egpMouse *mouse, int windowWidth)
             std::string easeVarName = "easeValue";
             Locator::getSaveManager()->setData<int>(easeVarName, clampedDeltaXInt);
         }
+		else if (m_currentDisplayOption == wh::ParameterOptions::RESTITUTION)
+		{
+			std::string restitutionVarNam = ((m_currentParameterSettings.m_parameterType == wh::ParameterType::VALUE) ? "restitutionValue" : "restitutionDelta");
+			Locator::getSaveManager()->setData<float>(restitutionVarNam, clampedDeltaX);
+		}
 	}
 }
 

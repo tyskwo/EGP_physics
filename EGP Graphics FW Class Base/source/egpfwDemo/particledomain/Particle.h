@@ -109,6 +109,8 @@ public:
 
         LifetimeType<cbmath::vec4> color;
         LifetimeType<cbmath::vec3> scale;
+
+		DeltaType<float>		restitution;
     };
     
 
@@ -123,6 +125,9 @@ private:
     
     // how long this particle has been alive
     float m_currentLife;
+
+	// how bouncy this particle is
+	float m_restitution;
     
     // whether or not this particle is dead
     bool  m_isActive;

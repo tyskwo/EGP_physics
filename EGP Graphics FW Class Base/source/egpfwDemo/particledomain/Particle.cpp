@@ -54,6 +54,9 @@ Particle::Particle(Data data)
     // set the lifespan values
     this->m_lifespan    = data.lifespan.init();
     this->m_currentLife = 0.0f;
+
+	// set restitution
+	this->m_restitution = data.restitution.init();
     
     // this particle is now alive
     this->m_isActive = true;
@@ -89,7 +92,7 @@ void Particle::update(const float dt)
         this->m_mover->updateMoverDisplacement(dt);
 		
         // perform basic collision with a given restitution
-		this->m_mover->clampMoverToGround(0.0f, 0.8f);
+		this->m_mover->clampMoverToGround(0.0f, m_restitution);
         
         // add to our age
         m_currentLife += dt;

@@ -1,26 +1,26 @@
 vec3
 velocityDelta
-2.5 2.0 2.5
+2.5 2 2.5
 
 vec3
 velocityValue
-0.0 2.0 0.0
+0 2 0
 
 vec4
 colorEnd
-1.0 1.0 1.0 0.0
+1 1 1 0
 
 vec4
 colorStart
-0.2 0.2 0.2 1.0
+0.2 0.2 0.2 1
 
 float
 lifespanDelta
-5.0
+5
 
 float
 lifespanValue
-5.0
+5
 
 float
 massDelta
@@ -28,7 +28,19 @@ massDelta
 
 float
 massValue
--1.0
+-1
+
+float
+restitutionDelta
+0
+
+float
+restitutionValue
+0.968562
+
+int
+easeValue
+7
 
 int
 emissionMode

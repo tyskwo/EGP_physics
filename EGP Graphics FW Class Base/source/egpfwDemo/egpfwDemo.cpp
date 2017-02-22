@@ -710,7 +710,7 @@ void displayControls()
 	printf("\n\n hold z + 1, 2, 3, 4 = save data to one of the data files");
 	printf("\n hold x + 1, 2, 3, 4 = load data to one of the data files");
 
-	printf("\n\n c, v, l, m = edit color, velocity, lifespan, or mass");
+	printf("\n\n c, v, b, l, m = edit color, velocity, restitution, lifespan, or mass");
 	printf("\n 1, 2, 3, 4 = choose xyzw or rgba when applicable");
 	printf("\n g = toggle between editing parameter delta or value");
 	printf("\n click and drag RMB = adjust selected parameter");

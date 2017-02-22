@@ -28,7 +28,15 @@ massDelta
 
 float
 massValue
-4.35156
+9.5625
+
+float
+restitutionDelta
+0
+
+float
+restitutionValue
+0.968562
 
 int
 easeValue
@@ -36,7 +44,7 @@ easeValue
 
 int
 emissionMode
-1
+0
 
 int
 numberToEmit

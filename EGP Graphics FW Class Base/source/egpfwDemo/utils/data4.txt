@@ -30,6 +30,18 @@ float
 massValue
 0.625
 
+float
+restitutionDelta
+0
+
+float
+restitutionValue
+0.968562
+
+int
+easeValue
+7
+
 int
 emissionMode
 1

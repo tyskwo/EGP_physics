@@ -30,6 +30,14 @@ float
 massValue
 2.65625
 
+float
+restitutionDelta
+0
+
+float
+restitutionValue
+0.968562
+
 int
 easeValue
 7

@@ -168,29 +168,34 @@ Particle::Data SaveManager::prepareData(int dataFileSelected)
 
     float lifespanValue, lifespanDelta;
     float massValue, massDelta;
+	float restitutionValue, restitutionDelta;
     cbmath::vec3 velocityValue, velocityDelta;
     cbmath::vec4 colorStart, colorEnd;
     int easeType;
     
-    lifespanValue = m_mapFloat["lifespanValue"];
-    lifespanDelta = m_mapFloat["lifespanDelta"];
-    massValue     = m_mapFloat["massValue"];
-    massDelta     = m_mapFloat["massDelta"];
-    velocityValue = m_mapVec3["velocityValue"];
-    velocityDelta = m_mapVec3["velocityDelta"];
-    colorStart    = m_mapVec4["colorStart"];
-    colorEnd      = m_mapVec4["colorEnd"];
-    easeType      = m_mapInt["easeValue"];
+    lifespanValue		= m_mapFloat["lifespanValue"];
+    lifespanDelta		= m_mapFloat["lifespanDelta"];
+    massValue			= m_mapFloat["massValue"];
+    massDelta			= m_mapFloat["massDelta"];
+	restitutionValue	= m_mapFloat["restitutionValue"];
+	restitutionDelta	= m_mapFloat["restitutionDelta"];
+    velocityValue		= m_mapVec3["velocityValue"];
+    velocityDelta		= m_mapVec3["velocityDelta"];
+    colorStart			= m_mapVec4["colorStart"];
+    colorEnd			= m_mapVec4["colorEnd"];
+    easeType			= m_mapInt["easeValue"];
     
     
     Particle::Data particle;
     
     particle.lifespan = Particle::DeltaType<float>{ lifespanValue, lifespanDelta, false };
     particle.mass = Particle::DeltaType<float>{ massValue, massDelta, false };
+	particle.restitution = Particle::DeltaType<float>{ restitutionValue, restitutionDelta, false };
     
     particle.velocity = Particle::DeltaType<cbmath::vec3>{ velocityValue, velocityDelta, true };
     
     particle.color = Particle::LifetimeType<cbmath::vec4>{ colorStart, colorEnd, TimingFunctions::getEase(easeType) };
+
     
     
     return particle;
